@@ -6,14 +6,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Digite o nome da base de dados: ");
-        String database = scanner.nextLine();
-
-        String url = "jdbc:mysql://localhost:3306/" + database;
-
-        try (Connection connection = DriverManager.getConnection(url, Autenticacao.USER, Autenticacao.PASSWORD)) {
+        String url = "jdbc:mysql://localhost:3306/PTDA24_BD_06";
+        try (Scanner scanner = new Scanner(System.in); Connection connection = DriverManager.getConnection(url, Autenticacao.USER, Autenticacao.PASSWORD)) {
             System.out.println("Conexão bem-sucedida!");
             Statement statement = connection.createStatement();
 
@@ -40,8 +34,6 @@ public class Main {
             }
         } catch (Exception e) {
             System.out.println("Erro ao conectar à base de dados: " + e.getMessage());
-        } finally {
-            scanner.close();
         }
     }
 }
