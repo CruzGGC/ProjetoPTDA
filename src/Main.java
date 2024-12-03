@@ -7,7 +7,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/PTDA24_BD_06";
-        try (Scanner scanner = new Scanner(System.in); Connection connection = DriverManager.getConnection(url, Autenticacao.USER, Autenticacao.PASSWORD)) {
+        String USER = "root";
+        String PASSWORD = "password";
+        try (Scanner scanner = new Scanner(System.in); Connection connection = DriverManager.getConnection(url, USER, PASSWORD)) {
             System.out.println("Conexão bem-sucedida!");
             Statement statement = connection.createStatement();
 

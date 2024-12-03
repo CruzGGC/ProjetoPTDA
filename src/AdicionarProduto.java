@@ -17,8 +17,10 @@ public class AdicionarProduto {
         int quantidade = scanner.nextInt();
 
         String url = "jdbc:mysql://localhost:3306/PTDA24_BD_06";
+        String USER = "root";
+        String PASSWORD = "password";
 
-        try (Connection connection = DriverManager.getConnection(url, Autenticacao.USER, Autenticacao.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(url, USER, PASSWORD)) {
             String sql = "{call adicionarProduto(?, ?, ?)}";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, nome);
