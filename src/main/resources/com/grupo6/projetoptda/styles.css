@@ -1,0 +1,45 @@
+.root {
+    -fx-font-family: Arial, sans-serif;
+}
+
+.btn-primary {
+    -fx-background-color: #5eb5ff;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+.btn-secondary {
+    -fx-background-color: #ff80ff;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+.btn-tertiary {
+    -fx-background-color: #ffb6c1;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+.btn-danger {
+    -fx-background-color: #ff6347;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+.btn-warning {
+    -fx-background-color: #ffa500;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+}
+
+.button {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}

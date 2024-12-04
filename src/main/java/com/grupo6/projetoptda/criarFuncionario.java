@@ -9,11 +9,11 @@ public class criarFuncionario {
     private static final String PASSWORD = "VaiTeFoder123@@";
 
     public static void main(String[] args) {
-        int id = 4;
-        String nome = "Manbo Ladrao";
+        int id = 1;
+        String nome = "Guilherme";
         String password = "1234";
-        int nivelAcesso = 1;
-        String tipo = "EmpregadoMesa";
+        int nivelAcesso = 2;
+        String tipo = "Gerente";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD)) {
             String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
