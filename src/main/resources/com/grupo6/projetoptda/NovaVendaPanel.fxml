@@ -46,6 +46,8 @@
         </VBox>
     </center>
 
+    <FlowPane fx:id="produtosPane" hgap="10" vgap="10" />
+
     <!-- Rodapé -->
     <bottom>
         <HBox spacing="20" alignment="CENTER">
