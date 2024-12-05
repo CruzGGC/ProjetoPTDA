@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.grupo6.projetoptda.NovaVendaController"
+            style="-fx-background-color: #333333;">
+    <!-- Topo -->
+    <top>
+        <HBox spacing="10">
+            <VBox spacing="5">
+                <Label text="DIGIGEST" style="-fx-font-size: 24px; -fx-text-fill: #00aaff; -fx-font-weight: bold;" />
+                <Label text="Fatura Simplificada (FS 2024)" style="-fx-font-size: 18px; -fx-text-fill: white;" />
+                <Label text="11 de outubro de 2024 | 13:00" style="-fx-font-size: 14px; -fx-text-fill: white;" />
+            </VBox>
+            <Label text="Administrador" style="-fx-font-size: 16px; -fx-text-fill: white; -fx-alignment: CENTER_RIGHT;" />
+        </HBox>
+    </top>
+
+    <!-- Centro -->
+    <center>
+        <VBox spacing="15">
+            <!-- Botões de Categorias -->
+            <HBox spacing="10">
+                <Button text="Águas" styleClass="btn-primary" />
+                <Button text="Sumos" styleClass="btn-secondary" />
+                <Button text="Cafetaria" styleClass="btn-danger" />
+                <Button text="Digestivos" styleClass="btn-tertiary" />
+                <Button text="Vinhos" styleClass="btn-warning" />
+                <Button text="Cerveja" styleClass="btn-primary" />
+                <Button text="Snacks" styleClass="btn-secondary" />
+            </HBox>
+
+            <!-- Botões de Produtos -->
+            <FlowPane hgap="10" vgap="10">
+                <Button text="Água s/gás\n0.60€" styleClass="btn-item" />
+                <Button text="Pedras\n1.00€" styleClass="btn-item" />
+                <Button text="Castelo\n1.00€" styleClass="btn-item" />
+                <Button text="Água Tónica\n1.20€" styleClass="btn-item" />
+                <Button text="Ginger Ale\n1.20€" styleClass="btn-item" />
+            </FlowPane>
+        </VBox>
+    </center>
+
+    <!-- Rodapé -->
+    <bottom>
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Botão Voltar -->
+            <HBox alignment="BOTTOM_LEFT">
+                <Button text="Voltar" onAction="#onVoltarClick" styleClass="btn-secondary" />
+            </HBox>
+
+            <!-- Outros Botões no Rodapé -->
+            <HBox spacing="20" alignment="CENTER_RIGHT">
+                <Button text="Consumidor Final" styleClass="btn-primary" />
+                <Button text="Pagamento" styleClass="btn-success" />
+            </HBox>
+        </HBox>
+    </bottom>
+</BorderPane>

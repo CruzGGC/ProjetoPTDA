@@ -2,33 +2,57 @@
     -fx-font-family: Arial, sans-serif;
 }
 
+/* Botões de Categoria */
 .btn-primary {
     -fx-background-color: #5eb5ff;
     -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
 
+/* Botão Voltar */
 .btn-secondary {
-    -fx-background-color: #ff80ff;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
+    -fx-background-color: #ffc107;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-padding: 8;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
 }
 
-.btn-tertiary {
-    -fx-background-color: #ffb6c1;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
-}
 
 .btn-danger {
-    -fx-background-color: #ff6347;
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.btn-success {
+    -fx-background-color: #28a745;
     -fx-text-fill: white;
     -fx-font-size: 16px;
-    -fx-padding: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
+
+.btn-item {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 10;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
 
 .btn-warning {
     -fx-background-color: #ffa500;
@@ -42,4 +66,21 @@
     -fx-cursor: hand;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
+}
+
+.btn-item {
+    -fx-background-color: #5eb5ff;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-alignment: CENTER;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.btn-success {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
 }
