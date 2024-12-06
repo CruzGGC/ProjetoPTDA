@@ -1,5 +1,6 @@
 package com.grupo6.projetoptda;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,11 @@ public class MainController {
     @FXML
     public void onOperacoesCaixaClick() {
         System.out.println("Operações de Caixa clicada!");
+    }
+
+    @FXML
+    public void onSairClick() {
+        Platform.exit();
     }
 
     @FXML

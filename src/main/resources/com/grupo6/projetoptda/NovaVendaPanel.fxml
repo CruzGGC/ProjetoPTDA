@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.NovaVendaController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.NovaVendaController">
    <bottom>
       <BorderPane maxHeight="40.0" prefHeight="37.0" prefWidth="595.0" BorderPane.alignment="CENTER">
          <left>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="🏠" BorderPane.alignment="CENTER">
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#onVoltarClick" text="🏠" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </BorderPane.margin>
@@ -32,8 +32,8 @@
          <left>
             <HBox spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="DIGIGEST" />
-                  <Label text="Fatura Simplicficada (FS 2024)" />
+                  <Label text="DIGIGEST" textFill="WHITE" />
+                  <Label text="Fatura Simplicficada (FS 2024)" textFill="WHITE" />
                </children>
                <BorderPane.margin>
                   <Insets />
@@ -48,15 +48,15 @@
    <left>
       <BorderPane prefHeight="324.0" prefWidth="328.0" BorderPane.alignment="CENTER">
          <center>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </BorderPane.margin>
                <children>
-                   <Label fx:id="labelNumArtigos" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Nº de artigos/quantidade: 0" />
-                   <Label fx:id="labelTotal" style="-fx-font-size: 16px; -fx-text-fill: white;" text="Total: 0.00€" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Produtos Selecionados" />
-                   <TableView fx:id="tabelaProdutos">
+                   <Label fx:id="labelTotal" style="-fx-font-size: 16px; -fx-text-fill: black;" text="Total: 0.00€" />
+                   <Label fx:id="labelNumArtigos" style="-fx-font-size: 14px; -fx-text-fill: black;" text="Nº de artigos/quantidade: 0" />
+                  <Label text="Produtos Selecionados" />
+                   <TableView fx:id="tabelaProdutos" style="-fx-background-color: #333333;">
                        <columns>
                            <TableColumn fx:id="colunaDescricao" text="Descrição" />
                            <TableColumn fx:id="colunaPVP" text="P.V.P" />
@@ -72,10 +72,16 @@
    <center>
       <BorderPane prefHeight="324.0" prefWidth="435.0" BorderPane.alignment="CENTER">
          <top>
-            <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></HBox>
          </top>
          <center>
-            <HBox fx:id="produtosPane" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <HBox fx:id="produtosPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></HBox>
          </center>
       </BorderPane>
    </center>
