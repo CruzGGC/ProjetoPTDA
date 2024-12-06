@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class NovaVendaController {
 
@@ -42,10 +46,10 @@ public class NovaVendaController {
     public void onVoltarClick() {
         try {
             // Carregar o layout principal
-            Parent mainPanelRoot = FXMLLoader.load(getClass().getResource("/com/grupo6/projetoptda/MainPanel.fxml"));
+            Parent mainPanelRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/MainPanel.fxml")));
 
             // Obter a cena atual e substituir pelo layout principal
-            Scene scene = ((Stage) Stage.getWindows().get(0)).getScene();
+            Scene scene = Stage.getWindows().getFirst().getScene();
             scene.setRoot(mainPanelRoot);
 
         } catch (IOException e) {
@@ -56,10 +60,35 @@ public class NovaVendaController {
     @FXML
     private HBox categoriasPane; // Painel para botões de categorias
     @FXML
-    private FlowPane produtosPane; // Painel para botões de produtos
+    private HBox produtosPane; // Alterado para HBox
+
+    @FXML
+    private TableView<ProdutoSelecionado> tabelaProdutos;
+    @FXML
+    private TableColumn<ProdutoSelecionado, String> colunaDescricao;
+    @FXML
+    private TableColumn<ProdutoSelecionado, Double> colunaPVP;
+    @FXML
+    private TableColumn<ProdutoSelecionado, Integer> colunaQuantidade;
+    @FXML
+    private TableColumn<ProdutoSelecionado, Double> colunaTotal;
+    @FXML
+    private Label labelTotal;
+    @FXML
+    private Label labelNumArtigos;
+
+    private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
+
 
     @FXML
     public void initialize() {
+        colunaDescricao.setCellValueFactory(data -> data.getValue().descricaoProperty());
+        colunaPVP.setCellValueFactory(data -> data.getValue().precoProperty().asObject());
+        colunaQuantidade.setCellValueFactory(data -> data.getValue().quantidadeStockProperty().asObject());
+        colunaTotal.setCellValueFactory(data -> data.getValue().totalProperty().asObject());
+
+        tabelaProdutos.setItems(produtosSelecionados);
+
         carregarCategorias();
     }
 
@@ -77,8 +106,7 @@ public class NovaVendaController {
     }
 
     private void carregarProdutosPorCategoria(int idCategoria) {
-        produtosPane.getChildren().clear(); // Limpar os produtos existentes
-
+        produtosPane.getChildren().clear();
         List<Produto> produtos = buscarProdutosPorCategoria(idCategoria);
 
         for (Produto produto : produtos) {
@@ -86,28 +114,48 @@ public class NovaVendaController {
             btnProduto.setStyle("-fx-font-size: 14px; -fx-padding: 10; -fx-background-color: #2196F3; -fx-text-fill: white;");
             produtosPane.getChildren().add(btnProduto);
 
-            // Adicionar ação para o botão (exemplo: adicionar ao carrinho)
-            btnProduto.setOnAction(e -> {
-                System.out.println("Produto selecionado: " + produto.getNome());
-                // Lógica para adicionar ao carrinho
-            });
+            btnProduto.setOnAction(e -> adicionarProduto(produto));
         }
+    }
+
+    private void adicionarProduto(Produto produto) {
+        ProdutoSelecionado existente = produtosSelecionados.stream()
+                .filter(p -> p.getIdProduto() == produto.getIdProduto())
+                .findFirst()
+                .orElse(null);
+
+        if (existente != null) {
+            existente.setQuantidadeStock(existente.getQuantidadeStock() + 1);
+            existente.setTotal(existente.getQuantidadeStock() * existente.getPreco());
+        } else {
+            produtosSelecionados.add(new ProdutoSelecionado(produto.getIdProduto(), produto.getNome(), produto.getPreco(), 1, produto.getPreco()));
+        }
+
+        atualizarTotais();
+    }
+
+    private void atualizarTotais() {
+        double total = produtosSelecionados.stream().mapToDouble(ProdutoSelecionado::getTotal).sum();
+        int quantidade = produtosSelecionados.stream().mapToInt(ProdutoSelecionado::getQuantidadeStock).sum();
+
+        labelTotal.setText(String.format("Total: %.2f€", total));
+        labelNumArtigos.setText("Nº de artigos/quantidade: " + quantidade);
     }
 
     private List<Categoria> buscarCategorias() {
         List<Categoria> categorias = new ArrayList<>();
-        String query = "SELECT idCategoria, nome FROM Categoria";
+        String query = "SELECT * FROM Categoria";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                int idCategoria = rs.getInt("idCategoria");
-                String nome = rs.getString("nome");
-                categorias.add(new Categoria(idCategoria, nome));
+             ResultSet resultSet = stmt.executeQuery()) {
+            while (resultSet.next()) {
+                Categoria categoria = new Categoria(
+                        resultSet.getInt("idCategoria"),
+                        resultSet.getString("nome")
+                );
+                categorias.add(categoria);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,23 +165,23 @@ public class NovaVendaController {
 
     private List<Produto> buscarProdutosPorCategoria(int idCategoria) {
         List<Produto> produtos = new ArrayList<>();
-        String query = "SELECT idProduto, nome, preco, quantidadeStock FROM Produto WHERE idCategoria = ?";
+        String query = "SELECT * FROM Produto WHERE idCategoria = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, idCategoria);
+            ResultSet resultSet = statement.executeQuery();
 
-            stmt.setInt(1, idCategoria);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    int idProduto = rs.getInt("idProduto");
-                    String nome = rs.getString("nome");
-                    double preco = rs.getDouble("preco");
-                    int quantidadeStock = rs.getInt("quantidadeStock");
-                    produtos.add(new Produto(idProduto, nome, preco, quantidadeStock));
-                }
+            while (resultSet.next()) {
+                Produto produto = new Produto(
+                        resultSet.getInt("idProduto"),
+                        resultSet.getInt("idCategoria"),
+                        resultSet.getString("nome"),
+                        resultSet.getDouble("preco"),
+                        resultSet.getInt("quantidadeStock")
+                );
+                produtos.add(produto);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
