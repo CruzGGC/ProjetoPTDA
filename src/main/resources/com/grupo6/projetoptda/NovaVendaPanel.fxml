@@ -11,56 +11,24 @@
             style="-fx-background-color: #333333;">
     <!-- Topo -->
     <top>
-        <HBox spacing="10">
-            <VBox spacing="5">
-                <Label text="DIGIGEST" style="-fx-font-size: 24px; -fx-text-fill: #00aaff; -fx-font-weight: bold;" />
-                <Label text="Fatura Simplificada (FS 2024)" style="-fx-font-size: 18px; -fx-text-fill: white;" />
-                <Label text="11 de outubro de 2024 | 13:00" style="-fx-font-size: 14px; -fx-text-fill: white;" />
-            </VBox>
-            <Label text="Administrador" style="-fx-font-size: 16px; -fx-text-fill: white; -fx-alignment: CENTER_RIGHT;" />
-        </HBox>
+        <VBox spacing="10">
+            <Label text="DIGIGEST" style="-fx-font-size: 24px; -fx-text-fill: #00aaff; -fx-font-weight: bold;" />
+            <Label text="Fatura Simplificada (FS 2024)" style="-fx-font-size: 18px; -fx-text-fill: white;" />
+        </VBox>
     </top>
 
-    <!-- Centro -->
-    <center>
-        <VBox spacing="15">
-            <!-- Botões de Categorias -->
-            <HBox spacing="10">
-                <Button text="Águas" styleClass="btn-primary" />
-                <Button text="Sumos" styleClass="btn-secondary" />
-                <Button text="Cafetaria" styleClass="btn-danger" />
-                <Button text="Digestivos" styleClass="btn-tertiary" />
-                <Button text="Vinhos" styleClass="btn-warning" />
-                <Button text="Cerveja" styleClass="btn-primary" />
-                <Button text="Snacks" styleClass="btn-secondary" />
-            </HBox>
+    <!-- Categorias -->
+    <top>
+        <HBox fx:id="categoriasPane" spacing="10" style="-fx-padding: 10;" />
+    </top>
 
-            <!-- Botões de Produtos -->
-            <FlowPane hgap="10" vgap="10">
-                <Button text="Água s/gás\n0.60€" styleClass="btn-item" />
-                <Button text="Pedras\n1.00€" styleClass="btn-item" />
-                <Button text="Castelo\n1.00€" styleClass="btn-item" />
-                <Button text="Água Tónica\n1.20€" styleClass="btn-item" />
-                <Button text="Ginger Ale\n1.20€" styleClass="btn-item" />
-            </FlowPane>
-        </VBox>
+    <!-- Produtos -->
+    <center>
+        <FlowPane fx:id="produtosPane" hgap="10" vgap="10" style="-fx-padding: 10;" />
     </center>
 
-    <FlowPane fx:id="produtosPane" hgap="10" vgap="10" />
-
-    <!-- Rodapé -->
+    <!-- Botão Voltar -->
     <bottom>
-        <HBox spacing="20" alignment="CENTER">
-            <!-- Botão Voltar -->
-            <HBox alignment="BOTTOM_LEFT">
-                <Button text="Voltar" onAction="#onVoltarClick" styleClass="btn-secondary" />
-            </HBox>
-
-            <!-- Outros Botões no Rodapé -->
-            <HBox spacing="20" alignment="CENTER_RIGHT">
-                <Button text="Consumidor Final" styleClass="btn-primary" />
-                <Button text="Pagamento" styleClass="btn-success" />
-            </HBox>
-        </HBox>
+        <Button text="Voltar" onAction="#onVoltarClick" style="-fx-font-size: 14px; -fx-padding: 10;" />
     </bottom>
 </BorderPane>
