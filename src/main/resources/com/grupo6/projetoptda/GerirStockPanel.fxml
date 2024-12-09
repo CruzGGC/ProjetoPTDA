@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.GerirStockController">
    <top>
@@ -45,4 +45,31 @@
          </BorderPane.margin>
       </BorderPane>
    </center>
+   <bottom>
+      <VBox prefHeight="80.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="40.0" spacing="5.0">
+               <children>
+                  <Button mnemonicParsing="false" prefWidth="290.0" text="Adicionar Produto" />
+                  <Button mnemonicParsing="false" prefWidth="290.0" text="Modificar Produto" />
+                  <Button mnemonicParsing="false" prefWidth="290.0" text="Remover Produto" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0">
+               <children>
+                  <Button mnemonicParsing="false" text="🏠" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </VBox>
+   </bottom>
 </BorderPane>
