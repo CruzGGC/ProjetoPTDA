@@ -53,8 +53,8 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </BorderPane.margin>
                <children>
-                   <Label fx:id="labelTotal" style="-fx-font-size: 16px; -fx-text-fill: black;" text="Total: 0.00€" />
-                   <Label fx:id="labelNumArtigos" style="-fx-font-size: 14px; -fx-text-fill: black;" text="Nº de artigos/quantidade: 0" />
+                   <Label fx:id="labelTotal" style="-fx-font-size: 16px; -fx-text-fill: white;" text="Total: 0.00€" />
+                   <Label fx:id="labelNumArtigos" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Nº de artigos/quantidade: 0" textFill="WHITE" />
                   <Label text="Produtos Selecionados" />
                    <TableView fx:id="tabelaProdutos" style="-fx-background-color: #333333;">
                        <columns>

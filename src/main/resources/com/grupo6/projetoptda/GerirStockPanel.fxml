@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.GerirStockController">
+   <top>
+      <BorderPane prefHeight="40.0" BorderPane.alignment="CENTER">
+         <left>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label style="-fx-text-fill: white;" text="DIGIGEST" />
+                  <Label style="-fx-text-fill: white;" text="Gerir Stock" />
+                  <Label style="-fx-text-fill: white;" text="(GS 2024)" />
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </left>
+      </BorderPane>
+   </top>
+   <padding>
+      <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
+   </padding>
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <top>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" />
+                  <HBox fx:id="produtosPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" />
+               </children>
+            </VBox>
+         </top>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </BorderPane>
+   </center>
+</BorderPane>
