@@ -14,7 +14,17 @@ public class MainController {
 
     @FXML
     public void onGestaoStockClick() {
-        System.out.println("Gestão de Stock clicada!");
+        try {
+            // Carregar o novo layout (Nova Venda)
+            Parent gerirStockRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/GerirStockPanel.fxml")));
+
+            // Obter a cena atual e substituí-la pelo novo conteúdo
+            Scene scene = Stage.getWindows().getFirst().getScene().getRoot().getScene();
+            scene.setRoot(gerirStockRoot);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
