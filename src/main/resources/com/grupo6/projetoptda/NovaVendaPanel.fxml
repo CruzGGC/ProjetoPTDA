@@ -22,18 +22,26 @@
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
+         <right>
+            <Button mnemonicParsing="false" text="Pagamento" BorderPane.alignment="CENTER" />
+         </right>
       </BorderPane>
    </bottom>
    <padding>
       <Insets bottom="2.5" left="2.5" right="2.5" top="2.5" />
    </padding>
    <top>
-      <BorderPane prefHeight="34.0" prefWidth="595.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="34.0" BorderPane.alignment="CENTER">
          <left>
             <HBox spacing="5.0" BorderPane.alignment="CENTER">
                <children>
                   <Label text="DIGIGEST" textFill="WHITE" />
-                  <Label text="Fatura Simplicficada (FS 2024)" textFill="WHITE" />
+                  <VBox>
+                     <children>
+                        <Label text="Fatura Simplicficada (FS 2024)" textFill="WHITE" />
+                        <Label style="-fx-text-fill: WHITE;" text="DATA" />
+                     </children>
+                  </VBox>
                </children>
                <BorderPane.margin>
                   <Insets />
@@ -43,6 +51,16 @@
                </padding>
             </HBox>
          </left>
+         <right>
+            <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label style="-fx-text-fill: white;" text="Utilizador" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </right>
       </BorderPane>
    </top>
    <left>
