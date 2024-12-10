@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.GerirStockController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.GerirStockController">
    <top>
       <BorderPane prefHeight="40.0" BorderPane.alignment="CENTER">
          <left>
@@ -43,8 +43,9 @@
                   <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" />
                   <TableView fx:id="produtosTable" prefHeight="200.0" prefWidth="200.0">
                      <columns>
-                        <TableColumn fx:id="colNome" prefWidth="75.0" text="Nome" />
-                        <TableColumn fx:id="colPreco" prefWidth="75.0" text="Preço" />
+                        <TableColumn fx:id="colId" minWidth="9.0" prefWidth="20.0" text="ID" />
+                        <TableColumn fx:id="colNome" minWidth="2.0" prefWidth="290.0" text="Nome" />
+                        <TableColumn fx:id="colPreco" prefWidth="50.0" text="Preço" />
                         <TableColumn fx:id="colQuantidade" prefWidth="75.0" text="Quantidade" />
                         <TableColumn fx:id="colModificar" prefWidth="75.0" text="Modificar" />
                         <TableColumn fx:id="colRemover" prefWidth="75.0" text="Remover" />

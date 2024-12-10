@@ -26,6 +26,9 @@ public class GerirStockController {
     private TableView<Produto> produtosTable;
 
     @FXML
+    private TableColumn<Produto, Integer> colId;
+
+    @FXML
     private TableColumn<Produto, String> colNome;
 
     @FXML
@@ -42,12 +45,12 @@ public class GerirStockController {
 
     @FXML
     public void initialize() {
+        colId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colPreco.setCellValueFactory(new PropertyValueFactory<>("preco"));
         colQuantidade.setCellValueFactory(new PropertyValueFactory<>("quantidadeStock"));
 
         addButtonToTable();
-
         carregarCategorias();
     }
 
