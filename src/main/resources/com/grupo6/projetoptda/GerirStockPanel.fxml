@@ -40,7 +40,7 @@
          <center>
             <VBox BorderPane.alignment="CENTER">
                <children>
-                  <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" />
+                  <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" />
                   <TableView fx:id="produtosTable" prefHeight="200.0" prefWidth="200.0">
                      <columns>
                         <TableColumn fx:id="colNome" prefWidth="75.0" text="Nome" />
@@ -57,16 +57,27 @@
    </center>
    <bottom>
       <BorderPane prefHeight="40.0" BorderPane.alignment="CENTER">
-         <top>
-            <HBox alignment="CENTER_LEFT" prefHeight="40.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+         <right>
+            <HBox alignment="CENTER" prefHeight="40.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" text="Adicionar Produto" />
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Adicionar Categoria" />
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </HBox>
+         </right>
+         <left>
+            <HBox alignment="CENTER" prefHeight="40.0" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" text="🏠" />
                </children>
             </HBox>
-         </top>
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
+         </left>
       </BorderPane>
    </bottom>
 </BorderPane>
