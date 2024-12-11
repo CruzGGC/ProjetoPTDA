@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -58,9 +59,9 @@ public class NovaVendaController {
     }
 
     @FXML
-    private HBox categoriasPane; // Painel para botões de categorias
+    private FlowPane categoriasPane; // Painel para botões de categorias
     @FXML
-    private HBox produtosPane; // Alterado para HBox
+    private FlowPane produtosPane; // Painel para botões de produtos
 
     @FXML
     private TableView<ProdutoSelecionado> tabelaProdutos;

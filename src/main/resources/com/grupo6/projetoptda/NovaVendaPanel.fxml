@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.NovaVendaController">
+<?import javafx.scene.layout.FlowPane?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.NovaVendaController">
    <bottom>
       <BorderPane maxHeight="40.0" prefHeight="40.0" BorderPane.alignment="CENTER">
          <left>
@@ -90,16 +91,18 @@
    <center>
       <BorderPane prefHeight="324.0" prefWidth="435.0" BorderPane.alignment="CENTER">
          <top>
-            <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+            <FlowPane fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding></HBox>
+               </padding>
+            </FlowPane>
          </top>
          <center>
-            <HBox fx:id="produtosPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+            <FlowPane fx:id="produtosPane" prefHeight="100.0" prefWidth="200.0" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding></HBox>
+               </padding>
+            </FlowPane>
          </center>
       </BorderPane>
    </center>
