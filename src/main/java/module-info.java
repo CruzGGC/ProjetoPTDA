@@ -2,7 +2,6 @@ module com.grupo6.projetoptda {
     requires javafx.controls;
     requires javafx.fxml;
     requires jbcrypt;
-    requires mysql.connector.j;
     requires com.google.gson;
     requires java.sql;
 
