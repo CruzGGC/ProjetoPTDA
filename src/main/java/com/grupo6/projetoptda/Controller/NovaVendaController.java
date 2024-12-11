@@ -1,21 +1,25 @@
-package com.grupo6.projetoptda;
+package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Getter.Cliente;
+import com.grupo6.projetoptda.Getter.ProdutoSelecionado;
+import com.grupo6.projetoptda.Getter.Categoria;
+import com.grupo6.projetoptda.Getter.Produto;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +63,13 @@ public class NovaVendaController {
     }
 
     @FXML
+    private ComboBox<Cliente> clienteComboBox; // ComboBox para selecionar o cliente
+    @FXML
     private FlowPane categoriasPane; // Painel para botões de categorias
     @FXML
     private FlowPane produtosPane; // Painel para botões de produtos
-
+    @FXML
+    private Button pedidoButton; // Botão para finalizar o pedido
     @FXML
     private TableView<ProdutoSelecionado> tabelaProdutos;
     @FXML
@@ -89,8 +96,35 @@ public class NovaVendaController {
         colunaTotal.setCellValueFactory(data -> data.getValue().totalProperty().asObject());
 
         tabelaProdutos.setItems(produtosSelecionados);
-
+        pedidoButton.setOnAction(event -> criarPedido());
         carregarCategorias();
+        carregarClientes();
+    }
+
+    private void carregarClientes() {
+        List<Cliente> clientes = buscarClientes();
+        clienteComboBox.setItems(FXCollections.observableArrayList(clientes));
+    }
+
+    private List<Cliente> buscarClientes() {
+        List<Cliente> clientes = new ArrayList<>();
+        String query = "SELECT * FROM Cliente";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet resultSet = stmt.executeQuery()) {
+            while (resultSet.next()) {
+                Cliente cliente = new Cliente(
+                        resultSet.getInt("idCliente"),
+                        resultSet.getString("nome")
+                );
+                clientes.add(cliente);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return clientes;
     }
 
     private void carregarCategorias() {
@@ -188,5 +222,60 @@ public class NovaVendaController {
         }
 
         return produtos;
+    }
+
+    private String criarJsonProdutos() {
+        JsonArray jsonArray = new JsonArray();
+
+        for (ProdutoSelecionado produto : tabelaProdutos.getItems()) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("idProduto", produto.getIdProduto());
+            jsonObject.addProperty("quantidade", produto.getQuantidadeStock());
+            jsonArray.add(jsonObject);
+        }
+
+        return jsonArray.toString();
+    }
+
+    private void criarPedido() {
+        Cliente clienteSelecionado = clienteComboBox.getSelectionModel().getSelectedItem();
+        if (clienteSelecionado == null) {
+            // Handle case where no client is selected
+            System.out.println("Nenhum cliente selecionado!");
+            return;
+        }
+
+        int idCliente = clienteSelecionado.getIdCliente();
+        String jsonProdutos = criarJsonProdutos();
+
+        String query = "{CALL criarPedido(?, ?)}";
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall(query)) {
+            stmt.setInt(1, idCliente);
+            stmt.setString(2, jsonProdutos);
+            boolean hadResults = stmt.execute();
+
+            if (hadResults) {
+                try (ResultSet rs = stmt.getResultSet()) {
+                    if (rs.next()) {
+                        int idPedido = rs.getInt("idPedido");
+                        // Exibir confirmação
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Confirmação");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Pedido criado com sucesso! ID do Pedido: " + idPedido);
+                        alert.showAndWait();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Exibir erro
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText(null);
+            alert.setContentText("Erro ao criar pedido: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 }

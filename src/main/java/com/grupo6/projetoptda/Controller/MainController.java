@@ -1,4 +1,4 @@
-package com.grupo6.projetoptda;
+package com.grupo6.projetoptda.Controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

@@ -5,15 +5,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.GerirStockController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.GerirStockController">
    <top>
       <BorderPane prefHeight="40.0" BorderPane.alignment="CENTER">
          <left>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+            <HBox spacing="5.0" BorderPane.alignment="CENTER">
                <children>
                   <Label style="-fx-text-fill: white;" text="DIGIGEST" />
                   <Label style="-fx-text-fill: white;" text="Gerir Stock" />
@@ -40,8 +42,8 @@
          <center>
             <VBox BorderPane.alignment="CENTER">
                <children>
-                  <HBox fx:id="categoriasPane" prefHeight="100.0" prefWidth="200.0" spacing="5.0" />
-                  <TableView fx:id="produtosTable" prefHeight="200.0" prefWidth="200.0">
+                  <HBox fx:id="categoriasPane" prefHeight="10.0" spacing="5.0" />
+                  <TableView fx:id="produtosTable" prefWidth="200.0">
                      <columns>
                         <TableColumn fx:id="colId" minWidth="9.0" prefWidth="20.0" text="ID" />
                         <TableColumn fx:id="colNome" minWidth="2.0" prefWidth="290.0" text="Nome" />
@@ -49,7 +51,11 @@
                         <TableColumn fx:id="colQuantidade" prefWidth="75.0" text="Quantidade" />
                         <TableColumn fx:id="colModificar" prefWidth="75.0" text="Modificar" />
                         <TableColumn fx:id="colRemover" prefWidth="75.0" text="Remover" />
+                        <TableColumn fx:id="colAtualizarStock" prefWidth="105.0" text="Atualizar Stock" />
                      </columns>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
                   </TableView>
                </children>
             </VBox>
@@ -64,8 +70,8 @@
          <right>
             <HBox alignment="CENTER" prefHeight="40.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="Adicionar Produto" />
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Adicionar Categoria" />
+                  <Button mnemonicParsing="false" onAction="#mostrarAddProductPane" text="Adicionar Produto" />
+                  <Button mnemonicParsing="false" onAction="#mostrarAddCategoryPane" text="Adicionar Categoria" />
                </children>
                <BorderPane.margin>
                   <Insets />
@@ -75,10 +81,65 @@
          <left>
             <HBox alignment="CENTER" prefHeight="40.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="🏠" />
+                  <Button mnemonicParsing="false" onAction="#onVoltarClick" text="🏠" />
                </children>
             </HBox>
          </left>
+         <bottom>
+            <VBox>
+               <children>
+                  <StackPane fx:id="addProductPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
+                     <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
+                        <TextField fx:id="nomeProdutoField" promptText="Nome do Produto" />
+                        <TextField fx:id="idCategoriaField" promptText="ID da Categoria" />
+                        <TextField fx:id="precoProdutoField" promptText="Preço" />
+                        <TextField fx:id="quantidadeProdutoField" promptText="Quantidade" />
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                           <children>
+                              <Button onAction="#adicionarProduto" text="Adicionar" />
+                              <Button onAction="#fecharAddProductPane" text="Cancelar" />
+                           </children>
+                        </HBox>
+                     </VBox>
+                  </StackPane>
+                  <StackPane fx:id="addCategoryPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
+                     <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
+                        <TextField fx:id="nomeCategoriaField" promptText="Nome da Categoria" />
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                           <children>
+                              <Button onAction="#adicionarCategoria" text="Adicionar" />
+                              <Button onAction="#fecharAddCategoryPane" text="Cancelar" />
+                           </children>
+                        </HBox>
+                     </VBox>
+                  </StackPane>
+                  <StackPane fx:id="modifyProductPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
+                     <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
+                        <TextField fx:id="modifyNomeProdutoField" promptText="Nome do Produto" />
+                        <TextField fx:id="modifyPrecoProdutoField" promptText="Preço" />
+                        <TextField fx:id="modifyQuantidadeProdutoField" promptText="Quantidade" />
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                           <children>
+                              <Button onAction="#salvarModificacoesProduto" text="Salvar" />
+                              <Button onAction="#fecharModifyProductPane" text="Cancelar" />
+                           </children>
+                        </HBox>
+                     </VBox>
+                  </StackPane>
+                  <StackPane fx:id="atualizarStockPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
+                     <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
+                        <TextField fx:id="atualizarQuantidadeField" promptText="Quantidade" />
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                           <children>
+                              <Button onAction="#atualizarStock" text="Atualizar" />
+                              <Button onAction="#fecharAtualizarStockPane" text="Cancelar" />
+                           </children>
+                        </HBox>
+                     </VBox>
+                  </StackPane>
+               </children>
+            </VBox>
+         </bottom>
       </BorderPane>
    </bottom>
 </BorderPane>

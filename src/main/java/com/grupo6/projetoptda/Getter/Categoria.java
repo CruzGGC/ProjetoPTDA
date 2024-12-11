@@ -1,4 +1,4 @@
-package com.grupo6.projetoptda;
+package com.grupo6.projetoptda.Getter;
 
 public class Categoria {
     private int idCategoria; // ID da categoria
