@@ -7,46 +7,35 @@ import com.grupo6.projetoptda.Getter.Produto;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
+import javafx.scene.control.Label;
+import javafx.util.Duration;
 
 public class NovaVendaController {
 
     @FXML
-    public void onCategoriaClick() {
-        System.out.println("Categoria clicada!");
-    }
+    public Label labelData;
 
-    @FXML
-    public void onProdutoClick() {
-        System.out.println("Produto clicado!");
-    }
-
-    @FXML
-    public void onPagamentoClick() {
-        System.out.println("Pagamento iniciado!");
-    }
-
-    @FXML
-    public void onConsumidorFinalClick() {
-        System.out.println("Consumidor final selecionado!");
-    }
     @FXML
     public void onVoltarClick() {
         try {
@@ -84,6 +73,10 @@ public class NovaVendaController {
     private Label labelTotal;
     @FXML
     private Label labelNumArtigos;
+    @FXML
+    private StackPane addClientPane;
+    @FXML
+    private TextField nomeClienteField;
 
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
 
@@ -99,6 +92,42 @@ public class NovaVendaController {
         pedidoButton.setOnAction(event -> criarPedido());
         carregarCategorias();
         carregarClientes();
+
+        // Formatar a data atual
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
+        String formattedDate = currentDate.format(formatter);
+
+        // Definir a data no label
+        labelData.setText(formattedDate);
+    }
+
+    private void recarregarInterface() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/NovaVendaPanel.fxml")));
+            Scene scene = Stage.getWindows().getFirst().getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void mostrarAddClientPane() {
+        addClientPane.setVisible(true);
+        addClientPane.setManaged(true);
+        addClientPane.toFront();
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), addClientPane);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.play();
+    }
+
+    @FXML
+    public void fecharAddClientPane() {
+        addClientPane.setVisible(false);
+        addClientPane.setManaged(false);
     }
 
     private void carregarClientes() {
@@ -275,6 +304,31 @@ public class NovaVendaController {
             alert.setTitle("Erro");
             alert.setHeaderText(null);
             alert.setContentText("Erro ao criar pedido: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+    @FXML
+    public void adicionarCliente() {
+        String nome = nomeClienteField.getText();
+
+        String query = "{CALL criarCliente(?)}";
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall(query)) {
+            stmt.setString(1, nome);
+            stmt.execute();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Cliente adicionado com sucesso!");
+            alert.showAndWait();
+            fecharAddClientPane();
+            carregarClientes();
+            recarregarInterface();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText(null);
+            alert.setContentText("Erro ao adicionar cliente: " + e.getMessage());
             alert.showAndWait();
         }
     }
