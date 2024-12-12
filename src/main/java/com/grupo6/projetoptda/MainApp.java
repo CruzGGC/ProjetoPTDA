@@ -12,7 +12,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Carrega o arquivo FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/MainPanel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/InicialPanel.fxml"));
         Parent root = loader.load();
 
         // Define a cena e aplica o CSS
