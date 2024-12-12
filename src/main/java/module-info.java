@@ -1,9 +1,9 @@
 module com.grupo6.projetoptda {
     requires javafx.controls;
     requires javafx.fxml;
-    requires jbcrypt;
     requires com.google.gson;
     requires java.sql;
+    requires jbcrypt;
 
 
     opens com.grupo6.projetoptda to javafx.fxml;
