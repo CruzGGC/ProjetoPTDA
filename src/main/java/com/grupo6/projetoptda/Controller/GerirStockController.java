@@ -113,6 +113,16 @@ public class GerirStockController {
 
     private Produto produtoAtual;
 
+    private void recarregarInterface() {
+        try {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/GerirStockPanel.fxml")));
+            Scene scene = Stage.getWindows().getFirst().getScene();
+            scene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     public void mostrarAddProductPane() {
         fecharAddCategoryPane(); // Fechar o painel de adicionar categoria
@@ -152,6 +162,7 @@ public class GerirStockController {
             alert.setHeaderText(null);
             alert.setContentText("Produto adicionado com sucesso!");
             alert.showAndWait();
+            recarregarInterface();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -198,6 +209,7 @@ public class GerirStockController {
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);
         fadeIn.play();
+
     }
 
     @FXML
@@ -227,6 +239,7 @@ public class GerirStockController {
             alert.showAndWait();
             fecharModifyProductPane();
             carregarProdutos(produtoAtual.getIdCategoria());
+            recarregarInterface();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -276,6 +289,7 @@ public class GerirStockController {
             alert.showAndWait();
             fecharAtualizarStockPane();
             carregarProdutos(produtoAtual.getIdCategoria());
+            recarregarInterface();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -299,6 +313,7 @@ public class GerirStockController {
             alert.setHeaderText(null);
             alert.setContentText("Categoria adicionada com sucesso!");
             alert.showAndWait();
+            recarregarInterface();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -467,6 +482,7 @@ public class GerirStockController {
              CallableStatement stmt = conn.prepareCall(query)) {
             stmt.setInt(1, produto.getIdProduto());
             stmt.execute();
+            recarregarInterface();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -9,8 +9,46 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainController {
+
+    @FXML
+    private Label labelHora;
+    @FXML
+    private Label labelData;
+
+    @FXML
+    public void initialize() {
+        // Atualizar a data
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
+        String formattedDate = currentDate.format(dateFormatter);
+        labelData.setText(formattedDate);
+
+        // Atualizar a hora a cada segundo
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    LocalTime currentTime = LocalTime.now();
+                    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                    String formattedTime = currentTime.format(timeFormatter);
+                    labelHora.setText(formattedTime);
+                });
+            }
+        }, 0, 1000);
+    }
 
     @FXML
     public void onGestaoStockClick() {

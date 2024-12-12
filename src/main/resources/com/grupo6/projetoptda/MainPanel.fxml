@@ -28,8 +28,8 @@
          <right>
             <VBox alignment="CENTER_RIGHT" prefHeight="433.0" prefWidth="199.0" BorderPane.alignment="CENTER">
                <children>
-                     <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="12:50:30" />
-                  <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="11 de outubro de 2024" />
+                   <Label fx:id="labelHora" style="-fx-font-size: 14px; -fx-text-fill: white;" text="12:50:30" />
+                   <Label fx:id="labelData" style="-fx-font-size: 14px; -fx-text-fill: white;" text="11 de outubro de 2024" />
                </children>
             </VBox>
          </right>
