@@ -1,12 +1,10 @@
 package com.grupo6.projetoptda.Utilidades;
 
+import com.grupo6.projetoptda.Controller.DatabaseConnection;
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 
 public class criarFuncionario {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/PTDA24_BD_06";
-    private static final String USER = "root";
-    private static final String PASSWORD = "VaiTeFoder123@@";
 
     public static void main(String[] args) {
         int id = 1;
@@ -14,7 +12,7 @@ public class criarFuncionario {
         String password = "password";
         String nivelAcesso = "Gerente ou EmpregadoMesa";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
             String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
             String sql = "INSERT INTO Funcionario (idFuncionario, fNome, fPassword, nivelAcesso) VALUES (?, ?, ?, ?)";
