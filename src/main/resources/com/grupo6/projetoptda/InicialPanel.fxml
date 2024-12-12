@@ -10,65 +10,65 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="513.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.InicioController">
-   <top>
-      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-         <children>
-            <Label text="DigiGest" textFill="#00aeff">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <Label text="Software Solutions" textFill="#00aeff">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
-   </top>
-   <left>
-      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-        <children>
-            <Label text="Login:" textFill="#00aeff">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-            <TextField alignment="CENTER" prefHeight="25.0" prefWidth="295.0" />
-            <Label text="Password:" textFill="#00aeff">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-            <PasswordField />
-            <Button mnemonicParsing="false" onAction="#onMainPanel" text="Login" />
-        </children>
-      </VBox>
-   </left>
-   <bottom>
-      <BorderPane BorderPane.alignment="CENTER">
-         <right>
-            <HBox BorderPane.alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" text="Button" />
-               </children>
-            </HBox>
-         </right>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </BorderPane>
-   </bottom>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
-   <right>
-      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-         <children>
-            <Label text="Data" />
-            <Label text="Hora" />
-         </children>
-      </VBox>
-   </right>
+<BorderPane prefHeight="600.0" prefWidth="513.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.InicioController">
+    <top>
+        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="DigiGest" textFill="#00aeff">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Label text="Software Solutions" textFill="#00aeff">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+    <left>
+        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Utilizador:" textFill="#00aeff">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="utilizadorField" alignment="CENTER" prefHeight="25.0" prefWidth="295.0" />
+                <Label text="Password:" textFill="#00aeff">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <PasswordField fx:id="passwordField" />
+                <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onMainPanel" text="Login" />
+            </children>
+        </VBox>
+    </left>
+    <bottom>
+        <BorderPane BorderPane.alignment="CENTER">
+            <right>
+                <HBox BorderPane.alignment="CENTER">
+                    <children>
+                        <Button mnemonicParsing="false" text="Button" />
+                    </children>
+                </HBox>
+            </right>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </BorderPane>
+    </bottom>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+    </padding>
+    <right>
+        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Data" />
+                <Label text="Hora" />
+            </children>
+        </VBox>
+    </right>
 </BorderPane>
