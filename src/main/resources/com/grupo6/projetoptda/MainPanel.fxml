@@ -2,9 +2,10 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.MainController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.MainController">
 
     <!-- Rodapé -->
     <bottom>
@@ -12,20 +13,17 @@
    <right>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
-            <VBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
-               <children>
-                     <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" style="-fx-font-size: 24px; -fx-text-fill: #00aaff; -fx-font-weight: bold;" text="DIGIGEST" />
-                     <Label style="-fx-font-size: 14px; -fx-text-fill: #00aaff;" text="software solutions" />
-               </children>
-            </VBox>
+             <VBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
+                 <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@Imagens/logotipo.png"/>
+                 </ImageView>
+             </VBox>
          </top>
          <right>
-            <VBox alignment="CENTER_RIGHT" prefHeight="433.0" prefWidth="199.0" BorderPane.alignment="CENTER">
-               <children>
-                   <Label fx:id="labelHora" style="-fx-font-size: 14px; -fx-text-fill: white;" text="12:50:30" />
-                   <Label fx:id="labelData" style="-fx-font-size: 14px; -fx-text-fill: white;" text="11 de outubro de 2024" />
-               </children>
-            </VBox>
+             <VBox alignment="CENTER_RIGHT" prefHeight="433.0" prefWidth="199.0" BorderPane.alignment="CENTER">
+                 <Label fx:id="labelHora" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Hora"/>
+                 <Label fx:id="labelData" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Data"/>
+             </VBox>
          </right>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -35,14 +33,12 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <right>
-            <HBox BorderPane.alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#onSairClick" text="Sair" />
-               </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </HBox>
+             <HBox BorderPane.alignment="CENTER">
+                 <BorderPane.margin>
+                     <Insets/>
+                 </BorderPane.margin>
+                 <Button mnemonicParsing="false" onAction="#onSairClick" text="Sair"/>
+             </HBox>
          </right>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

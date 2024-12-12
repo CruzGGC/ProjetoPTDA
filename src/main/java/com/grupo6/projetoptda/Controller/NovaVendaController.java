@@ -1,5 +1,7 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.MainApp;
+import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Getter.Cliente;
 import com.grupo6.projetoptda.Getter.ProdutoSelecionado;
 import com.grupo6.projetoptda.Getter.Categoria;
@@ -7,7 +9,9 @@ import com.grupo6.projetoptda.Getter.Produto;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import javafx.animation.FadeTransition;
+import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
+import com.grupo6.projetoptda.Utilidades.DateUtils;
+import com.grupo6.projetoptda.Utilidades.Panes;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,15 +25,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Objects;
 import javafx.scene.control.Label;
-import javafx.util.Duration;
 
 public class NovaVendaController {
 
@@ -39,14 +39,8 @@ public class NovaVendaController {
     @FXML
     public void onVoltarClick() {
         try {
-            // Carregar o layout principal
-            Parent mainPanelRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/MainPanel.fxml")));
-
-            // Obter a cena atual e substituir pelo layout principal
-            Scene scene = Stage.getWindows().getFirst().getScene();
-            scene.setRoot(mainPanelRoot);
-
-        } catch (IOException e) {
+            MainApp.setScene((Stage) labelData.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -94,12 +88,7 @@ public class NovaVendaController {
         carregarClientes();
 
         // Formatar a data atual
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
-        String formattedDate = currentDate.format(formatter);
-
-        // Definir a data no label
-        labelData.setText(formattedDate);
+        DateUtils.updateDate(labelData);
     }
 
     private void recarregarInterface() {
@@ -107,6 +96,7 @@ public class NovaVendaController {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/NovaVendaPanel.fxml")));
             Scene scene = Stage.getWindows().getFirst().getScene();
             scene.setRoot(root);
+            CarregarCSS.applyCSS(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -114,14 +104,7 @@ public class NovaVendaController {
 
     @FXML
     public void mostrarAddClientPane() {
-        addClientPane.setVisible(true);
-        addClientPane.setManaged(true);
-        addClientPane.toFront();
-
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), addClientPane);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
+        Panes.showPane(addClientPane);
     }
 
     @FXML
@@ -207,24 +190,7 @@ public class NovaVendaController {
     }
 
     private List<Categoria> buscarCategorias() {
-        List<Categoria> categorias = new ArrayList<>();
-        String query = "SELECT * FROM Categoria";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet resultSet = stmt.executeQuery()) {
-            while (resultSet.next()) {
-                Categoria categoria = new Categoria(
-                        resultSet.getInt("idCategoria"),
-                        resultSet.getString("nome")
-                );
-                categorias.add(categoria);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return categorias;
+        return DatabaseUtils.fetchCategories();
     }
 
     private List<Produto> buscarProdutosPorCategoria(int idCategoria) {

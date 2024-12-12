@@ -1,10 +1,12 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.MainApp;
+import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
+import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
+import com.grupo6.projetoptda.Utilidades.Panes;
 
-
-import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,7 +20,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
@@ -31,16 +32,11 @@ import java.util.Objects;
 
 public class GerirStockController {
 
+    @FXML
     public void onVoltarClick() {
         try {
-            // Carregar o layout principal
-            Parent mainPanelRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/MainPanel.fxml")));
-
-            // Obter a cena atual e substituir pelo layout principal
-            Scene scene = Stage.getWindows().getFirst().getScene();
-            scene.setRoot(mainPanelRoot);
-
-        } catch (IOException e) {
+            MainApp.setScene((Stage) categoriasPane.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -118,6 +114,7 @@ public class GerirStockController {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/GerirStockPanel.fxml")));
             Scene scene = Stage.getWindows().getFirst().getScene();
             scene.setRoot(root);
+            CarregarCSS.applyCSS(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,14 +123,7 @@ public class GerirStockController {
     @FXML
     public void mostrarAddProductPane() {
         fecharAddCategoryPane(); // Fechar o painel de adicionar categoria
-        addProductPane.setVisible(true);
-        addProductPane.setManaged(true);
-        addProductPane.toFront();
-
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), addProductPane);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
+        Panes.showPane(addProductPane);
     }
 
     @FXML
@@ -175,14 +165,7 @@ public class GerirStockController {
     @FXML
     public void mostrarAddCategoryPane() {
         fecharAddProductPane(); // Fechar o painel de adicionar produto
-        addCategoryPane.setVisible(true);
-        addCategoryPane.setManaged(true);
-        addCategoryPane.toFront();
-
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), addCategoryPane);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
+        Panes.showPane(addCategoryPane);
     }
 
     @FXML
@@ -201,15 +184,7 @@ public class GerirStockController {
         modifyPrecoProdutoField.setText(String.valueOf(produto.getPreco()));
         modifyQuantidadeProdutoField.setText(String.valueOf(produto.getQuantidadeStock()));
 
-        modifyProductPane.setVisible(true);
-        modifyProductPane.setManaged(true);
-        modifyProductPane.toFront();
-
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), modifyProductPane);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
-
+        Panes.showPane(modifyProductPane);
     }
 
     @FXML
@@ -256,14 +231,7 @@ public class GerirStockController {
         fecharModifyProductPane();
 
         produtoAtual = produto;
-        atualizarStockPane.setVisible(true);
-        atualizarStockPane.setManaged(true);
-        atualizarStockPane.toFront();
-
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(500), atualizarStockPane);
-        fadeIn.setFromValue(0.0);
-        fadeIn.setToValue(1.0);
-        fadeIn.play();
+        Panes.showPane(atualizarStockPane);
     }
 
     @FXML
@@ -419,24 +387,7 @@ public class GerirStockController {
     }
 
     private List<Categoria> buscarCategorias() {
-        List<Categoria> categorias = new ArrayList<>();
-        String query = "SELECT * FROM Categoria";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet resultSet = stmt.executeQuery()) {
-            while (resultSet.next()) {
-                Categoria categoria = new Categoria(
-                        resultSet.getInt("idCategoria"),
-                        resultSet.getString("nome")
-                );
-                categorias.add(categoria);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return categorias;
+        return DatabaseUtils.fetchCategories();
     }
 
     private void carregarProdutos(int idCategoria) {
