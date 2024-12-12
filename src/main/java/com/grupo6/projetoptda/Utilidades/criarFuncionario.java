@@ -1,4 +1,4 @@
-package com.grupo6.projetoptda.Controller;
+package com.grupo6.projetoptda.Utilidades;
 
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
