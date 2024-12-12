@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<VBox prefHeight="512.0" prefWidth="618.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="412.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Button layoutX="286.0" layoutY="324.0" mnemonicParsing="false" text="Login" AnchorPane.topAnchor="324.0" onAction="#onMainPanel"/>
+            <PasswordField layoutX="235.0" layoutY="282.0" />
+            <Label layoutX="235.0" layoutY="256.0" text="Password:" textFill="#00aeff">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="235.0" layoutY="193.0" text="Login:" textFill="#00aeff">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField layoutX="235.0" layoutY="217.0" />
+            <Label layoutX="261.0" layoutY="54.0" text="DigiGest" textFill="#00aeff">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="247.0" layoutY="89.0" text="Software Solutions" textFill="#00aeff">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>
