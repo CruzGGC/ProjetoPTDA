@@ -1,6 +1,5 @@
 package com.grupo6.projetoptda.Controller;
 
-import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
 import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
@@ -10,9 +9,6 @@ import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -20,15 +16,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
 
 public class GerirStockController {
 
@@ -108,17 +106,6 @@ public class GerirStockController {
     private TextField atualizarQuantidadeField;
 
     private Produto produtoAtual;
-
-    private void recarregarInterface() {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/GerirStockPanel.fxml")));
-            Scene scene = Stage.getWindows().getFirst().getScene();
-            scene.setRoot(root);
-            CarregarCSS.applyCSS(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void mostrarAddProductPane() {
@@ -304,9 +291,10 @@ public class GerirStockController {
 
     private void addButtonToTable() {
         colModificar.setCellFactory(param -> new TableCell<>() {
-            private final Button btn = new Button("Modificar");
-
+            private final Button btn = new Button();
             {
+                FontIcon icon = new FontIcon(FontAwesomeSolid.EDIT);
+                btn.setGraphic(icon);
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
                     modificarProduto(produto);
@@ -325,9 +313,10 @@ public class GerirStockController {
         });
 
         colRemover.setCellFactory(param -> new TableCell<>() {
-            private final Button btn = new Button("Remover");
-
+            private final Button btn = new Button();
             {
+                FontIcon icon = new FontIcon(FontAwesomeSolid.TRASH);
+                btn.setGraphic(icon);
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
                     removerProduto(produto);
@@ -347,7 +336,6 @@ public class GerirStockController {
 
         colAtualizarStock.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button("Atualizar Stock");
-
             {
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
