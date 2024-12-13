@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="fundo" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.GerirPedidosController">
+   <top>
+      <HBox spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="40.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Imagens/logotipo.png" />
+               </image>
+            </ImageView>
+            <VBox spacing="5.0">
+               <children>
+                  <Label styleClass="text-content" text="Gestão de Pedidos" />
+                  <Label fx:id="labelData" styleClass="text-content" text="Data" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </top>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+   <bottom>
+      <BorderPane>
+         <left>
+            <Button mnemonicParsing="false" onAction="#onVoltarClick" text="🏠" BorderPane.alignment="CENTER" />
+         </left>
+      </BorderPane>
+   </bottom>
+   <center>
+      <BorderPane BorderPane.alignment="CENTER">
+         <top>
+            <FlowPane alignment="CENTER" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#filtrarPedidosEntregues" styleClass="btn-categoria" text="Pedidos Entregues" />
+                  <Button mnemonicParsing="false" onAction="#filtrarPedidosPorPagar" styleClass="btn-categoria" text="Pedidos Por Pagar" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </FlowPane>
+         </top>
+         <center>
+            <FlowPane fx:id="pedidosPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
+         <bottom>
+            <VBox BorderPane.alignment="CENTER">
+               <FlowPane alignment="CENTER" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+                  <children>
+                     <Button fx:id="finalizarPedidoButton" mnemonicParsing="false" onAction="#finalizarPedido" styleClass="btn-success" text="Finalizar Pedido" />
+                     <Button fx:id="fazerPagamentoButton" mnemonicParsing="false" onAction="#mostrarPagamentoPane" styleClass="btn-success" text="Fazer Pagamento" />
+                  </children>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               </FlowPane>
+               <StackPane fx:id="pagamentoPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
+                  <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
+                     <Label text="Escolha o método de pagamento:" />
+                     <Button onAction="#fazerPagamento" text="Multibanco" />
+                     <Button onAction="#fazerPagamento" text="Dinheiro Vivo" />
+                     <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                        <Button onAction="#fecharPagamentoPane" styleClass="btn-danger" text="Cancelar" />
+                     </HBox>
+                  </VBox>
+               </StackPane>
+            </VBox>
+         </bottom>
+      </BorderPane>
+   </center>
+</BorderPane>
