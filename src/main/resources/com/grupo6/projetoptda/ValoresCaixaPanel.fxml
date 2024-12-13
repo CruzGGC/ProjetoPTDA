@@ -70,13 +70,13 @@
             <StackPane fx:id="selecionarDataPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
                     <HBox spacing="5.0">
-                        <Label styleClass="text-content" text="Data Inicio: "/>
-                        <DatePicker fx:id="dataInicioPicker" promptText="Data Início"/>
-                        <Label styleClass="text-content" text="Data Fim:"/>
-                        <DatePicker fx:id="dataFimPicker" promptText="Data Fim"/>
+                        <Label styleClass="text-content" text="Data Inicio: " />
+                        <DatePicker fx:id="dataInicioPicker" promptText="Data Início" />
+                        <Label styleClass="text-content" text="Data Fim:" />
+                        <DatePicker fx:id="dataFimPicker" promptText="Data Fim" />
                         <HBox alignment="CENTER_RIGHT" spacing="5.0">
-                            <Button onAction="#pesquisarPorData" styleClass="btn-success" text="Pesquisar"/>
-                            <Button onAction="#fecharSelecionarDataPane" styleClass="btn-danger" text="Cancelar"/>
+                            <Button onAction="#pesquisarPorData" styleClass="btn-success" text="Pesquisar" />
+                            <Button onAction="#fecharSelecionarDataPane" styleClass="btn-danger" text="Cancelar" />
                         </HBox>
                     </HBox>
                 </VBox>
