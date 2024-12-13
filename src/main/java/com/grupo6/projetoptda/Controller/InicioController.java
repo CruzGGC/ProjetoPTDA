@@ -1,8 +1,12 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
 import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -42,9 +46,18 @@ public class InicioController {
         String login = utilizadorField.getText();
         String password = passwordField.getText();
 
-        if (autenticarUsuario(login, password)) {
+        int funcionarioId = autenticarUsuario(login, password);
+        if (funcionarioId != -1) {
             try {
-                SceneManager.setScene((Stage) loginButton.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/MainPanel.fxml"));
+                Parent root = loader.load();
+                MainController mainController = loader.getController();
+                mainController.setFuncionarioId(funcionarioId);
+
+                Stage stage = (Stage) loginButton.getScene().getWindow();
+                Scene scene = new Scene(root, 800, 600);
+                CarregarCSS.applyCSS(scene);
+                stage.setScene(scene);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -52,7 +65,8 @@ public class InicioController {
             System.out.println("Autenticação falhou.");
         }
     }
-    private boolean autenticarUsuario(String nome, String passwordInserida) {
+
+    private int autenticarUsuario(String nome, String passwordInserida) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String sql = "CALL autenticar(?)";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -60,16 +74,21 @@ public class InicioController {
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
                         String hashSenha = rs.getString("fPassword");
-                        return BCrypt.checkpw(passwordInserida, hashSenha);
+                        if (BCrypt.checkpw(passwordInserida, hashSenha)) {
+                            return rs.getInt("idFuncionario");
+                        } else {
+                            System.out.println("Senha incorreta.");
+                            return -1;
+                        }
                     } else {
                         System.out.println("Usuário não encontrado.");
-                        return false;
+                        return -1;
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 }
