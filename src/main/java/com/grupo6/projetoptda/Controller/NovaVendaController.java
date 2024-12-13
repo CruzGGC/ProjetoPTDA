@@ -9,9 +9,6 @@ import com.grupo6.projetoptda.Getter.Produto;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -23,9 +20,9 @@ import javafx.scene.control.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
-import java.util.Objects;
 import javafx.scene.control.Label;
+
+import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
 
 public class NovaVendaController {
 
@@ -85,17 +82,6 @@ public class NovaVendaController {
 
         // Formatar a data atual
         DateUtils.updateDate(labelData);
-    }
-
-    private void recarregarInterface() {
-        try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/grupo6/projetoptda/NovaVendaPanel.fxml")));
-            Scene scene = Stage.getWindows().getFirst().getScene();
-            scene.setRoot(root);
-            CarregarCSS.applyCSS(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

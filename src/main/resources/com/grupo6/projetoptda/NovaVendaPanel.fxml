@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.NovaVendaController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="fundo" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.NovaVendaController">
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
@@ -67,10 +57,10 @@
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
-               <ImageView fitHeight="33.0" fitWidth="115.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fitHeight="40.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@Imagens/logotipo.png" />
                </ImageView>
-               <VBox>
+               <VBox spacing="5.0">
                   <Label styleClass="text-content" text="Fatura Simplicficada (FS 2024)" />
                   <Label fx:id="labelData" styleClass="text-content" text="DATA" />
                </VBox>
@@ -96,7 +86,7 @@
                <Label fx:id="labelTotal" styleClass="text-pagamento" text="Total: 0.00€" />
                <Label fx:id="labelNumArtigos" styleClass="text-pagamento" text="Nº de artigos/quantidade: 0" />
                <Label styleClass="text-pagamento" text="Produtos Selecionados" />
-               <TableView fx:id="tabelaProdutos" style="-fx-background-color: #333333;">
+               <TableView fx:id="tabelaProdutos" styleClass="fundo">
                   <columns>
                      <TableColumn fx:id="colunaDescricao" text="Descrição" />
                      <TableColumn fx:id="colunaPVP" text="P.V.P" />
