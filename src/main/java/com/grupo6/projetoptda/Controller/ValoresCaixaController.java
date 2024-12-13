@@ -1,5 +1,6 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Utilidades.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,15 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class ValoresCaixaController {
+
+    @FXML
+    public void onVoltarClick() {
+        try {
+            SceneManager.setScene((Stage) selecionarDataPane.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private FlowPane faturasPane;

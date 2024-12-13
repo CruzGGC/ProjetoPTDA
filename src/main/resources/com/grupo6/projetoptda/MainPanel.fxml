@@ -27,7 +27,7 @@
              </VBox>
          </top>
          <right>
-             <VBox alignment="CENTER_RIGHT" prefHeight="433.0" prefWidth="199.0" BorderPane.alignment="CENTER">
+             <VBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
                  <Label fx:id="labelHora" styleClass="text-datahora" text="Hora" />
                  <Label fx:id="labelData" styleClass="text-datahora" text="Data" />
              </VBox>

@@ -65,7 +65,7 @@
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </padding>
-                <Button mnemonicParsing="false" text="🏠" />
+                <Button mnemonicParsing="false" onAction="#onVoltarClick" text="🏠" />
             </HBox>
             <StackPane fx:id="selecionarDataPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
                 <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
