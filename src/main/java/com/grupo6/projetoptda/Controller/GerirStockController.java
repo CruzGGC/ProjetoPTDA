@@ -1,12 +1,12 @@
 package com.grupo6.projetoptda.Controller;
 
-import com.grupo6.projetoptda.MainApp;
 import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
 import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
 import com.grupo6.projetoptda.Utilidades.Panes;
 
+import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,7 +35,7 @@ public class GerirStockController {
     @FXML
     public void onVoltarClick() {
         try {
-            MainApp.setScene((Stage) categoriasPane.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+            SceneManager.setScene((Stage) categoriasPane.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -372,15 +372,15 @@ public class GerirStockController {
 
         for (Categoria categoria : categorias) {
             Text nomeText = new Text(categoria.getNome() + "\n");
-            nomeText.setStyle("-fx-font-size: 16px;");
+            nomeText.getStyleClass().add("text-nome");
 
             Text idText = new Text("ID: " + categoria.getIdCategoria());
-            idText.setStyle("-fx-font-size: 12px;");
+            idText.getStyleClass().add("text-id");
 
             TextFlow textFlow = new TextFlow(nomeText, idText);
             Button btnCategoria = new Button();
             btnCategoria.setGraphic(textFlow);
-            btnCategoria.setStyle("-fx-padding: 5; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+            btnCategoria.getStyleClass().add("btn-categoria");
             btnCategoria.setOnAction(event -> carregarProdutos(categoria.getIdCategoria()));
             categoriasPane.getChildren().add(btnCategoria);
         }

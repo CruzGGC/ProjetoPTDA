@@ -1,7 +1,6 @@
 package com.grupo6.projetoptda.Controller;
 
-import com.grupo6.projetoptda.MainApp;
-import com.grupo6.projetoptda.Utilidades.CarregarCSS;
+import com.grupo6.projetoptda.Utilidades.*;
 import com.grupo6.projetoptda.Getter.Cliente;
 import com.grupo6.projetoptda.Getter.ProdutoSelecionado;
 import com.grupo6.projetoptda.Getter.Categoria;
@@ -9,9 +8,6 @@ import com.grupo6.projetoptda.Getter.Produto;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
-import com.grupo6.projetoptda.Utilidades.DateUtils;
-import com.grupo6.projetoptda.Utilidades.Panes;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,7 +35,7 @@ public class NovaVendaController {
     @FXML
     public void onVoltarClick() {
         try {
-            MainApp.setScene((Stage) labelData.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+            SceneManager.setScene((Stage) labelData.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,7 +140,7 @@ public class NovaVendaController {
 
         for (Categoria categoria : categorias) {
             Button btnCategoria = new Button(categoria.getNome());
-            btnCategoria.setStyle("-fx-font-size: 16px; -fx-padding: 10; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+            btnCategoria.getStyleClass().add("btn-categoria");
             categoriasPane.getChildren().add(btnCategoria);
 
             // Adicionar ação para filtrar produtos por categoria
@@ -158,7 +154,7 @@ public class NovaVendaController {
 
         for (Produto produto : produtos) {
             Button btnProduto = new Button(produto.getNome() + "\n" + String.format("%.2f€", produto.getPreco()));
-            btnProduto.setStyle("-fx-font-size: 14px; -fx-padding: 10; -fx-background-color: #2196F3; -fx-text-fill: white;");
+            btnProduto.getStyleClass().add("btn-item");
             produtosPane.getChildren().add(btnProduto);
 
             btnProduto.setOnAction(e -> adicionarProduto(produto));

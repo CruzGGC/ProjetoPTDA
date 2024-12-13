@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.ValoresCaixaController">
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+    </padding>
+    <top>
+        <HBox spacing="5.0" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="30.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@Imagens/logotipo.png" />
+            </ImageView>
+            <Label styleClass="text-content" text="Relatório das Faturuas" />
+        </HBox>
+    </top>
+    <center>
+        <BorderPane BorderPane.alignment="CENTER">
+            <top>
+                <FlowPane alignment="CENTER" hgap="5.0" BorderPane.alignment="CENTER">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                    </padding>
+                    <Button fx:id="btnTurnoAtual" mnemonicParsing="false" styleClass="btn-categoria" text="Turno Atual" />
+                    <Button fx:id="btnHoje" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" styleClass="btn-categoria" text="Hoje" />
+                    <Button fx:id="btnUltimaSemana" layoutX="98.0" layoutY="15.0" mnemonicParsing="false" styleClass="btn-categoria" text="Ultima Semana" />
+                    <Button fx:id="btnUltimoMes" layoutX="144.0" layoutY="15.0" mnemonicParsing="false" styleClass="btn-categoria" text="Ultimo Mes" />
+                    <Button fx:id="btnEsteAno" layoutX="245.0" layoutY="15.0" mnemonicParsing="false" styleClass="btn-categoria" text="Este Ano" />
+                    <Button fx:id="btnAnoAnterior" layoutX="327.0" layoutY="15.0" mnemonicParsing="false" styleClass="btn-categoria" text="Ano Anterior" />
+                    <Button fx:id="btnSelecionarData" layoutX="395.0" layoutY="15.0" mnemonicParsing="false" styleClass="btn-categoria" text="Selecionar Data" />
+                </FlowPane>
+            </top>
+            <center>
+                <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <top>
+                        <HBox spacing="5.0" BorderPane.alignment="CENTER">
+                            <padding>
+                                <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+                            </padding>
+                            <TextField />
+                            <Button mnemonicParsing="false" styleClass="btn-success" text="Pesquisar" />
+                        </HBox>
+                    </top>
+                    <center>
+                        <FlowPane fx:id="faturasPane" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER" />
+                    </center>
+                </BorderPane>
+            </center>
+        </BorderPane>
+    </center>
+    <bottom>
+        <VBox>
+            <HBox BorderPane.alignment="CENTER">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+                <Button mnemonicParsing="false" text="🏠" />
+            </HBox>
+            <StackPane fx:id="selecionarDataPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
+                <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
+                    <HBox spacing="5.0">
+                        <Label styleClass="text-content" text="Data Inicio: "/>
+                        <DatePicker fx:id="dataInicioPicker" promptText="Data Início"/>
+                        <Label styleClass="text-content" text="Data Fim:"/>
+                        <DatePicker fx:id="dataFimPicker" promptText="Data Fim"/>
+                        <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                            <Button onAction="#pesquisarPorData" styleClass="btn-success" text="Pesquisar"/>
+                            <Button onAction="#fecharSelecionarDataPane" styleClass="btn-danger" text="Cancelar"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+            </StackPane>
+        </VBox>
+    </bottom>
+</BorderPane>

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.MainController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #333333;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.MainController">
 
     <!-- Rodapé -->
     <bottom>
@@ -15,14 +22,14 @@
          <top>
              <VBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@Imagens/logotipo.png"/>
+                     <Image url="@Imagens/logotipo.png" />
                  </ImageView>
              </VBox>
          </top>
          <right>
              <VBox alignment="CENTER_RIGHT" prefHeight="433.0" prefWidth="199.0" BorderPane.alignment="CENTER">
-                 <Label fx:id="labelHora" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Hora"/>
-                 <Label fx:id="labelData" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Data"/>
+                 <Label fx:id="labelHora" styleClass="text-datahora" text="Hora" />
+                 <Label fx:id="labelData" styleClass="text-datahora" text="Data" />
              </VBox>
          </right>
          <padding>
@@ -35,9 +42,9 @@
          <right>
              <HBox BorderPane.alignment="CENTER">
                  <BorderPane.margin>
-                     <Insets/>
+                     <Insets />
                  </BorderPane.margin>
-                 <Button mnemonicParsing="false" onAction="#onSairClick" text="Sair"/>
+                 <Button mnemonicParsing="false" onAction="#onSairClick" text="Sair" />
              </HBox>
          </right>
          <padding>
@@ -51,8 +58,8 @@
               <GridPane alignment="CENTER" hgap="15" prefHeight="200.0" vgap="15" BorderPane.alignment="CENTER">
                   <Button onAction="#onNovaVendaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Nova Venda" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                   <Button onAction="#onGestaoStockClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-secondary" text="Gestão de Stock" GridPane.columnIndex="1" />
-                  <Button onAction="#onFecharCaixaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-danger" text="Fechar Caixa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Button onAction="#onOperacoesCaixaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-warning" text="Valores em Caixa" GridPane.rowIndex="3" />
+                  <Button onAction="#onFecharCaixaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Fechar Caixa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button onAction="#onValoresCaixaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-secondary" text="Valores em Caixa" GridPane.rowIndex="3" />
                <columnConstraints>
                   <ColumnConstraints />
                   <ColumnConstraints />

@@ -44,43 +44,46 @@
     -fx-background-radius: 5;
 }
 
-.btn-item {
-    -fx-background-color: #6c757d;
-    -fx-text-fill: white;
-    -fx-font-size: 12px;
+.btn-categoria {
+    -fx-font-size: 16px;
     -fx-padding: 10;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-}
-
-
-.btn-warning {
-    -fx-background-color: #ffa500;
+    -fx-background-color: #4CAF50;
     -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px;
 }
 
-.button {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 2);
-    -fx-cursor: hand;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-}
-
-.btn-item {
-    -fx-background-color: #5eb5ff;
-    -fx-text-fill: white;
+.btn-produto {
     -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-alignment: CENTER;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
+    -fx-padding: 10;
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
 }
 
-.btn-success {
-    -fx-background-color: #28a745;
+.btn-fatura {
+    -fx-font-size: 14px;
+    -fx-padding: 10;
+    -fx-background-color: #4CAF50;
     -fx-text-fill: white;
+}
+
+.text-content {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.text-pagamento {
     -fx-font-size: 16px;
-    -fx-padding: 10px;
+    -fx-text-fill: white;
+}
+
+.text-datahora {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+
+.text-nome {
+    -fx-font-size: 14px;
+}
+
+.text-id {
+    -fx-font-size: 12px;
 }

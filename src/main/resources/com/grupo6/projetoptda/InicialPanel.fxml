@@ -16,38 +16,38 @@
     <top>
         <VBox alignment="CENTER" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@Imagens/logotipo.png"/>
+                <Image url="@Imagens/logotipo.png" />
             </ImageView>
         </VBox>
     </top>
     <left>
         <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
             <BorderPane.margin>
-                <Insets bottom="5.0" left="50.0" right="5.0" top="5.0"/>
+                <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
             </BorderPane.margin>
             <Label text="Utilizador:" textFill="#00aeff">
                 <font>
-                    <Font name="System Bold" size="14.0"/>
+                    <Font name="System Bold" size="14.0" />
                 </font>
             </Label>
-            <TextField fx:id="utilizadorField" prefWidth="300.0" promptText="Utilizador"/>
+            <TextField fx:id="utilizadorField" prefWidth="300.0" promptText="Utilizador" />
             <Label text="Password:" textFill="#00aeff">
                 <font>
-                    <Font name="System Bold" size="14.0"/>
+                    <Font name="System Bold" size="14.0" />
                 </font>
             </Label>
-            <PasswordField fx:id="passwordField" prefWidth="300.0" promptText="Password"/>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onMainPanel" text="Login"/>
+            <PasswordField fx:id="passwordField" prefWidth="300.0" promptText="Password" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onMainPanel" text="Login" />
         </VBox>
     </left>
     <bottom>
         <BorderPane BorderPane.alignment="CENTER">
             <right>
                 <HBox BorderPane.alignment="CENTER">
-                    <Button mnemonicParsing="false" text="Fechar"/>
+                    <Button mnemonicParsing="false" text="Fechar" />
                 </HBox>
             </right>
             <padding>
@@ -58,10 +58,10 @@
     <right>
         <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
             <padding>
-                <Insets bottom="5.0" left="5.0" right="20.0" top="5.0"/>
+                <Insets bottom="5.0" left="5.0" right="20.0" top="5.0" />
             </padding>
-            <Label fx:id="labelHora" style="-fx-text-fill: white;" text="Data"/>
-            <Label fx:id="labelData" style="-fx-text-fill: white;" text="Hora"/>
+            <Label fx:id="labelHora" styleClass="text-datahora" text="Data" />
+            <Label fx:id="labelData" styleClass="text-datahora" text="Hora" />
         </VBox>
     </right>
 </BorderPane>

@@ -1,7 +1,7 @@
 package com.grupo6.projetoptda.Controller;
 
-import com.grupo6.projetoptda.MainApp;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
+import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -44,7 +44,7 @@ public class InicioController {
 
         if (autenticarUsuario(login, password)) {
             try {
-                MainApp.setScene((Stage) loginButton.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+                SceneManager.setScene((Stage) loginButton.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
             } catch (Exception e) {
                 e.printStackTrace();
             }

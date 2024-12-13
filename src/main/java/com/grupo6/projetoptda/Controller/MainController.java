@@ -1,7 +1,7 @@
 package com.grupo6.projetoptda.Controller;
 
-import com.grupo6.projetoptda.MainApp;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
+import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
@@ -24,7 +24,7 @@ public class MainController {
     public void onGestaoStockClick() {
         try {
             // Carregar o novo layout (Gerir Stock)
-            MainApp.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/GerirStockPanel.fxml");
+            SceneManager.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/GerirStockPanel.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,8 +36,13 @@ public class MainController {
     }
 
     @FXML
-    public void onOperacoesCaixaClick() {
-        System.out.println("Operações de Caixa clicada!");
+    public void onValoresCaixaClick() {
+        try {
+            // Use labelData to get the current Stage
+            SceneManager.setScene((Stage) labelData.getScene().getWindow(), "/com/grupo6/projetoptda/ValoresCaixaPanel.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -49,7 +54,7 @@ public class MainController {
     public void onNovaVendaClick() {
         try {
             // Carregar o novo layout (Nova Venda)
-            MainApp.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/NovaVendaPanel.fxml");
+            SceneManager.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/NovaVendaPanel.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }
