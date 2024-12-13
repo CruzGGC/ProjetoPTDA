@@ -87,3 +87,7 @@
 .text-id {
     -fx-font-size: 12px;
 }
+
+.fundo {
+    -fx-background-color: #333333;
+}

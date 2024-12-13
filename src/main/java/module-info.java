@@ -1,9 +1,11 @@
 module com.grupo6.projetoptda {
-    requires javafx.controls;
     requires javafx.fxml;
+    requires org.kordamp.ikonli.javafx;
     requires com.google.gson;
     requires java.sql;
     requires jbcrypt;
+    requires javafx.controls;
+    requires org.kordamp.ikonli.fontawesome5;
 
 
     opens com.grupo6.projetoptda to javafx.fxml;

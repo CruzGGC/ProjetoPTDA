@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ProjetoPTDA" options="--add-exports java.base/jdk.internal.icu.text=com.grupo6.projetoptda" />
+      <module name="ProjetoPTDA" options="--add-exports java.base/jdk.internal.icu.text=com.grupo6.projetoptda --add-exports javafx.graphics/com.sun.javafx.tk.quantum=com.grupo6.projetoptda" />
     </option>
   </component>
 </project>
