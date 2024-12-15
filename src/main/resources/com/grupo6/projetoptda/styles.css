@@ -3,7 +3,7 @@
 }
 
 /* Botões de Categoria */
-.btn-primary {
+.btn-secondary {
     -fx-background-color: #5eb5ff;
     -fx-text-fill: white;
     -fx-font-size: 14px;
@@ -14,7 +14,7 @@
 }
 
 /* Botão Voltar */
-.btn-secondary {
+.btn-primary {
     -fx-background-color: #ffc107;
     -fx-text-fill: black;
     -fx-font-size: 14px;
@@ -63,6 +63,15 @@
     -fx-padding: 10;
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
+}
+
+.btn-login {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
 }
 
 .text-content {
