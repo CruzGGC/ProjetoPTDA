@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="fundo" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.NovaVendaController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="fundo" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.NovaVendaController">
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
-            <HBox spacing="5.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
@@ -27,8 +37,7 @@
                <padding>
                   <Insets bottom="5.0" right="5.0" top="5.0" />
                </padding>
-               <Button fx:id="pedidoButton" mnemonicParsing="false" text="Pedido" />
-               <Button mnemonicParsing="false" text="Pagamento" />
+               <Button fx:id="pedidoButton" mnemonicParsing="false" styleClass="btn-secondary" text="Pedido" />
             </HBox>
          </right>
          <bottom>
@@ -79,9 +88,9 @@
    <left>
       <BorderPane prefHeight="324.0" prefWidth="328.0" BorderPane.alignment="CENTER">
          <center>
-            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="2.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="8.0" />
                </BorderPane.margin>
                <Label fx:id="labelTotal" styleClass="text-pagamento" text="Total: 0.00€" />
                <Label fx:id="labelNumArtigos" styleClass="text-pagamento" text="Nº de artigos/quantidade: 0" />
@@ -115,7 +124,7 @@
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </padding>
                         <ComboBox fx:id="clienteComboBox" prefHeight="25.0" promptText="Selecione o Cliente" />
-                        <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" text="Criar Cliente" />
+                        <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" prefHeight="25.0" text="Criar Cliente" />
                      </HBox>
                   </VBox>
                </bottom>
