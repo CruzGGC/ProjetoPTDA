@@ -2,6 +2,7 @@ package com.grupo6.projetoptda.Controller;
 
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
+import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
 import com.grupo6.projetoptda.Utilidades.Panes;
 

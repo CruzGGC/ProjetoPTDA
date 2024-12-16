@@ -1,5 +1,6 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.Panes;
 import com.grupo6.projetoptda.Getter.Pedido;
 import com.grupo6.projetoptda.Utilidades.SceneManager;

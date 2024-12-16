@@ -1,6 +1,5 @@
 package com.grupo6.projetoptda.Utilidades;
 
-import com.grupo6.projetoptda.Controller.DatabaseConnection;
 import com.grupo6.projetoptda.Getter.Categoria;
 
 import java.sql.Connection;

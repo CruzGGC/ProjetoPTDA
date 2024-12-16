@@ -1,5 +1,6 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

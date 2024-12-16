@@ -14,4 +14,6 @@ module com.grupo6.projetoptda {
     exports com.grupo6.projetoptda;
     exports com.grupo6.projetoptda.Controller;
     exports com.grupo6.projetoptda.Getter;
+    exports com.grupo6.projetoptda.Utilidades;
+    opens com.grupo6.projetoptda.Utilidades to javafx.fxml;
 }
