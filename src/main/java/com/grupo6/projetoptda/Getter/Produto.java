@@ -1,35 +1,28 @@
 package com.grupo6.projetoptda.Getter;
 
+import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
+
 public class Produto {
-    private int idProduto;
+    private final int idProduto;
     private int idCategoria; // Referência à categoria do produto
     private String nome; // Nome do produto
     private double preco; // Preço do produto
     private int quantidadeStock; // Quantidade em estoque
 
-    // Construtores, getters e setters
-    public Produto(int idProduto, int idCategoria, String nome, double preco, int quantidadeStock) {
+    public Produto(int idProduto, int idCategoria, String nome, double preco, int quantidade) {
         this.idProduto = idProduto;
         this.idCategoria = idCategoria;
         this.nome = nome;
         this.preco = preco;
-        this.quantidadeStock = quantidadeStock;
+        this.quantidadeStock = quantidade;
     }
 
     public int getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(int idProduto) {
-        this.idProduto = idProduto;
-    }
-
     public int getIdCategoria() {
         return idCategoria;
-    }
-
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
     }
 
     public String getNome() {
@@ -52,7 +45,19 @@ public class Produto {
         return quantidadeStock;
     }
 
-    public void setQuantidadeStock(int quantidadeStock) {
-        this.quantidadeStock = quantidadeStock;
+    public Categoria getCategoria() {
+        return DatabaseUtils.getCategoriaById(idCategoria);
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.idCategoria = categoria.getIdCategoria();
+    }
+
+    public int getQuantidade() {
+        return quantidadeStock;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidadeStock = quantidade;
     }
 }

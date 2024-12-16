@@ -35,12 +35,6 @@ public class GerirComprasController {
     private TableColumn<Produto, Integer> quantidadeColumn;
 
     @FXML
-    private Button adicionarCategoriaButton;
-
-    @FXML
-    private Button adicionarProdutosButton;
-
-    @FXML
     private Button voltarButton;
 
     @FXML
@@ -67,15 +61,19 @@ public class GerirComprasController {
     private void setupTableView() {
         nomeColumn.setCellValueFactory(new PropertyValueFactory<>("nome"));
         nomeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nomeColumn.setOnEditCommit(event -> event.getRowValue().setNome(event.getNewValue()));
 
         categoriaColumn.setCellValueFactory(new PropertyValueFactory<>("categoria"));
         categoriaColumn.setCellFactory(ComboBoxTableCell.forTableColumn(categorias));
+        categoriaColumn.setOnEditCommit(event -> event.getRowValue().setCategoria(event.getNewValue()));
 
         precoColumn.setCellValueFactory(new PropertyValueFactory<>("preco"));
         precoColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        precoColumn.setOnEditCommit(event -> event.getRowValue().setPreco(event.getNewValue()));
 
         quantidadeColumn.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
         quantidadeColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        quantidadeColumn.setOnEditCommit(event -> event.getRowValue().setQuantidade(event.getNewValue()));
 
         tableView.setEditable(true);
     }
@@ -86,7 +84,8 @@ public class GerirComprasController {
 
     @FXML
     private void adicionarProdutos() {
-        for (Produto produto : tableView.getItems()) {
+        ObservableList<Produto> produtos = tableView.getItems();
+        for (Produto produto : produtos) {
             if (!isRowEmpty(produto)) {
                 DatabaseUtils.adicionarProduto(produto.getNome(), produto.getCategoria().getIdCategoria(), produto.getPreco(), produto.getQuantidade());
             }
@@ -129,11 +128,14 @@ public class GerirComprasController {
 
     @FXML
     private void adicionarLinha() {
-        Produto novoProduto = new Produto(0, new Categoria(0, ""), "", 0.0, 0, 0);
+        Produto novoProduto = new Produto(0, 0, "", 0.0, 0);
         produtos.add(novoProduto);
     }
 
     private boolean isRowEmpty(Produto produto) {
-        return produto.getNome().isEmpty() || produto.getCategoria() == null || produto.getPreco() == 0.0 || produto.getQuantidade() == 0;
+        return produto.getNome() == null || produto.getNome().trim().isEmpty() ||
+                produto.getCategoria() == null ||
+                produto.getPreco() <= 0.0 ||
+                produto.getQuantidade() <= 0;
     }
 }

@@ -84,7 +84,7 @@ public class GerirPedidosController {
             String query = "SELECT c.nome AS nomeCliente, p.dataHora FROM Pedido p JOIN Cliente c ON p.idCliente = c.idCliente WHERE p.idPedido = ?";
             try (Connection conn = DatabaseConnection.getConnection();
                  PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, pedido.getIdPedido());
+                stmt.setInt(1, pedido.idPedido());
                 try (ResultSet resultSet = stmt.executeQuery()) {
                     if (resultSet.next()) {
                         String nomeCliente = resultSet.getString("nomeCliente");
@@ -92,7 +92,7 @@ public class GerirPedidosController {
                         String data = dataHora.toLocalDateTime().toLocalDate().toString();
                         String hora = dataHora.toLocalDateTime().toLocalTime().toString();
                         String pedidoInfo = String.format("Fatura: %d\nCliente: %s\n%s | %s",
-                                pedido.getIdPedido(), nomeCliente, data, hora);
+                                pedido.idPedido(), nomeCliente, data, hora);
 
                         Button btnPedido = new Button(pedidoInfo);
                         btnPedido.setOnAction(event -> selecionarPedido(pedido));
@@ -145,10 +145,10 @@ public class GerirPedidosController {
 
     private void selecionarPedido(Pedido pedido) {
         this.pedidoSelecionado = pedido;
-        if ("Entregue".equals(pedido.getStatus())) {
+        if ("Entregue".equals(pedido.status())) {
             finalizarPedidoButton.setDisable(false);
             fazerPagamentoButton.setDisable(true);
-        } else if ("PorPagar".equals(pedido.getStatus())) {
+        } else if ("PorPagar".equals(pedido.status())) {
             finalizarPedidoButton.setDisable(true);
             fazerPagamentoButton.setDisable(false);
         } else {
@@ -159,8 +159,8 @@ public class GerirPedidosController {
 
     @FXML
     public void mostrarModifyPedidoPane(Pedido pedido) {
-        pedidoIdField.setText(String.valueOf(pedido.getIdPedido()));
-        pedidoStatusField.setText(pedido.getStatus());
+        pedidoIdField.setText(String.valueOf(pedido.idPedido()));
+        pedidoStatusField.setText(pedido.status());
         Panes.showPane(modifyPedidoPane);
     }
 
@@ -182,14 +182,14 @@ public class GerirPedidosController {
         String query = "{CALL cancelarPedido(?)}";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareCall(query)) {
-            stmt.setInt(1, pedido.getIdPedido());
+            stmt.setInt(1, pedido.idPedido());
             stmt.execute();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");
             alert.setHeaderText(null);
             alert.setContentText("Pedido removido com sucesso!");
             alert.showAndWait();
-            carregarPedidos(pedido.getStatus());
+            carregarPedidos(pedido.status());
             recarregarInterface();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -202,11 +202,11 @@ public class GerirPedidosController {
 
     @FXML
     public void finalizarPedido() {
-        if (pedidoSelecionado != null && "Entregue".equals(pedidoSelecionado.getStatus())) {
+        if (pedidoSelecionado != null && "Entregue".equals(pedidoSelecionado.status())) {
             String query = "{CALL finalizarPedido(?)}";
             try (Connection conn = DatabaseConnection.getConnection();
                  CallableStatement stmt = conn.prepareCall(query)) {
-                stmt.setInt(1, pedidoSelecionado.getIdPedido());
+                stmt.setInt(1, pedidoSelecionado.idPedido());
                 stmt.execute();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso");
@@ -227,7 +227,7 @@ public class GerirPedidosController {
 
     @FXML
     public void mostrarPagamentoPane() {
-        if (pedidoSelecionado != null && "PorPagar".equals(pedidoSelecionado.getStatus())) {
+        if (pedidoSelecionado != null && "PorPagar".equals(pedidoSelecionado.status())) {
             Panes.showPane(pagamentoPane);
         }
     }
@@ -249,12 +249,12 @@ public class GerirPedidosController {
              CallableStatement stmtEmitirFatura = conn.prepareCall(queryEmitirFatura)) {
 
             // Chamar a stored procedure fazerPagamento
-            stmtPagamento.setInt(1, pedidoSelecionado.getIdPedido());
+            stmtPagamento.setInt(1, pedidoSelecionado.idPedido());
             stmtPagamento.setString(2, metodoPagamento.equals("Dinheiro Vivo") ? "DinheiroVivo" : metodoPagamento);
             stmtPagamento.execute();
 
             // Chamar a stored procedure emitirFatura
-            stmtEmitirFatura.setInt(1, pedidoSelecionado.getIdPedido());
+            stmtEmitirFatura.setInt(1, pedidoSelecionado.idPedido());
             stmtEmitirFatura.execute();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

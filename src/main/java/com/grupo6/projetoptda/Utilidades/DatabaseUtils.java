@@ -33,6 +33,25 @@ public class DatabaseUtils {
         return categorias;
     }
 
+    public static Categoria getCategoriaById(int idCategoria) {
+        String query = "SELECT * FROM Categoria WHERE idCategoria = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, idCategoria);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Categoria(
+                            resultSet.getInt("idCategoria"),
+                            resultSet.getString("nome")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void adicionarCategoria(String nome) {
         if (nome.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -111,4 +130,5 @@ public class DatabaseUtils {
             alert.showAndWait();
         }
     }
+
 }

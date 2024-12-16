@@ -222,7 +222,7 @@ public class NovaVendaController {
             return;
         }
 
-        int idCliente = clienteSelecionado.getIdCliente();
+        int idCliente = clienteSelecionado.idCliente();
         String jsonProdutos = criarJsonProdutos();
 
         String query = "{CALL criarPedido(?, ?)}";

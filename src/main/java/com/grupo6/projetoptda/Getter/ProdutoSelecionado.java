@@ -18,15 +18,12 @@ public class ProdutoSelecionado {
     }
 
     public int getIdProduto() { return idProduto.get(); }
-    public String getDescricao() { return descricao.get(); }
+
     public double getPreco() { return preco.get(); }
     public int getQuantidadeStock() { return quantidadeStock.get(); }
     public double getTotal() { return total.get(); }
-
     public void setQuantidadeStock(int quantidadeStock) { this.quantidadeStock.set(quantidadeStock); }
     public void setTotal(double total) { this.total.set(total); }
-
-    public IntegerProperty idProdutoProperty() { return idProduto; }
     public StringProperty descricaoProperty() { return descricao; }
     public DoubleProperty precoProperty() { return preco; }
     public IntegerProperty quantidadeStockProperty() { return quantidadeStock; }

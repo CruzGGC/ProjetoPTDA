@@ -13,7 +13,7 @@ public class InterfaceUtils {
     public static void recarregarInterface() {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(InterfaceUtils.class.getResource("/com/grupo6/projetoptda/GerirStockPanel.fxml")));
-            Scene scene = Stage.getWindows().get(0).getScene();
+            Scene scene = Stage.getWindows().getFirst().getScene();
             scene.setRoot(root);
             CarregarCSS.applyCSS(scene);
         } catch (IOException e) {
