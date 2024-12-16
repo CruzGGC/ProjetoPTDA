@@ -5,7 +5,6 @@ import com.grupo6.projetoptda.Getter.Produto;
 import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
 import com.grupo6.projetoptda.Utilidades.Panes;
-
 import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -127,27 +126,8 @@ public class GerirStockController {
         double preco = Double.parseDouble(precoProdutoField.getText());
         int quantidade = Integer.parseInt(quantidadeProdutoField.getText());
 
-        String query = "{CALL adicionarProduto(?, ?, ?, ?)}";
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(query)) {
-            stmt.setString(1, nome);
-            stmt.setInt(2, idCategoria);
-            stmt.setDouble(3, preco);
-            stmt.setInt(4, quantidade);
-            stmt.execute();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sucesso");
-            alert.setHeaderText(null);
-            alert.setContentText("Produto adicionado com sucesso!");
-            alert.showAndWait();
-            recarregarInterface();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao adicionar produto: " + e.getMessage());
-            alert.showAndWait();
-        }
+        DatabaseUtils.adicionarProduto(nome, idCategoria, preco, quantidade);
+        recarregarInterface();
     }
 
     @FXML
@@ -256,27 +236,9 @@ public class GerirStockController {
     }
 
     @FXML
-    public void adicionarCategoria() {
-        String nome = nomeCategoriaField.getText();
-
-        String query = "{CALL adicionarCategoria(?)}";
-        try (Connection conn = DatabaseConnection.getConnection();
-             CallableStatement stmt = conn.prepareCall(query)) {
-            stmt.setString(1, nome);
-            stmt.execute();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sucesso");
-            alert.setHeaderText(null);
-            alert.setContentText("Categoria adicionada com sucesso!");
-            alert.showAndWait();
-            recarregarInterface();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText(null);
-            alert.setContentText("Erro ao adicionar categoria: " + e.getMessage());
-            alert.showAndWait();
-        }
+    private void adicionarCategoria() {
+        DatabaseUtils.adicionarCategoria(nomeCategoriaField.getText());
+        fecharAddCategoryPane();
     }
 
     @FXML
