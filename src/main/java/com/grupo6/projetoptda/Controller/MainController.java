@@ -96,6 +96,15 @@ public class MainController {
     }
 
     @FXML
+    public void onGerirComprasClick() {
+        try {
+            SceneManager.setScene((Stage) labelData.getScene().getWindow(), "/com/grupo6/projetoptda/GerirComprasPanel.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onSairClick() {
         Platform.exit();
     }

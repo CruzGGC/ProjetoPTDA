@@ -1,10 +1,9 @@
 package com.grupo6.projetoptda.Getter;
 
 public class Categoria {
-    private int idCategoria; // ID da categoria
-    private String nome; // Nome da categoria
+    private int idCategoria;
+    private String nome;
 
-    // Construtores, getters e setters
     public Categoria(int idCategoria, String nome) {
         this.idCategoria = idCategoria;
         this.nome = nome;
@@ -24,5 +23,10 @@ public class Categoria {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
 }
