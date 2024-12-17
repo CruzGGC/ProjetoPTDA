@@ -118,13 +118,17 @@
                   </HBox>
                </right>
                <bottom>
-                  <VBox>
-                     <HBox spacing="5.0" BorderPane.alignment="CENTER_LEFT">
+                  <VBox prefHeight="36.0">
+                     <HBox prefHeight="36.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
                         <padding>
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                         </padding>
-                        <ComboBox fx:id="clienteComboBox" prefHeight="25.0" promptText="Selecione o Cliente" />
-                        <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" prefHeight="25.0" text="Criar Cliente" />
+                        <ComboBox fx:id="clienteComboBox" prefHeight="26.0" prefWidth="120.0" promptText="Selecione o Cliente" />
+                        <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" prefHeight="26.0" text="Criar Cliente" />
+                        <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" prefHeight="26.0" text="Cliente Anónimo" />
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin>
                      </HBox>
                   </VBox>
                </bottom>
@@ -133,16 +137,16 @@
       </BorderPane>
    </left>
    <center>
-      <BorderPane prefHeight="324.0" prefWidth="435.0" BorderPane.alignment="CENTER">
+      <BorderPane BorderPane.alignment="CENTER">
          <top>
-            <FlowPane fx:id="categoriasPane" hgap="5.0" prefHeight="100.0" prefWidth="200.0" vgap="5.0" BorderPane.alignment="CENTER">
+            <FlowPane fx:id="categoriasPane" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </FlowPane>
          </top>
          <center>
-            <FlowPane fx:id="produtosPane" hgap="5.0" prefHeight="100.0" prefWidth="200.0" vgap="5.0" BorderPane.alignment="CENTER">
+            <FlowPane fx:id="produtosPane" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
