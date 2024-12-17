@@ -90,6 +90,15 @@ public class NovaVendaController {
     }
 
     @FXML
+    public void selecionarClienteAnonimo() {
+        Cliente clienteAnonimo = new Cliente(1, "Cliente Anônimo");
+        if (!clienteComboBox.getItems().contains(clienteAnonimo)) {
+            clienteComboBox.getItems().add(clienteAnonimo);
+        }
+        clienteComboBox.getSelectionModel().select(clienteAnonimo);
+    }
+
+    @FXML
     public void fecharAddClientPane() {
         addClientPane.setVisible(false);
         addClientPane.setManaged(false);

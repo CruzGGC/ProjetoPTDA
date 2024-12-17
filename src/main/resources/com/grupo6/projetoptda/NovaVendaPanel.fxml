@@ -125,7 +125,7 @@
                         </padding>
                         <ComboBox fx:id="clienteComboBox" prefHeight="26.0" prefWidth="120.0" promptText="Selecione o Cliente" />
                         <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" prefHeight="26.0" text="Criar Cliente" />
-                        <Button mnemonicParsing="false" onAction="#mostrarAddClientPane" prefHeight="26.0" text="Cliente Anónimo" />
+                        <Button mnemonicParsing="false" onAction="#selecionarClienteAnonimo" prefHeight="26.0" text="Cliente Anônimo" />
                         <VBox.margin>
                            <Insets />
                         </VBox.margin>
