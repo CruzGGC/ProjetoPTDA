@@ -54,6 +54,38 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- Procedure para Visualizar Relatório de Compra com Filtros
+DELIMITER $$
+CREATE PROCEDURE visualizarRelatorioCompra(
+    IN p_dataInicio DATE,
+    IN p_dataFim DATE
+)
+BEGIN
+    -- Validate dates
+    IF p_dataInicio IS NULL OR p_dataFim IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Start and end dates are required';
+    END IF;
+
+    IF p_dataInicio > p_dataFim THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Start date must be before end date';
+    END IF;
+
+    -- Detailed report of purchase invoices
+    SELECT
+        f.idFatura,
+        f.data,
+        f.hora,
+        c.nome AS nomeCliente,
+        f.valorTotal
+    FROM FaturaCompra f
+    JOIN Cliente c ON f.idCliente = c.idCliente
+    WHERE f.data BETWEEN p_dataInicio AND p_dataFim
+    ORDER BY f.data, f.hora;
+END$$
+DELIMITER ;
+
 -- Procedure para Fechar Conta (Gerente)
 DELIMITER $$
 CREATE PROCEDURE fecharConta()
@@ -723,6 +755,34 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
+CREATE PROCEDURE mostrarDetalhesFaturaCompra(IN p_idFatura INT)
+BEGIN
+    -- Verificar se a fatura existe
+    IF NOT EXISTS (SELECT 1 FROM FaturaCompra WHERE idFatura = p_idFatura) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'A fatura especificada não existe';
+    END IF;
+
+    -- Selecionar detalhes completos da fatura com produtos concatenados
+    SELECT
+        f.idFatura AS 'ID Fatura',
+        f.data AS 'Data',
+        f.hora AS 'Hora',
+        c.nome AS 'Nome do Cliente',
+        cp.idCompra AS 'ID Compra',
+        GROUP_CONCAT(CONCAT(pr.nome, ' (', cpp.quantidade, ' x ', pr.preco, ')') SEPARATOR ', ') AS 'Produtos',
+        f.valorTotal AS 'Total Fatura'
+    FROM FaturaCompra f
+             LEFT JOIN Compra cp ON f.idCompra = cp.idCompra
+             LEFT JOIN Cliente c ON f.idCliente = c.idCliente
+             LEFT JOIN CompraProduto cpp ON cpp.idCompra = f.idCompra
+             LEFT JOIN Produto pr ON cpp.idProduto = pr.idProduto
+    WHERE f.idFatura = p_idFatura
+    GROUP BY f.idFatura, f.data, f.hora, c.nome, cp.idCompra, f.valorTotal;
+END$$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE efetuarCompra(IN p_produtos JSON)
 BEGIN
     DECLARE v_idCompra INT;
@@ -743,7 +803,7 @@ BEGIN
     SET v_total_produtos = JSON_LENGTH(p_produtos);
     IF v_total_produtos = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Compra deve ter pelo menos um produto';
+            SET MESSAGE_TEXT = 'Compra deve ter pelo menos um produto';
     END IF;
 
     -- Criar compra
@@ -754,29 +814,29 @@ BEGIN
 
     -- Inserir produtos na compra
     WHILE v_index < v_total_produtos DO
-        SET v_nome = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].nome')));
-        SET v_idCategoria = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].idCategoria')));
-        SET v_quantidade = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].quantidade')));
-        SET v_preco = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].preco')));
+            SET v_nome = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].nome')));
+            SET v_idCategoria = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].idCategoria')));
+            SET v_quantidade = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].quantidade')));
+            SET v_preco = JSON_UNQUOTE(JSON_EXTRACT(p_produtos, CONCAT('$[', v_index, '].preco')));
 
-        -- Verificar se o produto já existe
-        SELECT idProduto INTO v_idProduto
-        FROM Produto
-        WHERE nome = v_nome AND idCategoria = v_idCategoria;
+            -- Verificar se o produto já existe
+            SELECT idProduto INTO v_idProduto
+            FROM Produto
+            WHERE nome = v_nome AND idCategoria = v_idCategoria;
 
-        IF v_idProduto IS NULL THEN
-            -- Produto não existe, inserir novo produto
-            INSERT INTO Produto (nome, idCategoria, preco, quantidadeStock)
-            VALUES (v_nome, v_idCategoria, v_preco, v_quantidade);
-            SET v_idProduto = LAST_INSERT_ID();
-        END IF;
+            IF v_idProduto IS NULL THEN
+                -- Produto não existe, inserir novo produto
+                INSERT INTO Produto (nome, idCategoria, preco, quantidadeStock)
+                VALUES (v_nome, v_idCategoria, v_preco, v_quantidade);
+                SET v_idProduto = LAST_INSERT_ID();
+            END IF;
 
-        -- Inserir produto na compra
-        INSERT INTO CompraProduto (idCompra, idProduto, quantidade, preco)
-        VALUES (v_idCompra, v_idProduto, v_quantidade, v_preco);
+            -- Inserir produto na compra
+            INSERT INTO CompraProduto (idCompra, idProduto, quantidade, preco)
+            VALUES (v_idCompra, v_idProduto, v_quantidade, v_preco);
 
-        SET v_index = v_index + 1;
-    END WHILE;
+            SET v_index = v_index + 1;
+        END WHILE;
 
     -- Atualizar quantidade e preço total na tabela Compra
     UPDATE Compra
@@ -788,7 +848,7 @@ BEGIN
     IF v_erro THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Erro ao efetuar compra';
+            SET MESSAGE_TEXT = 'Erro ao efetuar compra';
     ELSE
         COMMIT;
     END IF;
@@ -798,35 +858,35 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE emitirFaturaCompra(IN p_idPedido INT)
+CREATE PROCEDURE emitirFaturaCompra(IN p_idCompra INT)
 BEGIN
     DECLARE v_idCliente INT DEFAULT 2; -- Fixed idCliente
     DECLARE v_valorTotal DECIMAL(10,2);
     DECLARE v_idFatura INT;
 
     -- Debugging: Output the input parameter
-    SELECT 'Input p_idPedido:', p_idPedido;
+    SELECT 'Input p_idCompra:', p_idCompra;
 
-    -- Check if the idPedido exists in the Pedido table
-    IF NOT EXISTS (SELECT 1 FROM Pedido WHERE idPedido = p_idPedido) THEN
+    -- Check if the idCompra exists in the Compra table
+    IF NOT EXISTS (SELECT 1 FROM Compra WHERE idCompra = p_idCompra) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'idPedido does not exist in Pedido table.';
+            SET MESSAGE_TEXT = 'idCompra does not exist in Compra table.';
     END IF;
 
     SELECT COALESCE(SUM(cp.quantidade * cp.preco), 0) INTO v_valorTotal
     FROM CompraProduto cp
-    WHERE cp.idCompra = p_idPedido;
+    WHERE cp.idCompra = p_idCompra;
 
     -- Debugging: Output the total value of the compra
     SELECT 'Total Value of Compra:', v_valorTotal;
 
     IF v_valorTotal = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Não é possível gerar fatura para compra com valor zero.';
+            SET MESSAGE_TEXT = 'Não é possível gerar fatura para compra com valor zero.';
     END IF;
 
-    INSERT INTO Fatura (idPedido, idCliente, valorTotal, data, hora)
-    VALUES (p_idPedido, v_idCliente, v_valorTotal, CURDATE(), CURTIME());
+    INSERT INTO FaturaCompra (idCompra, idCliente, valorTotal, data, hora)
+    VALUES (p_idCompra, v_idCliente, v_valorTotal, CURDATE(), CURTIME());
 
     SET v_idFatura = LAST_INSERT_ID();
 

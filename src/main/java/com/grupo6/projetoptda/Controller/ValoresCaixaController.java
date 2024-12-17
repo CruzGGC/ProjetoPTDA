@@ -51,27 +51,48 @@ public class ValoresCaixaController {
 
     private void carregarFaturas(LocalDate dataInicio, LocalDate dataFim) {
         faturasPane.getChildren().clear();
-        String query = "{CALL visualizarRelatorio(?, ?)}";
+        String queryFaturas = "{CALL visualizarRelatorio(?, ?)}";
+        String queryFaturasCompra = "{CALL visualizarRelatorioCompra(?, ?)}";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement stmt = connection.prepareCall(query)) {
+             CallableStatement stmtFaturas = connection.prepareCall(queryFaturas);
+             CallableStatement stmtFaturasCompra = connection.prepareCall(queryFaturasCompra)) {
 
-            stmt.setDate(1, Date.valueOf(dataInicio));
-            stmt.setDate(2, Date.valueOf(dataFim));
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                int idFatura = rs.getInt("idFatura");
+            // Set parameters and execute query for Faturas
+            stmtFaturas.setDate(1, Date.valueOf(dataInicio));
+            stmtFaturas.setDate(2, Date.valueOf(dataFim));
+            ResultSet rsFaturas = stmtFaturas.executeQuery();
+            while (rsFaturas.next()) {
+                int idFatura = rsFaturas.getInt("idFatura");
                 String faturaInfo = String.format("Fatura: %d\nCliente: %s\n%s | %s | %.2f",
                         idFatura,
-                        rs.getString("nomeCliente"),
-                        rs.getDate("data").toString(),
-                        rs.getTime("hora").toString(),
-                        rs.getDouble("valorTotal"));
+                        rsFaturas.getString("nomeCliente"),
+                        rsFaturas.getDate("data").toString(),
+                        rsFaturas.getTime("hora").toString(),
+                        rsFaturas.getDouble("valorTotal"));
 
                 Button faturaButton = new Button(faturaInfo);
                 faturaButton.getStyleClass().add("btn-categoria");
                 faturaButton.setOnAction(event -> abrirDetalhesFatura(idFatura));
+                faturasPane.getChildren().add(faturaButton);
+            }
+
+            // Set parameters and execute query for FaturasCompra
+            stmtFaturasCompra.setDate(1, Date.valueOf(dataInicio));
+            stmtFaturasCompra.setDate(2, Date.valueOf(dataFim));
+            ResultSet rsFaturasCompra = stmtFaturasCompra.executeQuery();
+            while (rsFaturasCompra.next()) {
+                int idFatura = rsFaturasCompra.getInt("idFatura");
+                String faturaInfo = String.format("FaturaCompra: %d\nCliente: %s\n%s | %s | %.2f",
+                        idFatura,
+                        rsFaturasCompra.getString("nomeCliente"),
+                        rsFaturasCompra.getDate("data").toString(),
+                        rsFaturasCompra.getTime("hora").toString(),
+                        rsFaturasCompra.getDouble("valorTotal"));
+
+                Button faturaButton = new Button(faturaInfo);
+                faturaButton.getStyleClass().add("btn-primary");
+                faturaButton.setOnAction(event -> abrirDetalhesFaturaCompra(idFatura));
                 faturasPane.getChildren().add(faturaButton);
             }
         } catch (SQLException e) {
@@ -89,6 +110,23 @@ public class ValoresCaixaController {
 
             Stage stage = new Stage();
             stage.setTitle("Detalhes da Fatura");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void abrirDetalhesFaturaCompra(int idFatura) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/DetalhesFatura.fxml"));
+            Parent root = loader.load();
+
+            DetalhesFaturaController controller = loader.getController();
+            controller.carregarDetalhesFaturaCompra(idFatura);
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalhes da FaturaCompra");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {

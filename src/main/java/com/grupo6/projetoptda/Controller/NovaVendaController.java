@@ -185,29 +185,7 @@ public class NovaVendaController {
     }
 
     private List<Produto> buscarProdutosPorCategoria(int idCategoria) {
-        List<Produto> produtos = new ArrayList<>();
-        String query = "SELECT * FROM Produto WHERE idCategoria = ?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement(query)) {
-            statement.setInt(1, idCategoria);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Produto produto = new Produto(
-                        resultSet.getInt("idProduto"),
-                        resultSet.getInt("idCategoria"),
-                        resultSet.getString("nome"),
-                        resultSet.getDouble("preco"),
-                        resultSet.getInt("quantidadeStock")
-                );
-                produtos.add(produto);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return produtos;
+        return DatabaseUtils.buscarProdutosPorCategoria(idCategoria);
     }
 
     private String criarJsonProdutos() {

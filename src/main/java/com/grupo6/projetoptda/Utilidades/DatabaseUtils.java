@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.grupo6.projetoptda.Getter.Produto;
 import javafx.scene.control.Alert;
 
 public class DatabaseUtils {
@@ -131,4 +133,29 @@ public class DatabaseUtils {
         }
     }
 
+    public static List<Produto> buscarProdutosPorCategoria(int idCategoria) {
+        List<Produto> produtos = new ArrayList<>();
+        String query = "SELECT * FROM Produto WHERE idCategoria = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, idCategoria);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Produto produto = new Produto(
+                        resultSet.getInt("idProduto"),
+                        resultSet.getInt("idCategoria"),
+                        resultSet.getString("nome"),
+                        resultSet.getDouble("preco"),
+                        resultSet.getInt("quantidadeStock")
+                );
+                produtos.add(produto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return produtos;
+    }
 }

@@ -1,5 +1,6 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.Panes;
 import com.grupo6.projetoptda.Getter.Pedido;
@@ -13,10 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -28,6 +26,9 @@ import java.util.List;
 import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
 
 public class GerirPedidosController {
+
+    @FXML
+    private BorderPane rootPane;
 
     @FXML
     private Label labelData;
@@ -115,7 +116,7 @@ public class GerirPedidosController {
         Button btnModificar = new Button();
         FontIcon iconModificar = new FontIcon(FontAwesomeSolid.EDIT);
         btnModificar.setGraphic(iconModificar);
-        btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido));
+        btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido.idPedido())); // Passa o pedido aqui
 
         Button btnRemover = new Button();
         FontIcon iconRemover = new FontIcon(FontAwesomeSolid.TRASH);
@@ -160,38 +161,25 @@ public class GerirPedidosController {
         }
     }
 
-    @FXML
-    public void mostrarModifyPedidoPane(Pedido pedido) {
-        pedidoIdField.setText(String.valueOf(pedido.idPedido()));
-        pedidoStatusField.setText(pedido.status());
-        Panes.showPane(modifyPedidoPane);
-    }
-
-    @FXML
-    public void fecharModifyPedidoPane() {
-        modifyPedidoPane.setVisible(false);
-        modifyPedidoPane.setManaged(false);
-    }
-
-    @FXML
-    public void modificarPedido() {
-        int idPedido = Integer.parseInt(pedidoIdField.getText());
-        String status = pedidoStatusField.getText();
-        // Implement the logic to modify the order in the database
-    }
-
-    @FXML
-    public void abrirModificarVendaPane(Pedido pedido) {
+    public void abrirModificarVendaPane(int idPedido) {
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/ModificarVendaPanel.fxml"));
             Parent root = loader.load();
 
+            // Get the controller and set the pedido ID
             ModificarVendaController controller = loader.getController();
-            controller.setPedido(pedido);
+            controller.setPedidoId(idPedido);
 
-            Stage stage = new Stage();
-            stage.setTitle("Modificar Pedido");
-            stage.setScene(new Scene(root));
+            // Replace the current scene with the ModificarVenda scene
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+            Scene scene = new Scene(root);
+            stage.setWidth(width);
+            stage.setHeight(height);
+            CarregarCSS.applyCSS(scene);
+            stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

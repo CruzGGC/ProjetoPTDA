@@ -41,6 +41,7 @@ CREATE TABLE Pedido (
     idPedido INT AUTO_INCREMENT PRIMARY KEY,
     dataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Entregue', 'PorPagar', 'Finalizado') NOT NULL DEFAULT 'Entregue',
+    metodoPagamento ENUM('Multibanco', 'DinheiroVivo') NULL,
     idCliente INT,
     FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE SET NULL,
     INDEX idx_pedido_cliente (idCliente),
@@ -84,7 +85,6 @@ CREATE TABLE IF NOT EXISTS Pagamento (
     FOREIGN KEY (idFatura) REFERENCES Fatura(idFatura)
 );
 
-
 -- Tabela Compra
 CREATE TABLE Compra (
     idCompra INT AUTO_INCREMENT PRIMARY KEY,
@@ -101,6 +101,21 @@ CREATE TABLE CompraProduto (
     PRIMARY KEY (idCompra, idProduto),
     FOREIGN KEY (idCompra) REFERENCES Compra(idCompra),
     FOREIGN KEY (idProduto) REFERENCES Produto(idProduto)
+);
+
+-- Tabela FaturaCompra
+CREATE TABLE FaturaCompra (
+  idFatura INT AUTO_INCREMENT PRIMARY KEY,
+  idCompra INT NOT NULL,
+  idCliente INT NOT NULL,
+  valorTotal DECIMAL(10,2) NOT NULL CHECK (valorTotal >= 0),
+  data DATE NOT NULL,
+  hora TIME NOT NULL,
+  FOREIGN KEY (idCompra) REFERENCES Compra(idCompra) ON DELETE CASCADE,
+  FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE CASCADE,
+  INDEX idx_faturacompra_compra (idCompra),
+  INDEX idx_faturacompra_cliente (idCliente),
+  INDEX idx_faturacompra_data (data)
 );
 
 -- Tabela Turno

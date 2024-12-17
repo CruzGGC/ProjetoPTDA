@@ -135,20 +135,18 @@ public class GerirComprasController {
             String sqlEmitirCompra = "{CALL efetuarCompra(?)}";
             try (CallableStatement stmtCompra = connection.prepareCall(sqlEmitirCompra)) {
                 stmtCompra.setString(1, produtosJson);
-                ResultSet rsCompra = stmtCompra.executeQuery();
-                if (rsCompra.next()) {
-                    int idCompra = rsCompra.getInt("idCompra");
+                stmtCompra.execute(); // Ensure the stored procedure is executed
 
-                    // Call the stored procedure to emit the receipt
-                    String sqlEmitirRecibo = "{CALL emitirFaturaCompra(?)}";
-                    try (CallableStatement stmtRecibo = connection.prepareCall(sqlEmitirRecibo)) {
-                        stmtRecibo.setInt(1, idCompra);
-                        stmtRecibo.execute();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Sucesso");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Recibo emitido com sucesso!");
-                        alert.showAndWait();
+                // Retrieve the generated idCompra
+                ResultSet rs = stmtCompra.getResultSet();
+                if (rs.next()) {
+                    int idCompra = rs.getInt("idCompra");
+
+                    // Call the stored procedure to emit the invoice for the purchase
+                    String sqlEmitirFaturaCompra = "{CALL emitirFaturaCompra(?)}";
+                    try (CallableStatement stmtFatura = connection.prepareCall(sqlEmitirFaturaCompra)) {
+                        stmtFatura.setInt(1, idCompra);
+                        stmtFatura.execute(); // Ensure the stored procedure is executed
                     }
                 }
             }
