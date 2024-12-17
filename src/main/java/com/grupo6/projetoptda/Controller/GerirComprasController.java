@@ -2,6 +2,7 @@ package com.grupo6.projetoptda.Controller;
 
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
+import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
 import com.grupo6.projetoptda.Utilidades.SceneManager;
@@ -16,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import java.sql.*;
 
 public class GerirComprasController {
 
@@ -85,10 +87,73 @@ public class GerirComprasController {
     @FXML
     private void adicionarProdutos() {
         ObservableList<Produto> produtos = tableView.getItems();
-        for (Produto produto : produtos) {
-            if (!isRowEmpty(produto)) {
-                DatabaseUtils.adicionarProduto(produto.getNome(), produto.getCategoria().getIdCategoria(), produto.getPreco(), produto.getQuantidade());
+        if (produtos.isEmpty()) {
+            System.out.println("No products in the table.");
+            return;
+        }
+
+        try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
+            for (Produto produto : produtos) {
+                if (!isRowEmpty(produto)) {
+                    System.out.println("Processing product: " + produto);
+
+                    // Call the stored procedure to add or update the product
+                    String sql = "{CALL adicionarProduto(?, ?, ?, ?)}";
+                    try (CallableStatement stmt = connection.prepareCall(sql)) {
+                        stmt.setString(1, produto.getNome());
+                        stmt.setInt(2, produto.getCategoria().getIdCategoria());
+                        stmt.setDouble(3, produto.getPreco());
+                        stmt.setInt(4, produto.getQuantidade());
+                        stmt.execute();
+                    }
+                } else {
+                    System.out.println("Skipping empty row: " + produto);
+                }
             }
+
+            // Convert products to JSON format
+            StringBuilder jsonBuilder = new StringBuilder("[");
+            for (Produto produto : produtos) {
+                if (!isRowEmpty(produto)) {
+                    jsonBuilder.append("{")
+                            .append("\"nome\":\"").append(produto.getNome()).append("\",")
+                            .append("\"idCategoria\":").append(produto.getCategoria().getIdCategoria()).append(",")
+                            .append("\"quantidade\":").append(produto.getQuantidade()).append(",")
+                            .append("\"preco\":").append(produto.getPreco())
+                            .append("},");
+                }
+            }
+            if (jsonBuilder.length() > 1) {
+                jsonBuilder.setLength(jsonBuilder.length() - 1); // Remove trailing comma
+            }
+            jsonBuilder.append("]");
+
+            String produtosJson = jsonBuilder.toString();
+            System.out.println("Generated JSON: " + produtosJson);
+
+            // Call the stored procedure to emit the purchase
+            String sqlEmitirCompra = "{CALL efetuarCompra(?)}";
+            try (CallableStatement stmtCompra = connection.prepareCall(sqlEmitirCompra)) {
+                stmtCompra.setString(1, produtosJson);
+                ResultSet rsCompra = stmtCompra.executeQuery();
+                if (rsCompra.next()) {
+                    int idCompra = rsCompra.getInt("idCompra");
+
+                    // Call the stored procedure to emit the receipt
+                    String sqlEmitirRecibo = "{CALL emitirFaturaCompra(?)}";
+                    try (CallableStatement stmtRecibo = connection.prepareCall(sqlEmitirRecibo)) {
+                        stmtRecibo.setInt(1, idCompra);
+                        stmtRecibo.execute();
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Sucesso");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Recibo emitido com sucesso!");
+                        alert.showAndWait();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
