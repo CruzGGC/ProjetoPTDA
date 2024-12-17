@@ -6,6 +6,9 @@ import com.grupo6.projetoptda.Getter.Pedido;
 import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -112,7 +115,7 @@ public class GerirPedidosController {
         Button btnModificar = new Button();
         FontIcon iconModificar = new FontIcon(FontAwesomeSolid.EDIT);
         btnModificar.setGraphic(iconModificar);
-        btnModificar.setOnAction(event -> mostrarModifyPedidoPane(pedido));
+        btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido));
 
         Button btnRemover = new Button();
         FontIcon iconRemover = new FontIcon(FontAwesomeSolid.TRASH);
@@ -175,6 +178,24 @@ public class GerirPedidosController {
         int idPedido = Integer.parseInt(pedidoIdField.getText());
         String status = pedidoStatusField.getText();
         // Implement the logic to modify the order in the database
+    }
+
+    @FXML
+    public void abrirModificarVendaPane(Pedido pedido) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/ModificarVendaPanel.fxml"));
+            Parent root = loader.load();
+
+            ModificarVendaController controller = loader.getController();
+            controller.setPedido(pedido);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Pedido");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
