@@ -6,10 +6,10 @@ import java.sql.*;
 public class criarFuncionario {
 
     public static void main(String[] args) {
-        int id = 2;
-        String nome = "Empregado";
-        String password = "1234";
-        String nivelAcesso = "EmpregadoMesa";
+        int id = 1;
+        String nome = "Nome";
+        String password = "Password";
+        String nivelAcesso = "EmpregadoMesa ou Gerente";
 
         try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
             String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
