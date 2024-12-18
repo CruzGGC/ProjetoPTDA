@@ -28,6 +28,8 @@ public class NovaVendaController {
 
     @FXML
     public Label labelData;
+    @FXML
+    private Label labelUtilizador;
 
     @FXML
     public void onVoltarClick() {
@@ -66,7 +68,7 @@ public class NovaVendaController {
     private TextField nomeClienteField;
 
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
-
+    private AppState appState = AppState.getInstance();
 
     @FXML
     public void initialize() {
@@ -82,6 +84,7 @@ public class NovaVendaController {
 
         // Formatar a data atual
         DateUtils.updateDate(labelData);
+        labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
     @FXML

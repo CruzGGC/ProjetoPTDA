@@ -5,10 +5,7 @@ import com.google.gson.JsonObject;
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
 import com.grupo6.projetoptda.Getter.ProdutoSelecionado;
-import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
-import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
-import com.grupo6.projetoptda.Utilidades.DateUtils;
-import com.grupo6.projetoptda.Utilidades.SceneManager;
+import com.grupo6.projetoptda.Utilidades.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -60,6 +57,11 @@ public class ModificarVendaController {
     @FXML
     private TableColumn<ProdutoSelecionado, Double> colunaTotal;
 
+    @FXML
+    private Label labelUtilizador;
+
+    private AppState appState = AppState.getInstance();
+
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
 
     @FXML
@@ -84,6 +86,7 @@ public class ModificarVendaController {
         carregarCategorias();
         addButtonToTable();
         DateUtils.updateDate(labelData);
+        labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
     private void modificarPedido() {

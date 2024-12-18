@@ -2,10 +2,7 @@ package com.grupo6.projetoptda.Controller;
 
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
-import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
-import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
-import com.grupo6.projetoptda.Utilidades.Panes;
-import com.grupo6.projetoptda.Utilidades.SceneManager;
+import com.grupo6.projetoptda.Utilidades.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,6 +38,9 @@ public class GerirStockController {
 
     @FXML
     private HBox categoriasPane;
+
+    @FXML
+    private Label labelData;
 
     @FXML
     private TableView<Produto> produtosTable;
@@ -106,6 +106,11 @@ public class GerirStockController {
     private TextField atualizarQuantidadeField;
 
     private Produto produtoAtual;
+
+    @FXML
+    private Label labelUtilizador;
+
+    private AppState appState = AppState.getInstance();
 
     @FXML
     public void mostrarAddProductPane() {
@@ -250,6 +255,8 @@ public class GerirStockController {
 
         addButtonToTable();
         carregarCategorias();
+        DateUtils.updateDate(labelData);
+        labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
     private void addButtonToTable() {

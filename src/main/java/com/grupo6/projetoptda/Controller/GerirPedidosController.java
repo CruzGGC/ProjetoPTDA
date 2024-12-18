@@ -1,10 +1,7 @@
 package com.grupo6.projetoptda.Controller;
 
-import com.grupo6.projetoptda.Utilidades.CarregarCSS;
-import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
-import com.grupo6.projetoptda.Utilidades.Panes;
+import com.grupo6.projetoptda.Utilidades.*;
 import com.grupo6.projetoptda.Getter.Pedido;
-import com.grupo6.projetoptda.Utilidades.SceneManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -63,12 +60,19 @@ public class GerirPedidosController {
     @FXML
     private Button fazerPagamentoButton;
 
+    @FXML
+    private Label labelUtilizador;
+
+    private AppState appState = AppState.getInstance();
+
     private Pedido pedidoSelecionado;
 
     @FXML
     public void initialize() {
         finalizarPedidoButton.setDisable(true);
         fazerPagamentoButton.setDisable(true);
+        DateUtils.updateDate(labelData);
+        labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
     @FXML
