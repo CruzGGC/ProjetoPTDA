@@ -137,6 +137,8 @@ public class MainController {
             stmt.execute();
             appState.setTurnoAberto(true);
             btnCaixa.setText("Fechar Caixa");
+            btnCaixa.getStyleClass().remove("btn-fecharcaixa");
+            btnCaixa.getStyleClass().add("btn-fecharcaixa");
             if ("EmpregadoMesa".equals(appState.getNivelAcesso())) {
                 btnNovaVenda.setVisible(true);
                 btnNovaVenda.setDisable(false);
@@ -158,6 +160,8 @@ public class MainController {
             stmt.execute();
             appState.setTurnoAberto(false);
             btnCaixa.setText("Abrir Caixa");
+            btnCaixa.getStyleClass().remove("btn-fecharcaixa");
+            btnCaixa.getStyleClass().add("btn-abrircaixa");
             disableButtonsExceptCaixa();
         } catch (Exception e) {
             e.printStackTrace();

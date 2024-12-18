@@ -131,6 +131,19 @@
     -fx-text-fill: white;
 }
 
+.btn-pedido {
+    -fx-font-size: 16px;
+    -fx-padding: 10;
+    -fx-background-color: #01b0dc;
+    -fx-text-fill: white;
+}
+
+.btn-pedido-buttons {
+    -fx-font-size: 10px;
+    -fx-background-color: #01b0dc;
+    -fx-border-radius: 0px;
+    -fx-text-fill: white;
+}
 .btn-produto {
     -fx-font-size: 14px;
     -fx-padding: 10;

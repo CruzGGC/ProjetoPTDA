@@ -104,7 +104,7 @@ public class GerirPedidosController {
 
                         Button btnPedido = new Button(pedidoInfo);
                         btnPedido.setOnAction(event -> selecionarPedido(pedido));
-                        btnPedido.getStyleClass().add("btn-categoria");
+                        btnPedido.getStyleClass().add("btn-pedido");
 
                         HBox hbox = new HBox(btnPedido, criarBotoesPedido(pedido));
                         pedidosPane.getChildren().add(hbox);
@@ -120,11 +120,16 @@ public class GerirPedidosController {
         Button btnModificar = new Button();
         FontIcon iconModificar = new FontIcon(FontAwesomeSolid.EDIT);
         btnModificar.setGraphic(iconModificar);
+        btnModificar.getStyleClass().add("btn-pedido-buttons");
+        btnModificar.setPrefHeight(48);
         btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido.idPedido())); // Passa o pedido aqui
 
         Button btnRemover = new Button();
         FontIcon iconRemover = new FontIcon(FontAwesomeSolid.TRASH);
         btnRemover.setGraphic(iconRemover);
+        btnRemover.getStyleClass().add("btn-pedido-buttons");
+        btnRemover.setPrefHeight(48);
+        btnRemover.setPrefWidth(26);
         btnRemover.setOnAction(event -> removerPedido(pedido));
 
         return new VBox(btnModificar, btnRemover);
