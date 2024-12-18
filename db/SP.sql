@@ -362,6 +362,7 @@ DELIMITER ;
 
 -- Procedure para Criar Pedido com Gestão Transacional
 DELIMITER $$
+
 CREATE PROCEDURE criarPedido(IN p_idCliente INT, IN p_produtos JSON, IN p_idFuncionario INT)
 BEGIN
     DECLARE v_idPedido INT;
@@ -387,15 +388,17 @@ BEGIN
 
     SET v_idPedido = LAST_INSERT_ID();
 
-    INSERT INTO PedidoProduto (idPedido, idProduto, quantidade)
+    INSERT INTO PedidoProduto (idPedido, idProduto, quantidade, preco)
     SELECT
         v_idPedido,
         CAST(jt.idProduto AS UNSIGNED),
-        CAST(jt.quantidade AS UNSIGNED)
+        CAST(jt.quantidade AS UNSIGNED),
+        CAST(jt.preco AS DECIMAL(10,2)) -- Adiciona o preço do produto
     FROM JSON_TABLE(p_produtos, '$[*]'
                     COLUMNS (
                         idProduto VARCHAR(10) PATH '$.idProduto',
-                        quantidade VARCHAR(10) PATH '$.quantidade'
+                        quantidade VARCHAR(10) PATH '$.quantidade',
+                        preco VARCHAR(10) PATH '$.preco' -- Adiciona o preço do produto
                         )
          ) AS jt;
 
@@ -409,6 +412,7 @@ BEGIN
 
     SELECT v_idPedido AS idPedido;
 END$$
+
 DELIMITER ;
 
 
@@ -701,12 +705,13 @@ DELIMITER ;
 
 -- Procedure para Mostrar Detalhes da Fatura com Informações Detalhadas
 DELIMITER $$
+
 CREATE PROCEDURE mostrarDetalhesFatura(IN p_idFatura INT)
 BEGIN
     -- Verificar se a fatura existe
     IF NOT EXISTS (SELECT 1 FROM Fatura WHERE idFatura = p_idFatura) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'A fatura especificada não existe';
+            SET MESSAGE_TEXT = 'A fatura especificada não existe';
     END IF;
 
     -- Selecionar detalhes completos da fatura com produtos concatenados
@@ -716,34 +721,17 @@ BEGIN
         f.hora AS 'Hora',
         c.nome AS 'Nome do Cliente',
         pd.idPedido AS 'ID Pedido',
-        GROUP_CONCAT(CONCAT(pr.nome, ' (', pp.quantidade, ' x ', pr.preco, ')') SEPARATOR ', ') AS 'Produtos',
+        GROUP_CONCAT(CONCAT(pr.nome, ' (', pp.quantidade, ' x ', pp.preco, ')') SEPARATOR ', ') AS 'Produtos',
         f.valorTotal AS 'Total Fatura'
     FROM Fatura f
-    LEFT JOIN Pedido pd ON f.idPedido = pd.idPedido
-    LEFT JOIN Cliente c ON f.idCliente = c.idCliente
-    LEFT JOIN PedidoProduto pp ON pp.idPedido = f.idPedido
-    LEFT JOIN Produto pr ON pp.idProduto = pr.idProduto
+             LEFT JOIN Pedido pd ON f.idPedido = pd.idPedido
+             LEFT JOIN Cliente c ON f.idCliente = c.idCliente
+             LEFT JOIN PedidoProduto pp ON pp.idPedido = f.idPedido
+             LEFT JOIN Produto pr ON pp.idProduto = pr.idProduto
     WHERE f.idFatura = p_idFatura
-    GROUP BY f.idFatura, f.data, f.hora, c.nome, pd.idPedido, f.valorTotal
-
-    UNION
-
-    SELECT
-        f.idFatura AS 'ID Fatura',
-        f.data AS 'Data',
-        f.hora AS 'Hora',
-        c.nome AS 'Nome do Cliente',
-        cp.idCompra AS 'ID Pedido',
-        GROUP_CONCAT(CONCAT(pr.nome, ' (', cpp.quantidade, ' x ', pr.preco, ')') SEPARATOR ', ') AS 'Produtos',
-        f.valorTotal AS 'Total Fatura'
-    FROM Fatura f
-    LEFT JOIN Compra cp ON f.idPedido = cp.idCompra
-    LEFT JOIN Cliente c ON f.idCliente = c.idCliente
-    LEFT JOIN CompraProduto cpp ON cpp.idCompra = f.idPedido
-    LEFT JOIN Produto pr ON cpp.idProduto = pr.idProduto
-    WHERE f.idFatura = p_idFatura
-    GROUP BY f.idFatura, f.data, f.hora, c.nome, cp.idCompra, f.valorTotal;
+    GROUP BY f.idFatura, f.data, f.hora, c.nome, pd.idPedido, f.valorTotal;
 END$$
+
 DELIMITER ;
 
 DELIMITER $$

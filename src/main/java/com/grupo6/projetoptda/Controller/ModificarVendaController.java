@@ -123,6 +123,7 @@ public class ModificarVendaController {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("idProduto", produto.getIdProduto());
             jsonObject.addProperty("quantidade", produto.getQuantidadeStock());
+            jsonObject.addProperty("preco", produto.getPreco()); // Adiciona o preço do produto
             jsonArray.add(jsonObject);
         }
 

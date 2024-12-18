@@ -56,6 +56,7 @@ CREATE TABLE PedidoProduto (
     idPedido INT,
     idProduto INT,
     quantidade INT NOT NULL CHECK (quantidade > 0),
+    preco DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (idPedido, idProduto),
     FOREIGN KEY (idPedido) REFERENCES Pedido(idPedido) ON DELETE CASCADE,
     FOREIGN KEY (idProduto) REFERENCES Produto(idProduto) ON DELETE CASCADE,
