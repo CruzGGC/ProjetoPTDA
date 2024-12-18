@@ -1,5 +1,5 @@
 .root {
-    -fx-font-family: Arial, sans-serif;
+    -fx-font-family:Lilita One, sans-serif;
 }
 
 /* Botões de Categoria */
@@ -99,6 +99,8 @@
     -fx-padding: 8;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+    -fx-font-family:Lilita One, sans-serif;
+    -fx-font-weight: bold;
 }
 
 .btn-success {
@@ -139,11 +141,15 @@
     -fx-padding: 5;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
+    -fx-font-family:Lilita One, sans-serif;
+    -fx-font-weight: bold;
 }
 
 .text-content {
-    -fx-font-size: 14px;
+    -fx-font-size: 18px;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-family:Lilita One, sans-serif;
 }
 
 .text-pagamento {
@@ -154,6 +160,9 @@
 .text-datahora {
     -fx-font-size: 20px;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-family:Lilita One, sans-serif;
+
 }
 
 .text-nome {
