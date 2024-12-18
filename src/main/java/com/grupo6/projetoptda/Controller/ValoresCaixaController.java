@@ -75,8 +75,9 @@ public class ValoresCaixaController {
             ResultSet rsFaturas = stmtFaturas.executeQuery();
             while (rsFaturas.next()) {
                 int idFatura = rsFaturas.getInt("idFatura");
-                String faturaInfo = String.format("Fatura: %d\nCliente: %s\n%s | %s | %.2f",
+                String faturaInfo = String.format("Fatura: %d | Funcionario: %s\nCliente: %s\n%s | %s | %.2f",
                         idFatura,
+                        rsFaturas.getString("nomeFuncionario"),
                         rsFaturas.getString("nomeCliente"),
                         rsFaturas.getDate("data").toString(),
                         rsFaturas.getTime("hora").toString(),
@@ -94,8 +95,9 @@ public class ValoresCaixaController {
             ResultSet rsFaturasCompra = stmtFaturasCompra.executeQuery();
             while (rsFaturasCompra.next()) {
                 int idFatura = rsFaturasCompra.getInt("idFatura");
-                String faturaInfo = String.format("FaturaCompra: %d\nCliente: %s\n%s | %s | %.2f",
+                String faturaInfo = String.format("FaturaCompra: %d | Funcionario: %s\nCliente: %s\n%s | %s | %.2f",
                         idFatura,
+                        rsFaturasCompra.getString("nomeFuncionario"),
                         rsFaturasCompra.getString("nomeCliente"),
                         rsFaturasCompra.getDate("data").toString(),
                         rsFaturasCompra.getTime("hora").toString(),

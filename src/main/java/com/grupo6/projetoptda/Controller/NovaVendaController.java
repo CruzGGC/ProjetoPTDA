@@ -114,7 +114,7 @@ public class NovaVendaController {
 
     private List<Cliente> buscarClientes() {
         List<Cliente> clientes = new ArrayList<>();
-        String query = "SELECT * FROM Cliente";
+        String query = "SELECT * FROM Cliente WHERE idCliente > 2"; // Filtra clientes com id > 2
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);

@@ -256,7 +256,7 @@ public class GerirPedidosController {
     public void fazerPagamento(ActionEvent event) {
         String metodoPagamento = ((Button) event.getSource()).getText();
         String queryPagamento = "{CALL fazerPagamento(?, ?)}";
-        String queryEmitirFatura = "{CALL emitirFatura(?)}";
+        String queryEmitirFatura = "{CALL emitirFatura(?, ?)}"; // Modificado para incluir idFuncionario
 
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmtPagamento = conn.prepareCall(queryPagamento);
@@ -267,8 +267,9 @@ public class GerirPedidosController {
             stmtPagamento.setString(2, metodoPagamento.equals("Dinheiro Vivo") ? "DinheiroVivo" : metodoPagamento);
             stmtPagamento.execute();
 
-            // Chamar a stored procedure emitirFatura
+            // Chamar a stored procedure emitirFatura com idFuncionario
             stmtEmitirFatura.setInt(1, pedidoSelecionado.idPedido());
+            stmtEmitirFatura.setInt(2, appState.getFuncionarioId()); // Passa o idFuncionario
             stmtEmitirFatura.execute();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

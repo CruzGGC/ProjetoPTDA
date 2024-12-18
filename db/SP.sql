@@ -22,36 +22,40 @@ DELIMITER ;
 
 -- Procedure para Visualizar Relatório com Filtros
 DELIMITER $$
+
 CREATE PROCEDURE visualizarRelatorio(
-    IN p_dataInicio DATE, 
+    IN p_dataInicio DATE,
     IN p_dataFim DATE
 )
 BEGIN
     -- Validar datas
     IF p_dataInicio IS NULL OR p_dataFim IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Datas de início e fim são obrigatórias';
+            SET MESSAGE_TEXT = 'Datas de início e fim são obrigatórias';
     END IF;
-    
+
     IF p_dataInicio > p_dataFim THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Data de início deve ser anterior à data de fim';
+            SET MESSAGE_TEXT = 'Data de início deve ser anterior à data de fim';
     END IF;
-    
+
     -- Relatório detalhado de faturas
-    SELECT 
+    SELECT
         f.idFatura,
         f.data,
         f.hora,
         c.nome AS nomeCliente,
         f.valorTotal,
-        p.status AS statusPedido
+        p.status AS statusPedido,
+        func.fNome AS nomeFuncionario -- Include the employee name
     FROM Fatura f
-    JOIN Cliente c ON f.idCliente = c.idCliente
-    JOIN Pedido p ON f.idPedido = p.idPedido
+             JOIN Cliente c ON f.idCliente = c.idCliente
+             JOIN Pedido p ON f.idPedido = p.idPedido
+             JOIN Funcionario func ON f.idFuncionario = func.idFuncionario -- Join with Funcionario table
     WHERE f.data BETWEEN p_dataInicio AND p_dataFim
     ORDER BY f.data, f.hora;
 END$$
+
 DELIMITER ;
 
 -- Procedure para Visualizar Relatório de Compra com Filtros
@@ -636,71 +640,59 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE PROCEDURE emitirFatura(IN p_idPedido INT)
+
+CREATE PROCEDURE emitirFatura(IN p_idPedido INT, IN p_idFuncionario INT)
 BEGIN
-    -- Declaração de variáveis com tipos de dados precisos
     DECLARE v_idCliente INT;
     DECLARE v_valorTotal DECIMAL(10,2);
     DECLARE v_idFatura INT;
     DECLARE v_statusPedido VARCHAR(50);
-    
-    -- Declaração de handler para erros de banco de dados
+
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
-    BEGIN
-        -- Rollback em caso de erro
-        ROLLBACK;
-        
-        -- Relançar erro personalizado
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Erro ao processar a fatura. Verifique os dados do pedido.';
-    END;
-    
-    -- Iniciar transação para garantir atomicidade
+        BEGIN
+            ROLLBACK;
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'Erro ao processar a fatura. Verifique os dados do pedido.';
+        END;
+
     START TRANSACTION;
-    
-    -- Verificação mais robusta do pedido
+
     SELECT idCliente, status INTO v_idCliente, v_statusPedido
     FROM Pedido
     WHERE idPedido = p_idPedido FOR UPDATE;
-    
-    -- Validações adicionais
+
     IF v_idCliente IS NULL THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Pedido não encontrado.';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Pedido não encontrado.';
     END IF;
-    
+
     IF v_statusPedido != 'PorPagar' THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'A fatura só pode ser emitida para pedidos com status "Por Pagar".';
+            SET MESSAGE_TEXT = 'A fatura só pode ser emitida para pedidos com status "Por Pagar".';
     END IF;
-    
-    -- Cálculo do valor total com tratamento para valores zero
+
     SELECT COALESCE(SUM(pp.quantidade * pr.preco), 0) INTO v_valorTotal
     FROM PedidoProduto pp
-    JOIN Produto pr ON pp.idProduto = pr.idProduto
+             JOIN Produto pr ON pp.idProduto = pr.idProduto
     WHERE pp.idPedido = p_idPedido;
-    
-    -- Validação de valor total
+
     IF v_valorTotal = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Não é possível gerar fatura para pedido com valor zero.';
+            SET MESSAGE_TEXT = 'Não é possível gerar fatura para pedido com valor zero.';
     END IF;
-    
-    -- Inserir fatura com tratamento de erro
-    INSERT INTO Fatura (idPedido, idCliente, valorTotal, data, hora)
-    VALUES (p_idPedido, v_idCliente, v_valorTotal, CURDATE(), CURTIME());
-    
-    -- Obter o ID da fatura recém-criada
+
+    INSERT INTO Fatura (idPedido, idCliente, valorTotal, data, hora, idFuncionario)
+    VALUES (p_idPedido, v_idCliente, v_valorTotal, CURDATE(), CURTIME(), p_idFuncionario);
+
     SET v_idFatura = LAST_INSERT_ID();
-    
-    -- Atualizar status do pedido
+
     UPDATE Pedido
     SET status = 'Finalizado'
     WHERE idPedido = p_idPedido;
-    
-    -- Confirmar transação
+
     COMMIT;
 END$$
+
 DELIMITER ;
 
 -- Procedure para Mostrar Detalhes da Fatura com Informações Detalhadas
