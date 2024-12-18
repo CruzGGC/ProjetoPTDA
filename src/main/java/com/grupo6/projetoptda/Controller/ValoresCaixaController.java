@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -39,6 +40,14 @@ public class ValoresCaixaController {
     private DatePicker dataInicioPicker, dataFimPicker;
 
     @FXML
+    private Label labelData;
+
+    @FXML
+    private Label labelUtilizador;
+
+    private AppState appState = AppState.getInstance();
+
+    @FXML
     public void initialize() {
         btnTurnoAtual.setOnAction(event -> carregarFaturas(LocalDate.now(), LocalDate.now()));
         btnHoje.setOnAction(event -> carregarFaturas(LocalDate.now(), LocalDate.now()));
@@ -47,6 +56,8 @@ public class ValoresCaixaController {
         btnEsteAno.setOnAction(event -> carregarFaturas(LocalDate.now().withDayOfYear(1), LocalDate.now()));
         btnAnoAnterior.setOnAction(event -> carregarFaturas(LocalDate.now().minusYears(1).withDayOfYear(1), LocalDate.now().minusYears(1).withDayOfYear(LocalDate.now().minusYears(1).lengthOfYear())));
         btnSelecionarData.setOnAction(event -> mostrarSelecionarDataPane());
+        DateUtils.updateDate(labelData);
+        labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
     private void carregarFaturas(LocalDate dataInicio, LocalDate dataFim) {

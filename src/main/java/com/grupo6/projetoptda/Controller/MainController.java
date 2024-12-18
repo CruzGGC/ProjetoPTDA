@@ -1,5 +1,6 @@
 package com.grupo6.projetoptda.Controller;
 
+import com.grupo6.projetoptda.Utilidades.AppState;
 import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
 import com.grupo6.projetoptda.Utilidades.SceneManager;
@@ -11,6 +12,8 @@ import javafx.stage.Stage;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class MainController {
 
@@ -19,19 +22,81 @@ public class MainController {
     @FXML
     private Label labelData;
     @FXML
+    private Label labelUtilizador;
+    @FXML
     private Button btnCaixa;
+    @FXML
+    private Button btnValoresCaixa;
+    @FXML
+    private Button btnGestaoStock;
+    @FXML
+    private Button btnNovaVenda;
+    @FXML
+    private Button btnGerirPedidos;
+    @FXML
+    private Button btnGerirCompras;
 
-    private boolean turnoAberto = false;
-    private int funcionarioId;
+    private AppState appState = AppState.getInstance();
 
     @FXML
     public void initialize() {
         DateUtils.updateDate(labelData);
         DateUtils.updateTime(labelHora);
+        restoreState();
+    }
+
+    private void restoreState() {
+        if (appState.isTurnoAberto()) {
+            btnCaixa.setText("Fechar Caixa");
+            if ("EmpregadoMesa".equals(appState.getNivelAcesso())) {
+                btnNovaVenda.setVisible(true);
+                btnNovaVenda.setDisable(false);
+                btnGerirPedidos.setVisible(true);
+                btnGerirPedidos.setDisable(false);
+                btnValoresCaixa.setVisible(false);
+                btnGestaoStock.setVisible(false);
+                btnGerirCompras.setVisible(false);
+            } else {
+                enableAllButtons();
+            }
+        } else {
+            btnCaixa.setText("Abrir Caixa");
+            disableButtonsExceptCaixa();
+            if ("EmpregadoMesa".equals(appState.getNivelAcesso())) {
+                btnNovaVenda.setVisible(false);
+                btnGerirPedidos.setVisible(false);
+                btnValoresCaixa.setVisible(false);
+                btnGestaoStock.setVisible(false);
+                btnGerirCompras.setVisible(false);
+            }
+        }
+        labelUtilizador.setText(appState.getNomeFuncionario()); // Atualizar o Label com o nome do funcionário
     }
 
     public void setFuncionarioId(int funcionarioId) {
-        this.funcionarioId = funcionarioId;
+        appState.setFuncionarioId(funcionarioId);
+        String query = "SELECT nivelAcesso, fNome FROM Funcionario WHERE idFuncionario = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, funcionarioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                appState.setNivelAcesso(rs.getString("nivelAcesso"));
+                appState.setNomeFuncionario(rs.getString("fNome")); // Definir o nome do funcionário
+                updateButtonVisibility();
+                labelUtilizador.setText(appState.getNomeFuncionario()); // Atualizar o Label com o nome do funcionário
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateButtonVisibility() {
+        if ("EmpregadoMesa".equals(appState.getNivelAcesso())) {
+            btnValoresCaixa.setVisible(false);
+            btnGestaoStock.setVisible(false);
+            btnGerirCompras.setVisible(false);
+        }
     }
 
     @FXML
@@ -45,7 +110,7 @@ public class MainController {
 
     @FXML
     public void onCaixaBoolClick() {
-        if (!turnoAberto) {
+        if (!appState.isTurnoAberto()) {
             abrirTurno();
         } else {
             fecharTurno();
@@ -56,10 +121,18 @@ public class MainController {
         String query = "{CALL registrarAberturaTurno(?)}";
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {
-            stmt.setInt(1, funcionarioId);
+            stmt.setInt(1, appState.getFuncionarioId());
             stmt.execute();
-            turnoAberto = true;
+            appState.setTurnoAberto(true);
             btnCaixa.setText("Fechar Caixa");
+            if ("EmpregadoMesa".equals(appState.getNivelAcesso())) {
+                btnNovaVenda.setVisible(true);
+                btnNovaVenda.setDisable(false);
+                btnGerirPedidos.setVisible(true);
+                btnGerirPedidos.setDisable(false);
+            } else {
+                enableAllButtons();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,10 +143,24 @@ public class MainController {
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {
             stmt.execute();
-            turnoAberto = false;
+            appState.setTurnoAberto(false);
             btnCaixa.setText("Abrir Caixa");
+            disableButtonsExceptCaixa();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void disableButtonsExceptCaixa() {
+        btnCaixa.setDisable(false);
+        for (Button button : new Button[]{btnValoresCaixa, btnGestaoStock, btnNovaVenda, btnGerirPedidos, btnGerirCompras}) {
+            button.setDisable(true);
+        }
+    }
+
+    private void enableAllButtons() {
+        for (Button button : new Button[]{btnValoresCaixa, btnGestaoStock, btnNovaVenda, btnGerirPedidos, btnGerirCompras}) {
+            button.setDisable(false);
         }
     }
 

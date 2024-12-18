@@ -8,7 +8,17 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="fundo" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grupo6.projetoptda.Controller.GerirComprasController">
     <top>
         <BorderPane BorderPane.alignment="CENTER">
-            <top>
+         <right>
+            <HBox BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="labelUtilizador" text="Utilizador" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </right>
+         <left>
                 <HBox spacing="5.0" BorderPane.alignment="CENTER">
                     <children>
                         <ImageView fitHeight="40.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
@@ -27,7 +37,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </HBox>
-            </top>
+         </left>
         </BorderPane>
     </top>
     <padding>

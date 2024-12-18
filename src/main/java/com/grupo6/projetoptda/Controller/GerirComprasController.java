@@ -2,10 +2,7 @@ package com.grupo6.projetoptda.Controller;
 
 import com.grupo6.projetoptda.Getter.Categoria;
 import com.grupo6.projetoptda.Getter.Produto;
-import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
-import com.grupo6.projetoptda.Utilidades.DatabaseUtils;
-import com.grupo6.projetoptda.Utilidades.DateUtils;
-import com.grupo6.projetoptda.Utilidades.SceneManager;
+import com.grupo6.projetoptda.Utilidades.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -48,6 +45,11 @@ public class GerirComprasController {
     @FXML
     private TextField nomeCategoriaField;
 
+    @FXML
+    private Label labelUtilizador;
+
+    private AppState appState = AppState.getInstance();
+
     private ObservableList<Categoria> categorias;
     private ObservableList<Produto> produtos;
 
@@ -58,6 +60,7 @@ public class GerirComprasController {
         setupTableView();
         produtos = FXCollections.observableArrayList();
         tableView.setItems(produtos);
+        labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
     private void setupTableView() {
