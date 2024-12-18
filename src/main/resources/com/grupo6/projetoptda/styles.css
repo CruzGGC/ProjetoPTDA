@@ -79,6 +79,17 @@
     -fx-font-family:Lilita One, sans-serif;
 }
 
+.btn-fecharcaixa {
+    -fx-background-color: #cd5045;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 8;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-family:Lilita One, sans-serif;
+}
+
 
 /* Botão Voltar */
 .btn-primary {
