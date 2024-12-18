@@ -63,7 +63,7 @@ public class GerirPedidosController {
     @FXML
     private Label labelUtilizador;
 
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     private Pedido pedidoSelecionado;
 
@@ -204,7 +204,7 @@ public class GerirPedidosController {
             alert.setContentText("Pedido removido com sucesso!");
             alert.showAndWait();
             carregarPedidos(pedido.status());
-            recarregarInterface();
+            recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -228,7 +228,7 @@ public class GerirPedidosController {
                 alert.setContentText("Pedido finalizado com sucesso!");
                 alert.showAndWait();
                 carregarPedidos("Entregue");
-                recarregarInterface();
+                recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erro");
@@ -278,7 +278,7 @@ public class GerirPedidosController {
             alert.showAndWait();
 
             carregarPedidos("PorPagar");
-            recarregarInterface();
+            recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");

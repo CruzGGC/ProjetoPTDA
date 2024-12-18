@@ -10,9 +10,9 @@ import java.util.Objects;
 
 public class InterfaceUtils {
 
-    public static void recarregarInterface() {
+    public static void recarregarInterface(String fxmlPath) {
         try {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(InterfaceUtils.class.getResource("/com/grupo6/projetoptda/GerirStockPanel.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(InterfaceUtils.class.getResource(fxmlPath)));
             Scene scene = Stage.getWindows().getFirst().getScene();
             scene.setRoot(root);
             CarregarCSS.applyCSS(scene);

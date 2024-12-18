@@ -68,7 +68,7 @@ public class NovaVendaController {
     private TextField nomeClienteField;
 
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     @FXML
     public void initialize() {
@@ -261,7 +261,7 @@ public class NovaVendaController {
             alert.showAndWait();
             fecharAddClientPane();
             carregarClientes();
-            recarregarInterface();
+            recarregarInterface("/com/grupo6/projetoptda/NovaVendaPanel.fxml");
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");

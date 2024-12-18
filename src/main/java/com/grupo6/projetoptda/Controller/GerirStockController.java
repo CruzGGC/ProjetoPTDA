@@ -110,7 +110,7 @@ public class GerirStockController {
     @FXML
     private Label labelUtilizador;
 
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     @FXML
     public void mostrarAddProductPane() {
@@ -132,7 +132,7 @@ public class GerirStockController {
         int quantidade = Integer.parseInt(quantidadeProdutoField.getText());
 
         DatabaseUtils.adicionarProduto(nome, idCategoria, preco, quantidade);
-        recarregarInterface();
+        recarregarInterface("/com/grupo6/projetoptda/GerirStockPanel.fxml");
     }
 
     @FXML
@@ -187,7 +187,7 @@ public class GerirStockController {
             alert.showAndWait();
             fecharModifyProductPane();
             carregarProdutos(produtoAtual.getIdCategoria());
-            recarregarInterface();
+            recarregarInterface("/com/grupo6/projetoptda/GerirStockPanel.fxml");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -230,7 +230,7 @@ public class GerirStockController {
             alert.showAndWait();
             fecharAtualizarStockPane();
             carregarProdutos(produtoAtual.getIdCategoria());
-            recarregarInterface();
+            recarregarInterface("/com/grupo6/projetoptda/GerirStockPanel.fxml");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -391,7 +391,7 @@ public class GerirStockController {
              CallableStatement stmt = conn.prepareCall(query)) {
             stmt.setInt(1, produto.getIdProduto());
             stmt.execute();
-            recarregarInterface();
+            recarregarInterface("/com/grupo6/projetoptda/GerirStockPanel.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }

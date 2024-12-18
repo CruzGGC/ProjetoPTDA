@@ -4,7 +4,6 @@ import com.grupo6.projetoptda.Utilidades.AppState;
 import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
 import com.grupo6.projetoptda.Utilidades.SceneManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

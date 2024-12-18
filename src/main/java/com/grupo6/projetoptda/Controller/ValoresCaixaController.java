@@ -45,7 +45,7 @@ public class ValoresCaixaController {
     @FXML
     private Label labelUtilizador;
 
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     @FXML
     public void initialize() {

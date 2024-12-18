@@ -60,7 +60,7 @@ public class ModificarVendaController {
     @FXML
     private Label labelUtilizador;
 
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
 

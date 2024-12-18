@@ -48,7 +48,7 @@ public class GerirComprasController {
     @FXML
     private Label labelUtilizador;
 
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     private ObservableList<Categoria> categorias;
     private ObservableList<Produto> produtos;
