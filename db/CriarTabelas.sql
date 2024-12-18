@@ -33,6 +33,7 @@ CREATE TABLE Funcionario (
     fNome VARCHAR(255) NOT NULL UNIQUE,
     fPassword VARCHAR(255) NOT NULL, -- Aumentado para suportar hashing mais robusto
     nivelAcesso ENUM('EmpregadoMesa', 'Gerente') NOT NULL,
+    servico BOOLEAN DEFAULT FALSE,
     INDEX idx_funcionario_nome (fNome)	
 );
 
@@ -43,7 +44,9 @@ CREATE TABLE Pedido (
     status ENUM('Entregue', 'PorPagar', 'Finalizado') NOT NULL DEFAULT 'Entregue',
     metodoPagamento ENUM('Multibanco', 'DinheiroVivo') NULL,
     idCliente INT,
+    idFuncionario INT,
     FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE SET NULL,
+    FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario) ON DELETE SET NULL,
     INDEX idx_pedido_cliente (idCliente),
     INDEX idx_pedido_status (status)
 );

@@ -7,9 +7,9 @@ public class criarFuncionario {
 
     public static void main(String[] args) {
         int id = 1;
-        String nome = "Nome";
-        String password = "password";
-        String nivelAcesso = "Gerente ou EmpregadoMesa";
+        String nome = "Guilherme";
+        String password = "1";
+        String nivelAcesso = "Gerente";
 
         try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
             String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());

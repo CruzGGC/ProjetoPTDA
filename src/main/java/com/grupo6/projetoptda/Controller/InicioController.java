@@ -3,6 +3,7 @@ package com.grupo6.projetoptda.Controller;
 import com.grupo6.projetoptda.Utilidades.CarregarCSS;
 import com.grupo6.projetoptda.Utilidades.DatabaseConnection;
 import com.grupo6.projetoptda.Utilidades.DateUtils;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,6 +35,11 @@ public class InicioController {
     private Label labelHora;
     @FXML
     private Label labelData;
+
+    @FXML
+    private void onFecharClick() {
+        Platform.exit();
+    }
 
     @FXML
     public void initialize() {

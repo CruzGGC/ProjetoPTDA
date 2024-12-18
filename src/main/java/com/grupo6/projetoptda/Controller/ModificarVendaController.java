@@ -92,19 +92,21 @@ public class ModificarVendaController {
     private void modificarPedido() {
         int idPedido = Integer.parseInt(labelIdPedido.getText().replace("Pedido: ", ""));
         String jsonProdutos = criarJsonProdutos();
+        int idFuncionario = appState.getFuncionarioId();
 
-        String query = "{CALL personalizarPedido(?, ?)}";
+        String query = "{CALL personalizarPedido(?, ?, ?)}";
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {
             stmt.setInt(1, idPedido);
             stmt.setString(2, jsonProdutos);
+            stmt.setInt(3, idFuncionario);
             stmt.execute();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");
             alert.setHeaderText(null);
             alert.setContentText("Pedido modificado com sucesso!");
             alert.showAndWait();
-            voltarParaGerirPedidos(); // Chama o metodo para voltar ao painel de gestão de pedidos
+            voltarParaGerirPedidos();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");

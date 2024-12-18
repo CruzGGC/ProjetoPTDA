@@ -207,26 +207,26 @@ public class NovaVendaController {
     private void criarPedido() {
         Cliente clienteSelecionado = clienteComboBox.getSelectionModel().getSelectedItem();
         if (clienteSelecionado == null) {
-            // Handle case where no client is selected
             System.out.println("Nenhum cliente selecionado!");
             return;
         }
 
         int idCliente = clienteSelecionado.idCliente();
         String jsonProdutos = criarJsonProdutos();
+        int idFuncionario = appState.getFuncionarioId();
 
-        String query = "{CALL criarPedido(?, ?)}";
+        String query = "{CALL criarPedido(?, ?, ?)}";
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {
             stmt.setInt(1, idCliente);
             stmt.setString(2, jsonProdutos);
+            stmt.setInt(3, idFuncionario);
             boolean hadResults = stmt.execute();
 
             if (hadResults) {
                 try (ResultSet rs = stmt.getResultSet()) {
                     if (rs.next()) {
                         int idPedido = rs.getInt("idPedido");
-                        // Exibir confirmação
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Confirmação");
                         alert.setHeaderText(null);
@@ -237,7 +237,6 @@ public class NovaVendaController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Exibir erro
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText(null);

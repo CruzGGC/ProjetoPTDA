@@ -132,10 +132,11 @@ public class GerirPedidosController {
 
     private List<Pedido> buscarPedidos(String status) {
         List<Pedido> pedidos = new ArrayList<>();
-        String query = "SELECT * FROM Pedido WHERE status = ?";
+        String query = "SELECT * FROM Pedido WHERE status = ? AND idFuncionario = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, status);
+            stmt.setInt(2, appState.getFuncionarioId()); // Filtra pelo id do funcionário
             try (ResultSet resultSet = stmt.executeQuery()) {
                 while (resultSet.next()) {
                     Pedido pedido = new Pedido(

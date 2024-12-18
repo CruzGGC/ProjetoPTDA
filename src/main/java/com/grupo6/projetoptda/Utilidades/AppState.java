@@ -1,12 +1,14 @@
 // AppState.java
 package com.grupo6.projetoptda.Utilidades;
 
+import java.sql.*;
+
 public class AppState {
     private static AppState instance;
     private boolean turnoAberto;
     private int funcionarioId;
     private String nivelAcesso;
-    private String nomeFuncionario; // Novo campo
+    private String nomeFuncionario;
 
     private AppState() {}
 

@@ -36,7 +36,7 @@ public class MainController {
     @FXML
     private Button btnGerirCompras;
 
-    private AppState appState = AppState.getInstance();
+    private final AppState appState = AppState.getInstance();
 
     @FXML
     public void initialize() {
@@ -75,20 +75,24 @@ public class MainController {
 
     public void setFuncionarioId(int funcionarioId) {
         appState.setFuncionarioId(funcionarioId);
-        String query = "SELECT nivelAcesso, fNome FROM Funcionario WHERE idFuncionario = ?";
+        String query = "SELECT nivelAcesso, fNome, servico FROM Funcionario WHERE idFuncionario = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, funcionarioId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 appState.setNivelAcesso(rs.getString("nivelAcesso"));
-                appState.setNomeFuncionario(rs.getString("fNome")); // Definir o nome do funcionário
+                appState.setNomeFuncionario(rs.getString("fNome"));
+                appState.setTurnoAberto(rs.getBoolean("servico"));
                 updateButtonVisibility();
-                labelUtilizador.setText(appState.getNomeFuncionario()); // Atualizar o Label com o nome do funcionário
+                labelUtilizador.setText(appState.getNomeFuncionario());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Atualizar o estado da interface
+        restoreState();
     }
 
     private void updateButtonVisibility() {
@@ -139,9 +143,10 @@ public class MainController {
     }
 
     private void fecharTurno() {
-        String query = "{CALL registrarFechamentoTurno()}";
+        String query = "{CALL registrarFechamentoTurno(?)}";
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {
+            stmt.setInt(1, appState.getFuncionarioId());
             stmt.execute();
             appState.setTurnoAberto(false);
             btnCaixa.setText("Abrir Caixa");
@@ -193,7 +198,11 @@ public class MainController {
 
     @FXML
     public void onSairClick() {
-        Platform.exit();
+        try {
+            SceneManager.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/InicialPanel.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

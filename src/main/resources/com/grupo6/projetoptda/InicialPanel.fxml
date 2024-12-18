@@ -47,7 +47,7 @@
         <BorderPane BorderPane.alignment="CENTER">
             <right>
                 <HBox BorderPane.alignment="CENTER">
-                    <Button mnemonicParsing="false" styleClass="btn-danger" text="Fechar" />
+                    <Button mnemonicParsing="false" onAction="#onFecharClick" styleClass="btn-danger" text="Fechar" />
                 </HBox>
             </right>
             <padding>

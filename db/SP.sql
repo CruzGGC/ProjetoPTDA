@@ -362,57 +362,51 @@ DELIMITER ;
 
 -- Procedure para Criar Pedido com Gestão Transacional
 DELIMITER $$
-CREATE PROCEDURE criarPedido(IN p_idCliente INT, IN p_produtos JSON)
+CREATE PROCEDURE criarPedido(IN p_idCliente INT, IN p_produtos JSON, IN p_idFuncionario INT)
 BEGIN
     DECLARE v_idPedido INT;
     DECLARE v_total_produtos INT;
     DECLARE v_erro BOOLEAN DEFAULT FALSE;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_erro = TRUE;
-    
-    -- Iniciar transação
+
     START TRANSACTION;
-    
-    -- Validar cliente
+
     IF NOT EXISTS (SELECT 1 FROM Cliente WHERE idCliente = p_idCliente) THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Cliente não existe';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cliente não existe';
     END IF;
-    
-    -- Contar produtos no pedido
+
     SET v_total_produtos = JSON_LENGTH(p_produtos);
     IF v_total_produtos = 0 THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Pedido deve ter pelo menos um produto';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Pedido deve ter pelo menos um produto';
     END IF;
-    
-    -- Criar pedido
-    INSERT INTO Pedido (idCliente, status) 
-    VALUES (p_idCliente, 'Entregue');
-    
+
+    INSERT INTO Pedido (idCliente, status, idFuncionario)
+    VALUES (p_idCliente, 'Entregue', p_idFuncionario);
+
     SET v_idPedido = LAST_INSERT_ID();
-    
-    -- Inserir produtos no pedido
+
     INSERT INTO PedidoProduto (idPedido, idProduto, quantidade)
-    SELECT 
-        v_idPedido, 
-        CAST(jt.idProduto AS UNSIGNED), 
+    SELECT
+        v_idPedido,
+        CAST(jt.idProduto AS UNSIGNED),
         CAST(jt.quantidade AS UNSIGNED)
-    FROM JSON_TABLE(p_produtos, '$[*]' 
-        COLUMNS (
-            idProduto VARCHAR(10) PATH '$.idProduto',
-            quantidade VARCHAR(10) PATH '$.quantidade'
-        )
-    ) AS jt;
-    
-    -- Verificar se houve erro
+    FROM JSON_TABLE(p_produtos, '$[*]'
+                    COLUMNS (
+                        idProduto VARCHAR(10) PATH '$.idProduto',
+                        quantidade VARCHAR(10) PATH '$.quantidade'
+                        )
+         ) AS jt;
+
     IF v_erro THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro ao criar pedido';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Erro ao criar pedido';
     ELSE
         COMMIT;
     END IF;
-    
+
     SELECT v_idPedido AS idPedido;
 END$$
 DELIMITER ;
@@ -420,54 +414,52 @@ DELIMITER ;
 
 -- Procedure para Personalizar Pedido com Validações
 DELIMITER $$
-CREATE PROCEDURE personalizarPedido(IN p_idPedido INT, IN p_produtos JSON)
+CREATE PROCEDURE personalizarPedido(IN p_idPedido INT, IN p_produtos JSON, IN p_idFuncionario INT)
 BEGIN
     DECLARE v_pedido_existe INT;
     DECLARE v_total_produtos INT;
     DECLARE v_erro BOOLEAN DEFAULT FALSE;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_erro = TRUE;
-    
-    -- Verificar se o pedido existe
-    SELECT COUNT(*) INTO v_pedido_existe 
-    FROM Pedido 
+
+    SELECT COUNT(*) INTO v_pedido_existe
+    FROM Pedido
     WHERE idPedido = p_idPedido;
-    
+
     IF v_pedido_existe = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Pedido não encontrado';
+            SET MESSAGE_TEXT = 'Pedido não encontrado';
     END IF;
-    
-    -- Validar produtos
+
     SET v_total_produtos = JSON_LENGTH(p_produtos);
     IF v_total_produtos = 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Pedido deve ter pelo menos um produto';
+            SET MESSAGE_TEXT = 'Pedido deve ter pelo menos um produto';
     END IF;
-    
-    -- Iniciar transação
+
     START TRANSACTION;
-    
-    -- Remover produtos antigos do pedido
+
     DELETE FROM PedidoProduto WHERE idPedido = p_idPedido;
-    
-    -- Inserir novos produtos
+
     INSERT INTO PedidoProduto (idPedido, idProduto, quantidade)
-    SELECT 
-        p_idPedido, 
-        CAST(jt.idProduto AS UNSIGNED), 
+    SELECT
+        p_idPedido,
+        CAST(jt.idProduto AS UNSIGNED),
         CAST(jt.quantidade AS UNSIGNED)
-    FROM JSON_TABLE(p_produtos, '$[*]' 
-        COLUMNS (
-            idProduto VARCHAR(10) PATH '$.idProduto',
-            quantidade VARCHAR(10) PATH '$.quantidade'
-        )
-    ) AS jt;
-    
-    -- Verificar erros
+    FROM JSON_TABLE(p_produtos, '$[*]'
+                    COLUMNS (
+                        idProduto VARCHAR(10) PATH '$.idProduto',
+                        quantidade VARCHAR(10) PATH '$.quantidade'
+                        )
+         ) AS jt;
+
+    UPDATE Pedido
+    SET idFuncionario = p_idFuncionario
+    WHERE idPedido = p_idPedido;
+
     IF v_erro THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Erro ao personalizar pedido';
+            SET MESSAGE_TEXT = 'Erro ao personalizar pedido';
     ELSE
         COMMIT;
     END IF;
@@ -921,23 +913,25 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE registrarAberturaTurno(IN funcionarioId INT)
 BEGIN
+    UPDATE Funcionario SET servico = TRUE WHERE idFuncionario = funcionarioId;
     INSERT INTO Turno (dataHoraAbertura, idFuncionario) VALUES (NOW(), funcionarioId);
 END $$
 DELIMITER ;
 
 -- Procedure para Fechar o Turno
 DELIMITER $$
-CREATE PROCEDURE registrarFechamentoTurno()
+CREATE PROCEDURE registrarFechamentoTurno(IN funcionarioId INT)
 BEGIN
     DECLARE turnoId INT;
 
     SELECT MAX(idTurno) INTO turnoId
     FROM Turno
-    WHERE dataHoraFechamento IS NULL;
+    WHERE dataHoraFechamento IS NULL AND idFuncionario = funcionarioId;
 
     UPDATE Turno
     SET dataHoraFechamento = NOW()
     WHERE idTurno = turnoId;
-END $$
 
+    UPDATE Funcionario SET servico = FALSE WHERE idFuncionario = funcionarioId;
+END $$
 DELIMITER ;
