@@ -49,7 +49,18 @@ public class ValoresCaixaController {
 
     @FXML
     public void initialize() {
-        btnTurnoAtual.setOnAction(event -> carregarFaturas(LocalDate.now(), LocalDate.now()));
+        btnTurnoAtual.setOnAction(event -> {
+            int idTurno = getTurnoAtualId();
+            if (idTurno != -1) {
+                carregarFaturas(idTurno);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText(null);
+                alert.setContentText("Não foi possível encontrar o turno atual.");
+                alert.showAndWait();
+            }
+        });
         btnHoje.setOnAction(event -> carregarFaturas(LocalDate.now(), LocalDate.now()));
         btnUltimaSemana.setOnAction(event -> carregarFaturas(LocalDate.now().minusWeeks(1), LocalDate.now()));
         btnUltimoMes.setOnAction(event -> carregarFaturas(LocalDate.now().minusMonths(1), LocalDate.now()));
@@ -58,6 +69,52 @@ public class ValoresCaixaController {
         btnSelecionarData.setOnAction(event -> mostrarSelecionarDataPane());
         DateUtils.updateDate(labelData);
         labelUtilizador.setText(appState.getNomeFuncionario());
+    }
+
+    private int getTurnoAtualId() {
+        int idTurno = -1;
+        String query = "SELECT idTurno FROM Turno WHERE idFuncionario = ? AND dataHoraFechamento IS NULL";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, appState.getFuncionarioId());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                idTurno = rs.getInt("idTurno");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idTurno;
+    }
+
+    private void carregarFaturas(int idTurno) {
+        faturasPane.getChildren().clear();
+        String queryFaturas = "{CALL visualizarRelatorioPorTurno(?)}";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             CallableStatement stmtFaturas = connection.prepareCall(queryFaturas)) {
+
+            // Set parameters and execute query for Faturas
+            stmtFaturas.setInt(1, idTurno);
+            ResultSet rsFaturas = stmtFaturas.executeQuery();
+            while (rsFaturas.next()) {
+                int idFatura = rsFaturas.getInt("idFatura");
+                String faturaInfo = String.format("Fatura: %d | Funcionario: %s\nCliente: %s\n%s | %s | %.2f",
+                        idFatura,
+                        rsFaturas.getString("nomeFuncionario"),
+                        rsFaturas.getString("nomeCliente"),
+                        rsFaturas.getDate("data").toString(),
+                        rsFaturas.getTime("hora").toString(),
+                        rsFaturas.getDouble("valorTotal"));
+
+                Button faturaButton = new Button(faturaInfo);
+                faturaButton.getStyleClass().add("btn-categoria");
+                faturaButton.setOnAction(event -> abrirDetalhesFatura(idFatura));
+                faturasPane.getChildren().add(faturaButton);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void carregarFaturas(LocalDate dataInicio, LocalDate dataFim) {

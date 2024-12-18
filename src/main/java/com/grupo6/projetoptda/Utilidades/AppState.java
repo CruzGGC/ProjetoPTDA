@@ -48,4 +48,11 @@ public class AppState {
     public void setNomeFuncionario(String nomeFuncionario) {
         this.nomeFuncionario = nomeFuncionario;
     }
+
+    public void reset() {
+        this.turnoAberto = false;
+        this.funcionarioId = 0;
+        this.nivelAcesso = null;
+        this.nomeFuncionario = null;
+    }
 }

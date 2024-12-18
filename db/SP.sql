@@ -58,6 +58,38 @@ END$$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE PROCEDURE visualizarRelatorioPorTurno(
+    IN p_idTurno INT
+)
+BEGIN
+    -- Validate input
+    IF p_idTurno IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'idTurno is required';
+    END IF;
+
+    -- Detailed report of invoices for the given shift
+    SELECT
+        f.idFatura,
+        f.data,
+        f.hora,
+        c.nome AS nomeCliente,
+        f.valorTotal,
+        p.status AS statusPedido,
+        func.fNome AS nomeFuncionario
+    FROM Fatura f
+             JOIN Cliente c ON f.idCliente = c.idCliente
+             JOIN Pedido p ON f.idPedido = p.idPedido
+             JOIN Funcionario func ON f.idFuncionario = func.idFuncionario
+             JOIN Turno t ON f.idFuncionario = t.idFuncionario
+    WHERE t.idTurno = p_idTurno
+    ORDER BY f.data, f.hora;
+END$$
+
+DELIMITER ;
+
 -- Procedure para Visualizar Relatório de Compra com Filtros
 DELIMITER $$
 CREATE PROCEDURE visualizarRelatorioCompra(

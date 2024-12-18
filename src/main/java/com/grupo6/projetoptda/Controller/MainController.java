@@ -112,6 +112,15 @@ public class MainController {
     }
 
     @FXML
+    public void onNovaVendaClick() {
+        try {
+            SceneManager.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/NovaVendaPanel.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onCaixaBoolClick() {
         if (!appState.isTurnoAberto()) {
             abrirTurno();
@@ -198,16 +207,8 @@ public class MainController {
     @FXML
     public void onSairClick() {
         try {
+            appState.reset(); // Reset the AppState
             SceneManager.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/InicialPanel.fxml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void onNovaVendaClick() {
-        try {
-            SceneManager.setScene((Stage) labelHora.getScene().getWindow(), "/com/grupo6/projetoptda/NovaVendaPanel.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }
