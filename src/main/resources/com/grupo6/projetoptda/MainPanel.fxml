@@ -62,12 +62,12 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                     <Button onAction="#onValoresCaixaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Valores em Caixa" GridPane.rowIndex="1" />
-                     <Button onAction="#onGestaoStockClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Gestão de Stock" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                     <Button onAction="#onNovaVendaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Nova Venda" />
-                  <Button onAction="#onGerirPedidosClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Gerir Pedidos" GridPane.columnIndex="1" />
-                     <Button fx:id="btnCaixa" onAction="#onCaixaBoolClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Abrir Caixa" GridPane.rowIndex="2" />
-                  <Button layoutX="186.0" layoutY="137.0" onAction="#onGerirComprasClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-primary" text="Gestão de Compras" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     <Button onAction="#onValoresCaixaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-valoresemcaixa" text="Valores em Caixa" GridPane.rowIndex="1" />
+                     <Button onAction="#onGestaoStockClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-gestaostock" text="Gestão de Stock" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     <Button onAction="#onNovaVendaClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-novavenda" text="Nova Venda" />
+                     <Button onAction="#onGerirPedidosClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-gerirpedidos" text="Gerir Pedidos" GridPane.columnIndex="1" />
+                     <Button fx:id="btnCaixa" onAction="#onCaixaBoolClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-abrircaixa" text="Abrir Caixa" GridPane.rowIndex="2" />
+                  <Button layoutX="186.0" layoutY="137.0" onAction="#onGerirComprasClick" prefHeight="100.0" prefWidth="175.0" styleClass="btn-gestaocompras" text="Gestão de Compras" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </left>
