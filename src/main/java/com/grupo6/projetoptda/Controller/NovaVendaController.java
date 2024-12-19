@@ -152,7 +152,7 @@ public class NovaVendaController {
 
         for (Produto produto : produtos) {
             Button btnProduto = new Button(produto.getNome() + "\n" + String.format("%.2f€", produto.getPreco()));
-            btnProduto.getStyleClass().add("btn-item");
+            btnProduto.getStyleClass().add("btn-produto");
             produtosPane.getChildren().add(btnProduto);
 
             btnProduto.setOnAction(e -> adicionarProduto(produto));

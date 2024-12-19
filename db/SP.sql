@@ -591,8 +591,9 @@ DELIMITER ;
 
 -- Procedure para Fazer Pagamento
 DELIMITER $$
+
 CREATE PROCEDURE fazerPagamento(
-    IN p_idPedido INT, 
+    IN p_idPedido INT,
     IN p_metodoPagamento ENUM('Multibanco', 'DinheiroVivo')
 )
 BEGIN
@@ -600,74 +601,60 @@ BEGIN
     DECLARE v_valorTotal DECIMAL(10,2);
     DECLARE v_idFatura INT;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_erro = TRUE;
-    
+
     -- Iniciar transação
     START TRANSACTION;
-    
+
     -- Verificar se o pedido existe e está por pagar
     IF NOT EXISTS (SELECT 1 FROM Pedido WHERE idPedido = p_idPedido AND status = 'PorPagar') THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Pagamento só pode ser realizado para pedidos por pagar';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Pagamento só pode ser realizado para pedidos por pagar';
     END IF;
-    
+
     -- Obter o valor total do pedido
     SELECT SUM(pp.quantidade * p.preco) INTO v_valorTotal
     FROM PedidoProduto pp
-    JOIN Produto p ON pp.idProduto = p.idProduto
+             JOIN Produto p ON pp.idProduto = p.idProduto
     WHERE pp.idPedido = p_idPedido;
-    
+
     -- Atualizar pedido com metodo de pagamento e status
     UPDATE Pedido
-    SET 
-        metodoPagamento = p_metodoPagamento,
-        status = 'Finalizado'
+    SET status = 'Finalizado'
     WHERE idPedido = p_idPedido;
-    
+
     -- Verificar se houve erros até aqui
     IF v_erro THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro ao atualizar o status do pedido';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Erro ao atualizar o status do pedido';
     END IF;
-    
+
     -- Obter o ID da fatura correspondente
     SELECT idFatura INTO v_idFatura
     FROM Fatura
     WHERE idPedido = p_idPedido;
-    
+
     -- Verificar se a fatura existe
     IF v_idFatura IS NULL THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Fatura correspondente não encontrada';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Fatura correspondente não encontrada';
     END IF;
-    
-    -- Inserir registro de pagamento na tabela Pagamento
-    INSERT INTO Pagamento (idFatura, metodoPagamento, estadoPagamento)
-    VALUES (v_idFatura, 
-            CASE 
-                WHEN p_metodoPagamento = 'Multibanco' THEN 1
-                WHEN p_metodoPagamento = 'DinheiroVivo' THEN 2
-            END,
-            1); -- Estado do pagamento como "1 - Processado com sucesso"
-    
+
+    -- Inserir pagamento na tabela Pagamento
+    INSERT INTO Pagamento (idFatura, metodoPagamento, valorTotal)
+    VALUES (v_idFatura, p_metodoPagamento, v_valorTotal);
+
     -- Verificar se houve erros na inserção
     IF v_erro THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro ao registrar pagamento';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Erro ao registrar pagamento';
     ELSE
         COMMIT;
     END IF;
-    
-    -- Retornar detalhes do pagamento
-    SELECT 
-        p_idPedido AS idPedido,
-        v_idFatura AS idFatura,
-        v_valorTotal AS valorTotal,
-        p_metodoPagamento AS metodoPagamento,
-        'Pagamento processado com sucesso' AS mensagem;
 END$$
+
 DELIMITER ;
 
 

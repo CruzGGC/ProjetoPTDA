@@ -42,7 +42,6 @@ CREATE TABLE Pedido (
     idPedido INT AUTO_INCREMENT PRIMARY KEY,
     dataHora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Entregue', 'PorPagar', 'Finalizado') NOT NULL DEFAULT 'Entregue',
-    metodoPagamento ENUM('Multibanco', 'DinheiroVivo') NULL,
     idCliente INT,
     idFuncionario INT,
     FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE SET NULL,
@@ -82,11 +81,11 @@ CREATE TABLE Fatura (
 );
 
 -- Tabela Pagamento
-CREATE TABLE IF NOT EXISTS Pagamento (
+CREATE TABLE Pagamento (
     idPagamento INT AUTO_INCREMENT PRIMARY KEY,
     idFatura INT NOT NULL,
+    valorTotal DECIMAL(10,2) NOT NULL,
     metodoPagamento ENUM('Multibanco', 'DinheiroVivo') NULL,
-    estadoPagamento TINYINT NOT NULL,
     INDEX idx_metodoPagamento (metodoPagamento),
     FOREIGN KEY (idFatura) REFERENCES Fatura(idFatura)
 );

@@ -234,6 +234,7 @@ public class GerirPedidosController {
                 alert.showAndWait();
                 carregarPedidos("Entregue");
                 recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
+                carregarPedidos("Entregue");
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erro");
@@ -260,6 +261,7 @@ public class GerirPedidosController {
     @FXML
     public void fazerPagamento(ActionEvent event) {
         String metodoPagamento = ((Button) event.getSource()).getText();
+        System.out.println("Button clicked: " + metodoPagamento); // Print statement added
         String queryPagamento = "{CALL fazerPagamento(?, ?)}";
         String queryEmitirFatura = "{CALL emitirFatura(?, ?)}"; // Modificado para incluir idFuncionario
 
@@ -285,6 +287,7 @@ public class GerirPedidosController {
 
             carregarPedidos("PorPagar");
             recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
+            carregarPedidos("PorPagar");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
