@@ -64,7 +64,7 @@
          <center>
             <VBox BorderPane.alignment="CENTER">
                <HBox fx:id="categoriasPane" prefHeight="10.0" spacing="5.0" />
-               <TableView fx:id="produtosTable" prefWidth="200.0">
+               <TableView fx:id="produtosTable" prefWidth="200.0" styleClass="modern-table">
                   <columns>
                      <TableColumn fx:id="colId" minWidth="9.0" prefWidth="20.0" text="ID" />
                      <TableColumn fx:id="colNome" minWidth="2.0" prefWidth="290.0" text="Nome" />
@@ -77,6 +77,9 @@
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
                </TableView>
             </VBox>
          </center>
@@ -92,13 +95,13 @@
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
-               <Button mnemonicParsing="false" onAction="#mostrarAddProductPane" text="Adicionar Produto" />
-               <Button mnemonicParsing="false" onAction="#mostrarAddCategoryPane" text="Adicionar Categoria" />
+               <Button mnemonicParsing="false" onAction="#mostrarAddProductPane" styleClass="btn-tables" text="Adicionar Produto" />
+               <Button mnemonicParsing="false" onAction="#mostrarAddCategoryPane" styleClass="btn-tables" text="Adicionar Categoria" />
             </HBox>
          </right>
          <left>
             <HBox alignment="CENTER" prefHeight="40.0" BorderPane.alignment="CENTER">
-               <Button mnemonicParsing="false" onAction="#onVoltarClick" text="🏠" />
+               <Button mnemonicParsing="false" onAction="#onVoltarClick" styleClass="btn-home" text="🏠" />
             </HBox>
          </left>
          <bottom>

@@ -200,3 +200,189 @@
 .fundo {
     -fx-background-color: #3D3D3D;
 }
+
+.btn-home {
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-family: "Lilita One", sans-serif;
+}
+
+.btn-tables {
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-family: "Lilita One", sans-serif;
+}
+
+.btn-tables:hover {
+    -fx-background-color: #404040;
+}
+
+.table-header {
+    -fx-padding: 0 0 10 0;
+}
+
+.table-title {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.modern-table {
+    -fx-background-color: #2A2A2A;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 2);
+}
+
+.modern-table .column-header-background {
+    -fx-background-color: #232323;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #4A4A4A;
+}
+
+.modern-table .column-header .label {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E0E0E0;
+    -fx-padding: 8 15;
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: #2A2A2A;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #383838;
+    -fx-table-cell-border-color: transparent;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: #2F2F2F;
+}
+
+.modern-table .table-row-cell:hover {
+    -fx-background-color: #404040;
+}
+
+.modern-table .table-row-cell:selected {
+    -fx-background-color: #454545;
+}
+
+.modern-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #FFFFFF;
+}
+
+.modern-table .table-cell {
+    -fx-padding: 5 15;
+    -fx-font-size: 13;
+    -fx-text-fill: #CCCCCC;
+}
+
+/* Empty rows styling */
+.modern-table .table-row-cell:empty {
+    -fx-background-color: #2A2A2A;
+}
+
+.modern-table .table-row-cell:empty .table-cell {
+    -fx-border-width: 0;
+}
+
+/* Scrollbar styling */
+.modern-table .scroll-bar:vertical,
+.modern-table .scroll-bar:horizontal {
+    -fx-background-color: #2A2A2A;
+}
+
+.modern-table .scroll-bar:vertical .thumb,
+.modern-table .scroll-bar:horizontal .thumb {
+    -fx-background-color: #4A4A4A;
+    -fx-background-radius: 5;
+}
+
+.modern-table .scroll-bar:vertical .thumb:hover,
+.modern-table .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #5A5A5A;
+}
+
+.modern-table .scroll-bar:vertical .track,
+.modern-table .scroll-bar:horizontal .track {
+    -fx-background-color: #2A2A2A;
+}
+
+.modern-table .scroll-bar .increment-button,
+.modern-table .scroll-bar .decrement-button {
+    -fx-background-color: #2A2A2A;
+    -fx-border-color: transparent;
+}
+
+.modern-table .scroll-bar .increment-arrow,
+.modern-table .scroll-bar .decrement-arrow {
+    -fx-background-color: #4A4A4A;
+}
+
+/* Remove table grid lines */
+.modern-table .table-view {
+    -fx-table-cell-border-color: transparent;
+}
+
+/* ComboBox Styling */
+.combo-box {
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+    -fx-mark-color: #5eb5ff; /* Arrow color */
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #2A2A2A;
+    -fx-border-color: #4A4A4A;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #404040;
+}
+
+/* TextField Styling */
+.text-field {
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #808080;
+    -fx-border-color: #4A4A4A;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 5 10;
+}
+
+.text-field:focused {
+    -fx-border-color: #5eb5ff;
+}
+
+/* Popup Panel Enhancement */
+.stack-pane {
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+}
+
+.popup-content {
+    -fx-background-color: #333333;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 2);
+}
