@@ -16,6 +16,8 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import java.sql.*;
 
+import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
+
 public class GerirComprasController {
 
     @FXML
@@ -181,6 +183,7 @@ public class GerirComprasController {
         DatabaseUtils.adicionarCategoria(nome);
         fecharAddCategoryPane();
         loadCategorias();
+        recarregarInterface("/com/grupo6/projetoptda/GerirComprasPanel.fxml");
     }
 
     @FXML
@@ -196,6 +199,7 @@ public class GerirComprasController {
     private void adicionarLinha() {
         Produto novoProduto = new Produto(0, 0, "", 0.0, 0);
         produtos.add(novoProduto);
+        recarregarInterface("/com/grupo6/projetoptda/GerirComprasPanel.fxml");
     }
 
     private boolean isRowEmpty(Produto produto) {
