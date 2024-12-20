@@ -152,7 +152,7 @@ public class ValoresCaixaController {
             ResultSet rsFaturasCompra = stmtFaturasCompra.executeQuery();
             while (rsFaturasCompra.next()) {
                 int idFatura = rsFaturasCompra.getInt("idFatura");
-                String faturaInfo = String.format("FaturaCompra: %d | Funcionario: %s\nCliente: %s\n%s | %s | %.2f",
+                String faturaInfo = String.format("Fatura de Compra: %d | Funcionario: %s\nCliente: %s\n%s | %s | %.2f",
                         idFatura,
                         rsFaturasCompra.getString("nomeFuncionario"),
                         rsFaturasCompra.getString("nomeCliente"),
@@ -161,7 +161,7 @@ public class ValoresCaixaController {
                         rsFaturasCompra.getDouble("valorTotal"));
 
                 Button faturaButton = new Button(faturaInfo);
-                faturaButton.getStyleClass().add("btn-primary");
+                faturaButton.getStyleClass().add("btn-categoria");
                 faturaButton.setOnAction(event -> abrirDetalhesFaturaCompra(idFatura));
                 faturasPane.getChildren().add(faturaButton);
             }
@@ -196,7 +196,7 @@ public class ValoresCaixaController {
             controller.carregarDetalhesFaturaCompra(idFatura);
 
             Stage stage = new Stage();
-            stage.setTitle("Detalhes da FaturaCompra");
+            stage.setTitle("Detalhes da Fatura da Compra");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {

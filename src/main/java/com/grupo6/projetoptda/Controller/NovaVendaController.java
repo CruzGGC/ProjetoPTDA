@@ -233,6 +233,7 @@ public class NovaVendaController {
                         alert.setHeaderText(null);
                         alert.setContentText("Pedido criado com sucesso! ID do Pedido: " + idPedido);
                         alert.showAndWait();
+                        recarregarInterface("/com/grupo6/projetoptda/NovaVendaPanel.fxml");
                     }
                 }
             }

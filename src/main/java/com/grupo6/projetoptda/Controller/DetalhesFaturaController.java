@@ -32,7 +32,9 @@ public class DetalhesFaturaController {
                         .append("Nome do Cliente: ").append(rs.getString("Nome do Cliente")).append("\n")
                         .append("ID Pedido: ").append(rs.getInt("ID Pedido")).append("\n")
                         .append("Produtos: ").append(rs.getString("Produtos")).append("\n")
+                        .append("Método de Pagamento: ").append(rs.getString("Método de Pagamento")).append("\n")
                         .append("Total Fatura: ").append(rs.getDouble("Total Fatura")).append("\n");
+
             }
 
             labelConteudo.setText(detalhes.toString());

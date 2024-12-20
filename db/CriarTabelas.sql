@@ -70,6 +70,7 @@ CREATE TABLE Fatura (
     idCliente INT NOT NULL,
     idFuncionario INT,
     valorTotal DECIMAL(10,2) NOT NULL CHECK (valorTotal >= 0),
+    metodoPagamento ENUM('Multibanco', 'DinheiroVivo') NULL,
     data DATE NOT NULL,
     hora TIME NOT NULL,
     FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario) ON DELETE SET NULL,
@@ -83,11 +84,11 @@ CREATE TABLE Fatura (
 -- Tabela Pagamento
 CREATE TABLE Pagamento (
     idPagamento INT AUTO_INCREMENT PRIMARY KEY,
-    idFatura INT NOT NULL,
+    idPedido INT NOT NULL,
     valorTotal DECIMAL(10,2) NOT NULL,
     metodoPagamento ENUM('Multibanco', 'DinheiroVivo') NULL,
     INDEX idx_metodoPagamento (metodoPagamento),
-    FOREIGN KEY (idFatura) REFERENCES Fatura(idFatura)
+    FOREIGN KEY (idPedido) REFERENCES Pedido(idPedido)
 );
 
 -- Tabela Compra
@@ -113,6 +114,7 @@ CREATE TABLE FaturaCompra (
   idFatura INT AUTO_INCREMENT PRIMARY KEY,
   idCompra INT NOT NULL,
   idCliente INT NOT NULL,
+  idFuncionario INT,
   valorTotal DECIMAL(10,2) NOT NULL CHECK (valorTotal >= 0),
   data DATE NOT NULL,
   hora TIME NOT NULL,
@@ -131,19 +133,6 @@ CREATE TABLE Turno (
     idFuncionario INT,
     FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario)
 );
--- Trigger para atualizar stock após finalização de pedido
-DELIMITER $$
-
-CREATE TRIGGER trg_atualizar_stock_apos_pedido 
-AFTER INSERT ON PedidoProduto
-FOR EACH ROW
-BEGIN
-    UPDATE Produto 
-    SET quantidadeStock = quantidadeStock - NEW.quantidade
-    WHERE idProduto = NEW.idProduto;
-END$$
-
-DELIMITER ;
 
 -- Trigger para prevenir stock negativo
 DELIMITER $$

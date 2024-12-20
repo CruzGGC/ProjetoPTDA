@@ -99,7 +99,7 @@ public class GerirComprasController {
 
         try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
             for (Produto produto : produtos) {
-                if (!isRowEmpty(produto)) {
+                if (isRowEmpty(produto)) {
                     System.out.println("Processing product: " + produto);
 
                     // Call the stored procedure to add or update the product
@@ -119,7 +119,7 @@ public class GerirComprasController {
             // Convert products to JSON format
             StringBuilder jsonBuilder = new StringBuilder("[");
             for (Produto produto : produtos) {
-                if (!isRowEmpty(produto)) {
+                if (isRowEmpty(produto)) {
                     jsonBuilder.append("{")
                             .append("\"nome\":\"").append(produto.getNome()).append("\",")
                             .append("\"idCategoria\":").append(produto.getCategoria().getIdCategoria()).append(",")
@@ -148,9 +148,10 @@ public class GerirComprasController {
                     int idCompra = rs.getInt("idCompra");
 
                     // Call the stored procedure to emit the invoice for the purchase
-                    String sqlEmitirFaturaCompra = "{CALL emitirFaturaCompra(?)}";
+                    String sqlEmitirFaturaCompra = "{CALL emitirFaturaCompra(?, ?)}";
                     try (CallableStatement stmtFatura = connection.prepareCall(sqlEmitirFaturaCompra)) {
                         stmtFatura.setInt(1, idCompra);
+                        stmtFatura.setInt(2, appState.getFuncionarioId()); // Pass the idFuncionario
                         stmtFatura.execute(); // Ensure the stored procedure is executed
                     }
                 }
@@ -199,13 +200,13 @@ public class GerirComprasController {
     private void adicionarLinha() {
         Produto novoProduto = new Produto(0, 0, "", 0.0, 0);
         produtos.add(novoProduto);
-        recarregarInterface("/com/grupo6/projetoptda/GerirComprasPanel.fxml");
+        tableView.refresh(); // Atualiza a tabela para exibir a nova linha
     }
 
     private boolean isRowEmpty(Produto produto) {
-        return produto.getNome() == null || produto.getNome().trim().isEmpty() ||
-                produto.getCategoria() == null ||
-                produto.getPreco() <= 0.0 ||
-                produto.getQuantidade() <= 0;
+        return produto.getNome() != null && !produto.getNome().trim().isEmpty() &&
+                produto.getCategoria() != null &&
+                !(produto.getPreco() <= 0.0) &&
+                produto.getQuantidade() > 0;
     }
 }
