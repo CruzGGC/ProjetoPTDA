@@ -13,8 +13,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -263,8 +261,7 @@ public class GerirStockController {
         colModificar.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button();
             {
-                FontIcon icon = new FontIcon(FontAwesomeSolid.EDIT);
-                btn.setGraphic(icon);
+                btn.setText("✏️");
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
                     modificarProduto(produto);
@@ -285,8 +282,7 @@ public class GerirStockController {
         colRemover.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button();
             {
-                FontIcon icon = new FontIcon(FontAwesomeSolid.TRASH);
-                btn.setGraphic(icon);
+                btn.setText("🗑️");
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
                     removerProduto(produto);

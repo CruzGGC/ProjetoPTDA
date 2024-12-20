@@ -12,8 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -112,15 +110,13 @@ public class GerirPedidosController {
         }
 
         Button btnModificar = new Button();
-        FontIcon iconModificar = new FontIcon(FontAwesomeSolid.EDIT);
-        btnModificar.setGraphic(iconModificar);
+        btnModificar.setText("⚙️");
         btnModificar.getStyleClass().add("btn-pedido-buttons");
         btnModificar.setPrefHeight(48);
         btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido.idPedido())); // Passa o pedido aqui
 
         Button btnRemover = new Button();
-        FontIcon iconRemover = new FontIcon(FontAwesomeSolid.TRASH);
-        btnRemover.setGraphic(iconRemover);
+        btnRemover.setText("🗑️");
         btnRemover.getStyleClass().add("btn-pedido-buttons");
         btnRemover.setPrefHeight(48);
         btnRemover.setPrefWidth(26);
