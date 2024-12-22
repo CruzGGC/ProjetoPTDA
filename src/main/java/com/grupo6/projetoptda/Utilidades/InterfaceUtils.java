@@ -8,8 +8,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * A classe InterfaceUtils fornece métodos utilitários para recarregar interfaces do JavaFX.
+ */
 public class InterfaceUtils {
 
+    /**
+     * Recarrega a interface a partir do caminho do ficheiro FXML fornecido.
+     *
+     * @param fxmlPath o caminho do ficheiro FXML a ser carregado
+     */
     public static void recarregarInterface(String fxmlPath) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(InterfaceUtils.class.getResource(fxmlPath)));

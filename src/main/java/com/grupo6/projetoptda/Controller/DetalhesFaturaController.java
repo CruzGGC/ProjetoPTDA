@@ -9,11 +9,19 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * A classe DetalhesFaturaController gere a exibição dos detalhes das faturas na interface JavaFX.
+ */
 public class DetalhesFaturaController {
 
     @FXML
     private Label labelConteudo;
 
+    /**
+     * Carrega os detalhes de uma fatura específica e exibe-os na etiqueta.
+     *
+     * @param idFatura o ID da fatura a ser carregada
+     */
     public void carregarDetalhesFatura(int idFatura) {
         String query = "{CALL mostrarDetalhesFatura(?)}";
 
@@ -41,6 +49,11 @@ public class DetalhesFaturaController {
         }
     }
 
+    /**
+     * Carrega os detalhes de uma fatura de compra específica e exibe-os na etiqueta.
+     *
+     * @param idFatura o ID da fatura de compra a ser carregada
+     */
     public void carregarDetalhesFaturaCompra(int idFatura) {
         String query = "{CALL mostrarDetalhesFaturaCompra(?)}";
 

@@ -14,6 +14,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * A classe MainController gere a interface principal da aplicação JavaFX.
+ */
 public class MainController {
 
     @FXML
@@ -37,6 +40,9 @@ public class MainController {
 
     private final AppState appState = AppState.getInstance();
 
+    /**
+     * Inicializa o controlador, atualizando a data e hora e restaurando o estado da interface.
+     */
     @FXML
     public void initialize() {
         DateUtils.updateDate(labelData);
@@ -44,6 +50,9 @@ public class MainController {
         restoreState();
     }
 
+    /**
+     * Restaura o estado da interface com base no estado da aplicação.
+     */
     private void restoreState() {
         if (appState.isTurnoAberto()) {
             btnCaixa.setText("Fechar Caixa");
@@ -72,6 +81,11 @@ public class MainController {
         labelUtilizador.setText(appState.getNomeFuncionario()); // Atualizar o Label com o nome do funcionário
     }
 
+    /**
+     * Define o ID do funcionário e atualiza o estado da aplicação e a interface.
+     *
+     * @param funcionarioId o ID do funcionário
+     */
     public void setFuncionarioId(int funcionarioId) {
         appState.setFuncionarioId(funcionarioId);
         String query = "SELECT nivelAcesso, fNome, servico FROM Funcionario WHERE idFuncionario = ?";
@@ -94,6 +108,9 @@ public class MainController {
         restoreState();
     }
 
+    /**
+     * Atualiza a visibilidade dos botões com base no nível de acesso do funcionário.
+     */
     private void updateButtonVisibility() {
         if ("EmpregadoMesa".equals(appState.getNivelAcesso())) {
             btnValoresCaixa.setVisible(false);
@@ -102,6 +119,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Navega para a interface de gestão de stock.
+     */
     @FXML
     public void onGestaoStockClick() {
         try {
@@ -111,6 +131,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Navega para a interface de nova venda.
+     */
     @FXML
     public void onNovaVendaClick() {
         try {
@@ -120,6 +143,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Alterna entre abrir e fechar o turno.
+     */
     @FXML
     public void onCaixaBoolClick() {
         if (!appState.isTurnoAberto()) {
@@ -129,6 +155,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Abre o turno e atualiza a interface.
+     */
     private void abrirTurno() {
         String query = "{CALL registrarAberturaTurno(?)}";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -152,6 +181,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Fecha o turno e atualiza a interface.
+     */
     private void fecharTurno() {
         String query = "{CALL registrarFechamentoTurno(?)}";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -168,6 +200,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Desativa todos os botões exceto o botão de caixa.
+     */
     private void disableButtonsExceptCaixa() {
         btnCaixa.setDisable(false);
         for (Button button : new Button[]{btnValoresCaixa, btnGestaoStock, btnNovaVenda, btnGerirPedidos, btnGerirCompras}) {
@@ -175,12 +210,18 @@ public class MainController {
         }
     }
 
+    /**
+     * Ativa todos os botões.
+     */
     private void enableAllButtons() {
         for (Button button : new Button[]{btnValoresCaixa, btnGestaoStock, btnNovaVenda, btnGerirPedidos, btnGerirCompras}) {
             button.setDisable(false);
         }
     }
 
+    /**
+     * Navega para a interface de valores de caixa.
+     */
     @FXML
     public void onValoresCaixaClick() {
         try {
@@ -190,6 +231,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Navega para a interface de gestão de pedidos.
+     */
     @FXML
     public void onGerirPedidosClick() {
         try {
@@ -199,6 +243,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Navega para a interface de gestão de compras.
+     */
     @FXML
     public void onGerirComprasClick() {
         try {
@@ -208,6 +255,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Sai da aplicação e navega para a interface inicial.
+     */
     @FXML
     public void onSairClick() {
         try {

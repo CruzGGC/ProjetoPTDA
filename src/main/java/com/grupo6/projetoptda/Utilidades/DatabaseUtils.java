@@ -12,8 +12,16 @@ import java.util.List;
 import com.grupo6.projetoptda.Getter.Produto;
 import javafx.scene.control.Alert;
 
+/**
+ * A classe DatabaseUtils fornece métodos utilitários para interagir com a base de dados.
+ */
 public class DatabaseUtils {
 
+    /**
+     * Procura todas as categorias da base de dados.
+     *
+     * @return uma lista de objetos Categoria
+     */
     public static List<Categoria> fetchCategories() {
         List<Categoria> categorias = new ArrayList<>();
         String query = "SELECT * FROM Categoria";
@@ -35,6 +43,12 @@ public class DatabaseUtils {
         return categorias;
     }
 
+    /**
+     * Procura uma categoria pelo seu ID.
+     *
+     * @param idCategoria o ID da categoria
+     * @return um objeto Categoria ou null se não for encontrado
+     */
     public static Categoria getCategoriaById(int idCategoria) {
         String query = "SELECT * FROM Categoria WHERE idCategoria = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -54,6 +68,11 @@ public class DatabaseUtils {
         return null;
     }
 
+    /**
+     * Adiciona uma nova categoria à base de dados.
+     *
+     * @param nome o nome da nova categoria
+     */
     public static void adicionarCategoria(String nome) {
         if (nome.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -83,6 +102,14 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Adiciona um novo produto à base de dados.
+     *
+     * @param nome o nome do produto
+     * @param idCategoria o ID da categoria do produto
+     * @param preco o preço do produto
+     * @param quantidade a quantidade em stock do produto
+     */
     public static void adicionarProduto(String nome, int idCategoria, double preco, int quantidade) {
         if (nome.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -133,6 +160,12 @@ public class DatabaseUtils {
         }
     }
 
+    /**
+     * Procura todos os produtos de uma categoria específica.
+     *
+     * @param idCategoria o ID da categoria
+     * @return uma lista de objetos Produto
+     */
     public static List<Produto> buscarProdutosPorCategoria(int idCategoria) {
         List<Produto> produtos = new ArrayList<>();
         String query = "SELECT * FROM Produto WHERE idCategoria = ?";

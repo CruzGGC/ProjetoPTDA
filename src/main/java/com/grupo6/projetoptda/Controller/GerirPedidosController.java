@@ -22,6 +22,9 @@ import java.util.List;
 
 import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
 
+/**
+ * A classe GerirPedidosController gere a interface de gestão de pedidos no JavaFX.
+ */
 public class GerirPedidosController {
 
     @FXML
@@ -30,6 +33,9 @@ public class GerirPedidosController {
     @FXML
     private Label labelData;
 
+    /**
+     * Volta para o painel principal.
+     */
     @FXML
     public void onVoltarClick() {
         try {
@@ -67,6 +73,9 @@ public class GerirPedidosController {
 
     private Pedido pedidoSelecionado;
 
+    /**
+     * Inicializa o controlador, configurando os botões e atualizando a data.
+     */
     @FXML
     public void initialize() {
         finalizarPedidoButton.setDisable(true);
@@ -75,16 +84,27 @@ public class GerirPedidosController {
         labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
+    /**
+     * Filtra e carrega os pedidos com status "Entregue".
+     */
     @FXML
     public void filtrarPedidosEntregues() {
         carregarPedidos("Entregue");
     }
 
+    /**
+     * Filtra e carrega os pedidos com status "PorPagar".
+     */
     @FXML
     public void filtrarPedidosPorPagar() {
         carregarPedidos("PorPagar");
     }
 
+    /**
+     * Carrega os pedidos com o status especificado.
+     *
+     * @param status o status dos pedidos a serem carregados
+     */
     private void carregarPedidos(String status) {
         List<Pedido> pedidos = buscarPedidos(status);
         pedidosPane.getChildren().clear();
@@ -116,6 +136,12 @@ public class GerirPedidosController {
         }
     }
 
+    /**
+     * Cria os botões de modificar e remover para um pedido.
+     *
+     * @param pedido o pedido para o qual os botões serão criados
+     * @return um VBox contendo os botões
+     */
     private VBox criarBotoesPedido(Pedido pedido) {
         Button btnModificar = new Button();
         FontIcon iconModificar = new FontIcon(FontAwesomeSolid.EDIT);
@@ -135,6 +161,12 @@ public class GerirPedidosController {
         return new VBox(btnModificar, btnRemover);
     }
 
+    /**
+     * Busca os pedidos com o status especificado.
+     *
+     * @param status o status dos pedidos a serem buscados
+     * @return uma lista de pedidos
+     */
     private List<Pedido> buscarPedidos(String status) {
         List<Pedido> pedidos = new ArrayList<>();
         String query = "SELECT * FROM Pedido WHERE status = ? AND idFuncionario = ?";
@@ -157,6 +189,11 @@ public class GerirPedidosController {
         return pedidos;
     }
 
+    /**
+     * Seleciona um pedido e atualiza os botões de ação com base no status do pedido.
+     *
+     * @param pedido o pedido a ser selecionado
+     */
     private void selecionarPedido(Pedido pedido) {
         this.pedidoSelecionado = pedido;
         if ("Entregue".equals(pedido.status())) {
@@ -171,6 +208,11 @@ public class GerirPedidosController {
         }
     }
 
+    /**
+     * Abre o painel de modificação de venda para o pedido especificado.
+     *
+     * @param idPedido o ID do pedido a ser modificado
+     */
     public void abrirModificarVendaPane(int idPedido) {
         try {
 
@@ -196,6 +238,11 @@ public class GerirPedidosController {
         }
     }
 
+    /**
+     * Remove o pedido especificado da base de dados.
+     *
+     * @param pedido o pedido a ser removido
+     */
     @FXML
     public void removerPedido(Pedido pedido) {
         String query = "{CALL cancelarPedido(?)}";
@@ -219,6 +266,9 @@ public class GerirPedidosController {
         }
     }
 
+    /**
+     * Finaliza o pedido selecionado se o status for "Entregue".
+     */
     @FXML
     public void finalizarPedido() {
         if (pedidoSelecionado != null && "Entregue".equals(pedidoSelecionado.status())) {
@@ -244,6 +294,9 @@ public class GerirPedidosController {
         }
     }
 
+    /**
+     * Mostra o painel de pagamento.
+     */
     @FXML
     public void mostrarPagamentoPane() {
         if (pedidoSelecionado != null && "PorPagar".equals(pedidoSelecionado.status())) {
@@ -251,12 +304,20 @@ public class GerirPedidosController {
         }
     }
 
+    /**
+     * Esconde o painel de pagamento.
+     */
     @FXML
     public void fecharPagamentoPane() {
         pagamentoPane.setVisible(false);
         pagamentoPane.setManaged(false);
     }
 
+    /**
+     * Realiza o pagamento do pedido selecionado e emite a fatura.
+     *
+     * @param event o evento de ação que disparou o pagamento
+     */
     @FXML
     public void fazerPagamento(ActionEvent event) {
         String metodoPagamento = ((Button) event.getSource()).getText();
