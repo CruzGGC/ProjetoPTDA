@@ -10,13 +10,13 @@ public class criarFuncionario {
 
     public static void main(String[] args) {
         // Define os dados do novo funcionário
-        int id = 1;
-        String nome = "USER";
-        String password = "PASSWORD";
-        String nivelAcesso = "EmpregadoMesa ou Gerente";
+        int id = 6;
+        String nome = "Gabriel";
+        String password = "1234";
+        String nivelAcesso = "EmpregadoMesa";
 
         // Tenta estabelecer conexão com a base de dados
-        try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
             // Cria um hash para a password do funcionário
             String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
