@@ -10,10 +10,10 @@ public class criarFuncionario {
 
     public static void main(String[] args) {
         // Define os dados do novo funcionário
-        int id = 6;
-        String nome = "Gabriel";
-        String password = "1234";
-        String nivelAcesso = "EmpregadoMesa";
+        int id = 1;
+        String nome = "USER";
+        String password = "PASSWORD";
+        String nivelAcesso = "EmpregadoMesa ou Gerente";
 
         // Tenta estabelecer conexão com a base de dados
         try (Connection connection = DatabaseConnection.getConnection()) {
