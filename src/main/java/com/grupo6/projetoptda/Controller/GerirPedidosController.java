@@ -136,13 +136,13 @@ public class GerirPedidosController {
         }
 
         Button btnModificar = new Button();
-        btnModificar.setText("⚙️");
+        btnModificar.setText("⚙");
         btnModificar.getStyleClass().add("btn-pedido-buttons");
         btnModificar.setPrefHeight(48);
         btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido.idPedido())); // Passa o pedido aqui
 
         Button btnRemover = new Button();
-        btnRemover.setText("🗑️");
+        btnRemover.setText("🗑");
         btnRemover.getStyleClass().add("btn-pedido-buttons");
         btnRemover.setPrefHeight(48);
         btnRemover.setPrefWidth(26);

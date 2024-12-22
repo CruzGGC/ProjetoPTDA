@@ -23,8 +23,14 @@ import java.util.List;
 
 import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
 
+/**
+ * A classe GerirStockController gere a interface de gestão de stock no JavaFX.
+ */
 public class GerirStockController {
 
+    /**
+     * Volta para o painel principal.
+     */
     @FXML
     public void onVoltarClick() {
         try {
@@ -110,18 +116,27 @@ public class GerirStockController {
 
     private final AppState appState = AppState.getInstance();
 
+    /**
+     * Mostra o painel para adicionar um novo produto.
+     */
     @FXML
     public void mostrarAddProductPane() {
         fecharAddCategoryPane(); // Fechar o painel de adicionar categoria
         Panes.showPane(addProductPane);
     }
 
+    /**
+     * Esconde o painel para adicionar um novo produto.
+     */
     @FXML
     public void fecharAddProductPane() {
         addProductPane.setVisible(false);
         addProductPane.setManaged(false);
     }
 
+    /**
+     * Adiciona um novo produto à base de dados.
+     */
     @FXML
     public void adicionarProduto() {
         String nome = nomeProdutoField.getText();
@@ -133,18 +148,29 @@ public class GerirStockController {
         recarregarInterface("/com/grupo6/projetoptda/GerirStockPanel.fxml");
     }
 
+    /**
+     * Mostra o painel para adicionar uma nova categoria.
+     */
     @FXML
     public void mostrarAddCategoryPane() {
         fecharAddProductPane(); // Fechar o painel de adicionar produto
         Panes.showPane(addCategoryPane);
     }
 
+    /**
+     * Esconde o painel para adicionar uma nova categoria.
+     */
     @FXML
     public void fecharAddCategoryPane() {
         addCategoryPane.setVisible(false);
         addCategoryPane.setManaged(false);
     }
 
+    /**
+     * Mostra o painel para modificar um produto existente.
+     *
+     * @param produto o produto a ser modificado
+     */
     @FXML
     public void mostrarModifyProductPane(Produto produto) {
         fecharAddProductPane(); // Fechar outros paineis
@@ -158,12 +184,18 @@ public class GerirStockController {
         Panes.showPane(modifyProductPane);
     }
 
+    /**
+     * Esconde o painel para modificar um produto existente.
+     */
     @FXML
     public void fecharModifyProductPane() {
         modifyProductPane.setVisible(false);
         modifyProductPane.setManaged(false);
     }
 
+    /**
+     * Salva as modificações feitas em um produto existente.
+     */
     @FXML
     public void salvarModificacoesProduto() {
         String nome = modifyNomeProdutoField.getText();
@@ -195,6 +227,11 @@ public class GerirStockController {
         }
     }
 
+    /**
+     * Mostra o painel para atualizar o stock de um produto.
+     *
+     * @param produto o produto cujo stock será atualizado
+     */
     @FXML
     public void mostrarAtualizarStockPane(Produto produto) {
         fecharAddProductPane(); // Fechar outros paineis
@@ -205,12 +242,18 @@ public class GerirStockController {
         Panes.showPane(atualizarStockPane);
     }
 
+    /**
+     * Esconde o painel para atualizar o stock de um produto.
+     */
     @FXML
     public void fecharAtualizarStockPane() {
         atualizarStockPane.setVisible(false);
         atualizarStockPane.setManaged(false);
     }
 
+    /**
+     * Atualiza o stock de um produto na base de dados.
+     */
     @FXML
     public void atualizarStock() {
         int quantidade = Integer.parseInt(atualizarQuantidadeField.getText());
@@ -238,12 +281,18 @@ public class GerirStockController {
         }
     }
 
+    /**
+     * Adiciona uma nova categoria à base de dados.
+     */
     @FXML
     private void adicionarCategoria() {
         DatabaseUtils.adicionarCategoria(nomeCategoriaField.getText());
         fecharAddCategoryPane();
     }
 
+    /**
+     * Inicializa o controlador, configurando as colunas da tabela e carregando categorias.
+     */
     @FXML
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("idProduto"));
@@ -257,6 +306,9 @@ public class GerirStockController {
         labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
+    /**
+     * Adiciona botões de ação à tabela de produtos.
+     */
     private void addButtonToTable() {
         colModificar.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button();
@@ -323,6 +375,9 @@ public class GerirStockController {
         });
     }
 
+    /**
+     * Carrega as categorias a partir da base de dados e as exibe no painel.
+     */
     private void carregarCategorias() {
         List<Categoria> categorias = buscarCategorias();
 
@@ -342,16 +397,32 @@ public class GerirStockController {
         }
     }
 
+    /**
+     * Procura as categorias na base de dados.
+     *
+     * @return uma lista de categorias
+     */
     private List<Categoria> buscarCategorias() {
         return DatabaseUtils.fetchCategories();
     }
 
+    /**
+     * Carrega os produtos de uma categoria específica e os exibe na tabela.
+     *
+     * @param idCategoria o ID da categoria
+     */
     private void carregarProdutos(int idCategoria) {
         List<Produto> produtos = buscarProdutos(idCategoria);
         ObservableList<Produto> produtosObservableList = FXCollections.observableArrayList(produtos);
         produtosTable.setItems(produtosObservableList);
     }
 
+    /**
+     * Procura os produtos de uma categoria específica na base de dados.
+     *
+     * @param idCategoria o ID da categoria
+     * @return uma lista de produtos
+     */
     private List<Produto> buscarProdutos(int idCategoria) {
         List<Produto> produtos = new ArrayList<>();
         String query = "SELECT * FROM Produto WHERE idCategoria = ?";
@@ -378,12 +449,22 @@ public class GerirStockController {
         return produtos;
     }
 
+    /**
+     * Mostra o painel para modificar um produto.
+     *
+     * @param produto o produto a ser modificado
+     */
     private void modificarProduto(Produto produto) {
         mostrarModifyProductPane(produto);
     }
 
+    /**
+     * Remove um produto da base de dados.
+     *
+     * @param produto o produto a ser removido
+     */
     private void removerProduto(Produto produto) {
-        // Call the stored procedure to remove the product
+        // Chama o procedimento armazenado para remover o produto
         String query = "{CALL removerProduto(?)}";
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {

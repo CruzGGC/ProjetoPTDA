@@ -20,6 +20,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * A classe InicioController gere a interface de login da aplicação JavaFX.
+ */
 public class InicioController {
 
     @FXML
@@ -36,17 +39,26 @@ public class InicioController {
     @FXML
     private Label labelData;
 
+    /**
+     * Fecha a aplicação.
+     */
     @FXML
     private void onFecharClick() {
         Platform.exit();
     }
 
+    /**
+     * Inicializa o controlador, atualizando a data e hora.
+     */
     @FXML
     public void initialize() {
         DateUtils.updateDate(labelData);
         DateUtils.updateTime(labelHora);
     }
 
+    /**
+     * Navega para o painel principal após autenticação bem-sucedida.
+     */
     @FXML
     private void onMainPanel() {
         String login = utilizadorField.getText();
@@ -72,6 +84,13 @@ public class InicioController {
         }
     }
 
+    /**
+     * Autentica o utilizador com base no nome e password fornecidos.
+     *
+     * @param nome o nome do utilizador
+     * @param passwordInserida a password inserida pelo utilizador
+     * @return o ID do funcionário se a autenticação for bem-sucedida, -1 caso contrário
+     */
     private int autenticarUsuario(String nome, String passwordInserida) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String sql = "CALL autenticar(?)";
@@ -83,11 +102,11 @@ public class InicioController {
                         if (BCrypt.checkpw(passwordInserida, hashSenha)) {
                             return rs.getInt("idFuncionario");
                         } else {
-                            System.out.println("Senha incorreta.");
+                            System.out.println("Password incorreta.");
                             return -1;
                         }
                     } else {
-                        System.out.println("Usuário não encontrado.");
+                        System.out.println("Utilizador não encontrado.");
                         return -1;
                     }
                 }

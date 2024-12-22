@@ -24,6 +24,9 @@ import javafx.scene.control.Label;
 
 import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
 
+/**
+ * A classe NovaVendaController gere a interface de criação de novas vendas no JavaFX.
+ */
 public class NovaVendaController {
 
     @FXML
@@ -31,6 +34,9 @@ public class NovaVendaController {
     @FXML
     private Label labelUtilizador;
 
+    /**
+     * Volta para o painel principal.
+     */
     @FXML
     public void onVoltarClick() {
         try {
@@ -70,6 +76,9 @@ public class NovaVendaController {
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
     private final AppState appState = AppState.getInstance();
 
+    /**
+     * Inicializa o controlador, configurando as colunas da tabela e carregando categorias e clientes.
+     */
     @FXML
     public void initialize() {
         colunaDescricao.setCellValueFactory(data -> data.getValue().descricaoProperty());
@@ -87,31 +96,48 @@ public class NovaVendaController {
         labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
+    /**
+     * Mostra o painel para adicionar um novo cliente.
+     */
     @FXML
     public void mostrarAddClientPane() {
         Panes.showPane(addClientPane);
     }
 
+    /**
+     * Seleciona o cliente anónimo.
+     */
     @FXML
     public void selecionarClienteAnonimo() {
-        Cliente clienteAnonimo = new Cliente(1, "Cliente Anônimo");
+        Cliente clienteAnonimo = new Cliente(1, "Cliente Anónimo");
         if (!clienteComboBox.getItems().contains(clienteAnonimo)) {
             clienteComboBox.getItems().add(clienteAnonimo);
         }
         clienteComboBox.getSelectionModel().select(clienteAnonimo);
     }
 
+    /**
+     * Esconde o painel para adicionar um novo cliente.
+     */
     @FXML
     public void fecharAddClientPane() {
         addClientPane.setVisible(false);
         addClientPane.setManaged(false);
     }
 
+    /**
+     * Carrega os clientes a partir da base de dados.
+     */
     private void carregarClientes() {
         List<Cliente> clientes = buscarClientes();
         clienteComboBox.setItems(FXCollections.observableArrayList(clientes));
     }
 
+    /**
+     * Busca os clientes na base de dados.
+     *
+     * @return uma lista de clientes
+     */
     private List<Cliente> buscarClientes() {
         List<Cliente> clientes = new ArrayList<>();
         String query = "SELECT * FROM Cliente WHERE idCliente > 2"; // Filtra clientes com id > 2
@@ -133,6 +159,9 @@ public class NovaVendaController {
         return clientes;
     }
 
+    /**
+     * Carrega as categorias a partir da base de dados.
+     */
     private void carregarCategorias() {
         List<Categoria> categorias = buscarCategorias();
 
@@ -146,6 +175,11 @@ public class NovaVendaController {
         }
     }
 
+    /**
+     * Carrega os produtos de uma categoria específica.
+     *
+     * @param idCategoria o ID da categoria
+     */
     private void carregarProdutosPorCategoria(int idCategoria) {
         produtosPane.getChildren().clear();
         List<Produto> produtos = buscarProdutosPorCategoria(idCategoria);
@@ -159,6 +193,11 @@ public class NovaVendaController {
         }
     }
 
+    /**
+     * Adiciona um produto à lista de produtos selecionados.
+     *
+     * @param produto o produto a ser adicionado
+     */
     private void adicionarProduto(Produto produto) {
         ProdutoSelecionado existente = produtosSelecionados.stream()
                 .filter(p -> p.getIdProduto() == produto.getIdProduto())
@@ -175,6 +214,9 @@ public class NovaVendaController {
         atualizarTotais();
     }
 
+    /**
+     * Atualiza os totais de preço e quantidade dos produtos selecionados.
+     */
     private void atualizarTotais() {
         double total = produtosSelecionados.stream().mapToDouble(ProdutoSelecionado::getTotal).sum();
         int quantidade = produtosSelecionados.stream().mapToInt(ProdutoSelecionado::getQuantidadeStock).sum();
@@ -183,14 +225,30 @@ public class NovaVendaController {
         labelNumArtigos.setText("Nº de artigos/quantidade: " + quantidade);
     }
 
+    /**
+     * Busca as categorias na base de dados.
+     *
+     * @return uma lista de categorias
+     */
     private List<Categoria> buscarCategorias() {
         return DatabaseUtils.fetchCategories();
     }
 
+    /**
+     * Busca os produtos de uma categoria específica na base de dados.
+     *
+     * @param idCategoria o ID da categoria
+     * @return uma lista de produtos
+     */
     private List<Produto> buscarProdutosPorCategoria(int idCategoria) {
         return DatabaseUtils.buscarProdutosPorCategoria(idCategoria);
     }
 
+    /**
+     * Cria um JSON com os produtos selecionados.
+     *
+     * @return uma string JSON com os produtos
+     */
     private String criarJsonProdutos() {
         JsonArray jsonArray = new JsonArray();
 
@@ -205,6 +263,9 @@ public class NovaVendaController {
         return jsonArray.toString();
     }
 
+    /**
+     * Cria um novo pedido com os produtos selecionados.
+     */
     private void criarPedido() {
         Cliente clienteSelecionado = clienteComboBox.getSelectionModel().getSelectedItem();
         if (clienteSelecionado == null) {
@@ -246,6 +307,10 @@ public class NovaVendaController {
             alert.showAndWait();
         }
     }
+
+    /**
+     * Adiciona um novo cliente à base de dados.
+     */
     @FXML
     public void adicionarCliente() {
         String nome = nomeClienteField.getText();

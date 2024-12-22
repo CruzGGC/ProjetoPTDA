@@ -19,6 +19,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A classe ModificarVendaController gere a interface de modificação de vendas no JavaFX.
+ */
 public class ModificarVendaController {
 
     @FXML
@@ -67,6 +70,9 @@ public class ModificarVendaController {
 
     private final ObservableList<ProdutoSelecionado> produtosSelecionados = FXCollections.observableArrayList();
 
+    /**
+     * Volta para o painel de gestão de pedidos.
+     */
     @FXML
     public void voltarParaGerirPedidos() {
         try {
@@ -76,6 +82,9 @@ public class ModificarVendaController {
         }
     }
 
+    /**
+     * Inicializa o controlador, configurando as colunas da tabela e carregando categorias.
+     */
     @FXML
     public void initialize() {
         colunaDescricao.setCellValueFactory(data -> data.getValue().descricaoProperty());
@@ -92,6 +101,9 @@ public class ModificarVendaController {
         labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
+    /**
+     * Modifica o pedido atual com os produtos selecionados.
+     */
     private void modificarPedido() {
         int idPedido = Integer.parseInt(labelIdPedido.getText().replace("Pedido: ", ""));
         String jsonProdutos = criarJsonProdutos();
@@ -119,6 +131,11 @@ public class ModificarVendaController {
         }
     }
 
+    /**
+     * Cria um JSON com os produtos selecionados.
+     *
+     * @return uma string JSON com os produtos
+     */
     private String criarJsonProdutos() {
         JsonArray jsonArray = new JsonArray();
 
@@ -133,6 +150,9 @@ public class ModificarVendaController {
         return jsonArray.toString();
     }
 
+    /**
+     * Adiciona um botão de remoção à tabela de produtos.
+     */
     private void addButtonToTable() {
         Callback<TableColumn<ProdutoSelecionado, Void>, TableCell<ProdutoSelecionado, Void>> cellFactory = new Callback<>() {
             @Override
@@ -165,7 +185,7 @@ public class ModificarVendaController {
 
         colBtn.setCellFactory(cellFactory);
 
-        // Check if the column is already added to avoid duplication
+        // Verifica se a coluna já foi adicionada para evitar duplicação
         if (!tabelaProdutos.getColumns().contains(colBtn)) {
             tabelaProdutos.getColumns().add(colBtn);
             colBtn.getStyleClass().add("btn-pedido-buttons");
@@ -173,6 +193,9 @@ public class ModificarVendaController {
 
     }
 
+    /**
+     * Carrega as categorias a partir da base de dados.
+     */
     private void carregarCategorias() {
         List<Categoria> categorias = DatabaseUtils.fetchCategories();
 
@@ -185,6 +208,11 @@ public class ModificarVendaController {
         }
     }
 
+    /**
+     * Carrega os produtos de uma categoria específica.
+     *
+     * @param idCategoria o ID da categoria
+     */
     private void carregarProdutosPorCategoria(int idCategoria) {
         produtosPane.getChildren().clear();
         List<Produto> produtos = DatabaseUtils.buscarProdutosPorCategoria(idCategoria);
@@ -198,6 +226,11 @@ public class ModificarVendaController {
         }
     }
 
+    /**
+     * Adiciona um produto à lista de produtos selecionados.
+     *
+     * @param produto o produto a ser adicionado
+     */
     private void adicionarProduto(Produto produto) {
         ProdutoSelecionado existente = produtosSelecionados.stream()
                 .filter(p -> p.getIdProduto() == produto.getIdProduto())
@@ -214,6 +247,9 @@ public class ModificarVendaController {
         atualizarTotais();
     }
 
+    /**
+     * Atualiza os totais de preço e quantidade dos produtos selecionados.
+     */
     private void atualizarTotais() {
         double total = produtosSelecionados.stream().mapToDouble(ProdutoSelecionado::getTotal).sum();
         int quantidade = produtosSelecionados.stream().mapToInt(ProdutoSelecionado::getQuantidadeStock).sum();
@@ -222,22 +258,43 @@ public class ModificarVendaController {
         labelNumArtigos.setText("Nº de artigos/quantidade: " + quantidade);
     }
 
+    /**
+     * Remove um produto da lista de produtos selecionados.
+     *
+     * @param produto o produto a ser removido
+     */
     @FXML
     private void removerProduto(ProdutoSelecionado produto) {
         produtosSelecionados.remove(produto);
         atualizarTotais();
     }
 
+    /**
+     * Define o ID do pedido a ser modificado.
+     *
+     * @param idPedido o ID do pedido
+     */
     public void setPedidoId(int idPedido) {
         labelIdPedido.setText("Pedido: " + idPedido);
         carregarProdutosDoPedido(idPedido);
     }
 
+    /**
+     * Carrega os produtos do pedido especificado.
+     *
+     * @param idPedido o ID do pedido
+     */
     private void carregarProdutosDoPedido(int idPedido) {
         List<ProdutoSelecionado> produtos = buscarProdutosDoPedido(idPedido);
         produtosSelecionados.setAll(produtos);
     }
 
+    /**
+     * Busca os produtos do pedido especificado na base de dados.
+     *
+     * @param idPedido o ID do pedido
+     * @return uma lista de produtos selecionados
+     */
     private List<ProdutoSelecionado> buscarProdutosDoPedido(int idPedido) {
         List<ProdutoSelecionado> produtos = new ArrayList<>();
         String query = "SELECT p.idProduto, p.nome, p.preco, pp.quantidade " +

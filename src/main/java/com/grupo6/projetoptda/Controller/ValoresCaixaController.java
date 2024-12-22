@@ -16,16 +16,10 @@ import javafx.stage.Stage;
 import java.sql.*;
 import java.time.LocalDate;
 
+/**
+ * A classe ValoresCaixaController gere a interface de visualização dos valores de caixa no JavaFX.
+ */
 public class ValoresCaixaController {
-
-    @FXML
-    public void onVoltarClick() {
-        try {
-            SceneManager.setScene((Stage) selecionarDataPane.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private FlowPane faturasPane;
@@ -47,6 +41,9 @@ public class ValoresCaixaController {
 
     private final AppState appState = AppState.getInstance();
 
+    /**
+     * Inicializa o controlador, configurando os botões e atualizando a data e o utilizador.
+     */
     @FXML
     public void initialize() {
         btnTurnoAtual.setOnAction(event -> {
@@ -71,6 +68,11 @@ public class ValoresCaixaController {
         labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
+    /**
+     * Obtém o ID do turno atual do funcionário.
+     *
+     * @return o ID do turno atual, ou -1 se não for encontrado
+     */
     private int getTurnoAtualId() {
         int idTurno = -1;
         String query = "SELECT idTurno FROM Turno WHERE idFuncionario = ? AND dataHoraFechamento IS NULL";
@@ -87,6 +89,11 @@ public class ValoresCaixaController {
         return idTurno;
     }
 
+    /**
+     * Carrega as faturas do turno especificado e exibe-as no painel.
+     *
+     * @param idTurno o ID do turno
+     */
     private void carregarFaturas(int idTurno) {
         faturasPane.getChildren().clear();
         String queryFaturas = "{CALL visualizarRelatorioPorTurno(?)}";
@@ -94,7 +101,6 @@ public class ValoresCaixaController {
         try (Connection connection = DatabaseConnection.getConnection();
              CallableStatement stmtFaturas = connection.prepareCall(queryFaturas)) {
 
-            // Set parameters and execute query for Faturas
             stmtFaturas.setInt(1, idTurno);
             ResultSet rsFaturas = stmtFaturas.executeQuery();
             while (rsFaturas.next()) {
@@ -117,6 +123,12 @@ public class ValoresCaixaController {
         }
     }
 
+    /**
+     * Carrega as faturas no intervalo de datas especificado e exibe-as no painel.
+     *
+     * @param dataInicio a data de início do intervalo
+     * @param dataFim a data de fim do intervalo
+     */
     private void carregarFaturas(LocalDate dataInicio, LocalDate dataFim) {
         faturasPane.getChildren().clear();
         String queryFaturas = "{CALL visualizarRelatorio(?, ?)}";
@@ -126,7 +138,6 @@ public class ValoresCaixaController {
              CallableStatement stmtFaturas = connection.prepareCall(queryFaturas);
              CallableStatement stmtFaturasCompra = connection.prepareCall(queryFaturasCompra)) {
 
-            // Set parameters and execute query for Faturas
             stmtFaturas.setDate(1, Date.valueOf(dataInicio));
             stmtFaturas.setDate(2, Date.valueOf(dataFim));
             ResultSet rsFaturas = stmtFaturas.executeQuery();
@@ -146,7 +157,6 @@ public class ValoresCaixaController {
                 faturasPane.getChildren().add(faturaButton);
             }
 
-            // Set parameters and execute query for FaturasCompra
             stmtFaturasCompra.setDate(1, Date.valueOf(dataInicio));
             stmtFaturasCompra.setDate(2, Date.valueOf(dataFim));
             ResultSet rsFaturasCompra = stmtFaturasCompra.executeQuery();
@@ -170,6 +180,11 @@ public class ValoresCaixaController {
         }
     }
 
+    /**
+     * Abre a janela de detalhes da fatura especificada.
+     *
+     * @param idFatura o ID da fatura
+     */
     private void abrirDetalhesFatura(int idFatura) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/DetalhesFatura.fxml"));
@@ -187,6 +202,11 @@ public class ValoresCaixaController {
         }
     }
 
+    /**
+     * Abre a janela de detalhes da fatura de compra especificada.
+     *
+     * @param idFatura o ID da fatura de compra
+     */
     private void abrirDetalhesFaturaCompra(int idFatura) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grupo6/projetoptda/DetalhesFatura.fxml"));
@@ -204,18 +224,27 @@ public class ValoresCaixaController {
         }
     }
 
+    /**
+     * Mostra o painel de seleção de data.
+     */
     @FXML
     private void mostrarSelecionarDataPane() {
         selecionarDataPane.setVisible(true);
         selecionarDataPane.setManaged(true);
     }
 
+    /**
+     * Esconde o painel de seleção de data.
+     */
     @FXML
     private void fecharSelecionarDataPane() {
         selecionarDataPane.setVisible(false);
         selecionarDataPane.setManaged(false);
     }
 
+    /**
+     * Pesquisa faturas no intervalo de datas selecionado.
+     */
     @FXML
     private void pesquisarPorData() {
         LocalDate dataInicio = dataInicioPicker.getValue();
@@ -229,6 +258,18 @@ public class ValoresCaixaController {
             alert.setHeaderText(null);
             alert.setContentText("Por favor, selecione ambas as datas: Data Início e Data Fim.");
             alert.showAndWait();
+        }
+    }
+
+    /**
+     * Volta para o painel principal.
+     */
+    @FXML
+    public void onVoltarClick() {
+        try {
+            SceneManager.setScene((Stage) selecionarDataPane.getScene().getWindow(), "/com/grupo6/projetoptda/MainPanel.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
