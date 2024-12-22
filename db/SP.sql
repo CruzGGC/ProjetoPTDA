@@ -88,42 +88,6 @@ END$$
 
 DELIMITER ;
 
--- Procedure para Visualizar Relatório de Compra com Filtros
-DELIMITER $$
-
-CREATE PROCEDURE visualizarRelatorioCompra(
-    IN p_dataInicio DATE,
-    IN p_dataFim DATE
-)
-BEGIN
-    -- Validate dates
-    IF p_dataInicio IS NULL OR p_dataFim IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Start and end dates are required';
-    END IF;
-
-    IF p_dataInicio > p_dataFim THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Start date must be before end date';
-    END IF;
-
-    -- Detailed report of purchase invoices
-    SELECT
-        f.idFatura,
-        f.data,
-        f.hora,
-        c.nome AS nomeCliente,
-        f.valorTotal,
-        func.fNome AS nomeFuncionario -- Include the employee name
-    FROM FaturaCompra f
-             JOIN Cliente c ON f.idCliente = c.idCliente
-             JOIN Funcionario func ON f.idFuncionario = func.idFuncionario -- Join with Funcionario table
-    WHERE f.data BETWEEN p_dataInicio AND p_dataFim
-    ORDER BY f.data, f.hora;
-END$$
-
-DELIMITER ;
-
 -- Procedure para Fechar Conta (Gerente)
 DELIMITER $$
 CREATE PROCEDURE fecharConta()
@@ -741,6 +705,7 @@ END$$
 
 DELIMITER ;
 
+-- Procedure para Visualizar Relatório de Compra com Filtros
 DELIMITER $$
 
 CREATE PROCEDURE visualizarRelatorioCompra(
@@ -766,13 +731,13 @@ BEGIN
         f.hora,
         c.nome AS nomeCliente,
         f.valorTotal,
-        func.fNome AS nomeFuncionario -- Add this line to include the employee name
+        func.fNome AS nomeFuncionario -- Include the employee name
     FROM FaturaCompra f
              JOIN Cliente c ON f.idCliente = c.idCliente
              JOIN Funcionario func ON f.idFuncionario = func.idFuncionario -- Join with Funcionario table
     WHERE f.data BETWEEN p_dataInicio AND p_dataFim
     ORDER BY f.data, f.hora;
-    END$$
+END$$
 
 DELIMITER ;
 
