@@ -142,6 +142,8 @@ public class ModificarVendaController {
                     private final Button btn = new Button("Remover");
 
                     {
+                        btn.setText("🗑");
+                        btn.getStyleClass().add("btn-tables");
                         btn.setOnAction((ActionEvent event) -> {
                             ProdutoSelecionado produto = getTableView().getItems().get(getIndex());
                             removerProduto(produto);
@@ -162,7 +164,13 @@ public class ModificarVendaController {
         };
 
         colBtn.setCellFactory(cellFactory);
-        tabelaProdutos.getColumns().add(colBtn);
+
+        // Check if the column is already added to avoid duplication
+        if (!tabelaProdutos.getColumns().contains(colBtn)) {
+            tabelaProdutos.getColumns().add(colBtn);
+            colBtn.getStyleClass().add("btn-pedido-buttons");
+        }
+
     }
 
     private void carregarCategorias() {

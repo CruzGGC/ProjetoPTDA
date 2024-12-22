@@ -261,7 +261,8 @@ public class GerirStockController {
         colModificar.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button();
             {
-                btn.setText("✏️");
+                btn.setText("✏");
+                btn.getStyleClass().add("btn-tables");
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
                     modificarProduto(produto);
@@ -282,7 +283,8 @@ public class GerirStockController {
         colRemover.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button();
             {
-                btn.setText("🗑️");
+                btn.setText("🗑");
+                btn.getStyleClass().add("btn-tables");
                 btn.setOnAction(event -> {
                     Produto produto = getTableView().getItems().get(getIndex());
                     removerProduto(produto);
