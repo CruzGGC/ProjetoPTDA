@@ -29,13 +29,8 @@
                </ImageView>
                <VBox>
                   <children>
-                     <HBox spacing="5.0">
-                        <children>
-                           <Label styleClass="text-content" text="Gerir Stock" />
-                           <Label styleClass="text-content" text="(GS 2024)" />
-                        </children>
-                     </HBox>
                      <Label fx:id="labelData" styleClass="text-content" text="Data" />
+                     <Label styleClass="text-content" text="Gerir Stock" />
                   </children>
                </VBox>
             </HBox>

@@ -83,8 +83,8 @@
                <StackPane fx:id="pagamentoPane" managed="false" style="-fx-background-color: rgba(0, 0, 0, 0.8);" visible="false">
                   <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #333333; -fx-padding: 20;">
                      <Label text="Escolha o método de pagamento:" />
-                     <Button onAction="#fazerPagamento" text="Multibanco" />
-                     <Button onAction="#fazerPagamento" text="Dinheiro Vivo" />
+                     <Button onAction="#fazerPagamento" styleClass="btn-produto" text="Multibanco" />
+                     <Button onAction="#fazerPagamento" styleClass="btn-produto" text="Dinheiro Vivo" />
                      <HBox alignment="CENTER_RIGHT" spacing="5.0">
                         <Button onAction="#fecharPagamentoPane" styleClass="btn-danger" text="Cancelar" />
                      </HBox>

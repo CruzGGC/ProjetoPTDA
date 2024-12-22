@@ -10,11 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,16 +46,7 @@ public class GerirPedidosController {
     private FlowPane pedidosPane;
 
     @FXML
-    private StackPane modifyPedidoPane;
-
-    @FXML
     private StackPane pagamentoPane;
-
-    @FXML
-    private TextField pedidoIdField;
-
-    @FXML
-    private TextField pedidoStatusField;
 
     @FXML
     private Button finalizarPedidoButton;
@@ -119,7 +107,7 @@ public class GerirPedidosController {
                         Timestamp dataHora = resultSet.getTimestamp("dataHora");
                         String data = dataHora.toLocalDateTime().toLocalDate().toString();
                         String hora = dataHora.toLocalDateTime().toLocalTime().toString();
-                        String pedidoInfo = String.format("Fatura: %d\nCliente: %s\n%s | %s",
+                        String pedidoInfo = String.format("Pedido: %d\nCliente: %s\n%s | %s",
                                 pedido.idPedido(), nomeCliente, data, hora);
 
                         Button btnPedido = new Button(pedidoInfo);
@@ -143,16 +131,18 @@ public class GerirPedidosController {
      * @return um VBox contendo os botões
      */
     private VBox criarBotoesPedido(Pedido pedido) {
+        if (!"Entregue".equals(pedido.status())) {
+            return new VBox(); // Retorna uma VBox vazia se o pedido não estiver "Entregue"
+        }
+
         Button btnModificar = new Button();
-        FontIcon iconModificar = new FontIcon(FontAwesomeSolid.EDIT);
-        btnModificar.setGraphic(iconModificar);
+        btnModificar.setText("⚙️");
         btnModificar.getStyleClass().add("btn-pedido-buttons");
         btnModificar.setPrefHeight(48);
         btnModificar.setOnAction(event -> abrirModificarVendaPane(pedido.idPedido())); // Passa o pedido aqui
 
         Button btnRemover = new Button();
-        FontIcon iconRemover = new FontIcon(FontAwesomeSolid.TRASH);
-        btnRemover.setGraphic(iconRemover);
+        btnRemover.setText("🗑️");
         btnRemover.getStyleClass().add("btn-pedido-buttons");
         btnRemover.setPrefHeight(48);
         btnRemover.setPrefWidth(26);
@@ -284,6 +274,7 @@ public class GerirPedidosController {
                 alert.showAndWait();
                 carregarPedidos("Entregue");
                 recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
+                carregarPedidos("Entregue");
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erro");
@@ -321,6 +312,7 @@ public class GerirPedidosController {
     @FXML
     public void fazerPagamento(ActionEvent event) {
         String metodoPagamento = ((Button) event.getSource()).getText();
+        System.out.println("Button clicked: " + metodoPagamento); // Print statement added
         String queryPagamento = "{CALL fazerPagamento(?, ?)}";
         String queryEmitirFatura = "{CALL emitirFatura(?, ?)}"; // Modificado para incluir idFuncionario
 
@@ -346,6 +338,7 @@ public class GerirPedidosController {
 
             carregarPedidos("PorPagar");
             recarregarInterface("/com/grupo6/projetoptda/GerirPedidosPanel.fxml");
+            carregarPedidos("PorPagar");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");

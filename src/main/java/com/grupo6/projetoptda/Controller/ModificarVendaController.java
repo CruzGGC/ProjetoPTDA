@@ -58,6 +58,9 @@ public class ModificarVendaController {
     private TableColumn<ProdutoSelecionado, Double> colunaTotal;
 
     @FXML
+    private TableColumn<ProdutoSelecionado, Void> colBtn;
+
+    @FXML
     private Label labelUtilizador;
 
     private final AppState appState = AppState.getInstance();
@@ -131,8 +134,6 @@ public class ModificarVendaController {
     }
 
     private void addButtonToTable() {
-        TableColumn<ProdutoSelecionado, Void> colBtn = new TableColumn<>("Remover");
-
         Callback<TableColumn<ProdutoSelecionado, Void>, TableCell<ProdutoSelecionado, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<ProdutoSelecionado, Void> call(final TableColumn<ProdutoSelecionado, Void> param) {

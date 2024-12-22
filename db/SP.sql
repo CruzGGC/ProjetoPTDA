@@ -5,8 +5,6 @@ USE PTDA24_BD_06;
 DELIMITER $$
 CREATE PROCEDURE autenticar(IN p_nome VARCHAR(255))
 BEGIN
-    DECLARE v_count INT;
-    
     -- Validar entrada
     IF p_nome IS NULL OR p_nome = '' THEN
         SIGNAL SQLSTATE '45000' 
@@ -88,38 +86,6 @@ BEGIN
     ORDER BY f.data, f.hora;
 END$$
 
-DELIMITER ;
-
--- Procedure para Visualizar Relatório de Compra com Filtros
-DELIMITER $$
-CREATE PROCEDURE visualizarRelatorioCompra(
-    IN p_dataInicio DATE,
-    IN p_dataFim DATE
-)
-BEGIN
-    -- Validate dates
-    IF p_dataInicio IS NULL OR p_dataFim IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Start and end dates are required';
-    END IF;
-
-    IF p_dataInicio > p_dataFim THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Start date must be before end date';
-    END IF;
-
-    -- Detailed report of purchase invoices
-    SELECT
-        f.idFatura,
-        f.data,
-        f.hora,
-        c.nome AS nomeCliente,
-        f.valorTotal
-    FROM FaturaCompra f
-    JOIN Cliente c ON f.idCliente = c.idCliente
-    WHERE f.data BETWEEN p_dataInicio AND p_dataFim
-    ORDER BY f.data, f.hora;
-END$$
 DELIMITER ;
 
 -- Procedure para Fechar Conta (Gerente)
@@ -340,7 +306,7 @@ BEGIN
         preco
     FROM Produto 
     WHERE quantidadeStock < p_limite
-    ORDER BY quantidadeStock ASC;
+    ORDER BY quantidadeStock;
 END$$
 DELIMITER ;
 
@@ -546,128 +512,103 @@ DELIMITER ;
 
 -- Procedure para Finalizar Pedido com Verificações Avançadas
 DELIMITER $$
+
 CREATE PROCEDURE finalizarPedido(IN p_idPedido INT)
 BEGIN
     DECLARE v_erro BOOLEAN DEFAULT FALSE;
     DECLARE v_stock_suficiente BOOLEAN DEFAULT TRUE;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_erro = TRUE;
-    
+
     -- Iniciar transação
     START TRANSACTION;
-    
+
     -- Verificar se o pedido existe e não está finalizado
     IF NOT EXISTS (SELECT 1 FROM Pedido WHERE idPedido = p_idPedido AND status != 'Finalizado') THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'O pedido não existe ou já foi finalizado';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'O pedido não existe ou já foi finalizado';
     END IF;
-    
+
     -- Verificar stock de cada produto
     IF NOT EXISTS (
-        SELECT 1 
+        SELECT 1
         FROM PedidoProduto pp
-        JOIN Produto p ON pp.idProduto = p.idProduto
-        WHERE pp.idPedido = p_idPedido 
+                 JOIN Produto p ON pp.idProduto = p.idProduto
+        WHERE pp.idPedido = p_idPedido
           AND p.quantidadeStock >= pp.quantidade
     ) THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Stock insuficiente para um ou mais produtos';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stock insuficiente para um ou mais produtos';
     END IF;
-    
+
     -- Atualizar status do pedido para Por Pagar
     UPDATE Pedido
     SET status = 'PorPagar'
     WHERE idPedido = p_idPedido;
-    
+
+    -- Atualizar estoque de produtos
+    UPDATE Produto p
+        JOIN PedidoProduto pp ON p.idProduto = pp.idProduto
+    SET p.quantidadeStock = p.quantidadeStock - pp.quantidade
+    WHERE pp.idPedido = p_idPedido;
+
     -- Verificar se houve erros
     IF v_erro THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro ao finalizar pedido';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Erro ao finalizar pedido';
     ELSE
         COMMIT;
     END IF;
 END$$
+
 DELIMITER ;
 
 -- Procedure para Fazer Pagamento
 DELIMITER $$
+
 CREATE PROCEDURE fazerPagamento(
-    IN p_idPedido INT, 
+    IN p_idPedido INT,
     IN p_metodoPagamento ENUM('Multibanco', 'DinheiroVivo')
 )
 BEGIN
     DECLARE v_erro BOOLEAN DEFAULT FALSE;
     DECLARE v_valorTotal DECIMAL(10,2);
-    DECLARE v_idFatura INT;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET v_erro = TRUE;
-    
-    -- Iniciar transação
-    START TRANSACTION;
-    
+
     -- Verificar se o pedido existe e está por pagar
     IF NOT EXISTS (SELECT 1 FROM Pedido WHERE idPedido = p_idPedido AND status = 'PorPagar') THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Pagamento só pode ser realizado para pedidos por pagar';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Pagamento só pode ser realizado para pedidos por pagar';
     END IF;
-    
+
     -- Obter o valor total do pedido
     SELECT SUM(pp.quantidade * p.preco) INTO v_valorTotal
     FROM PedidoProduto pp
-    JOIN Produto p ON pp.idProduto = p.idProduto
+             JOIN Produto p ON pp.idProduto = p.idProduto
     WHERE pp.idPedido = p_idPedido;
-    
+
     -- Atualizar pedido com metodo de pagamento e status
     UPDATE Pedido
-    SET 
-        metodoPagamento = p_metodoPagamento,
-        status = 'Finalizado'
+    SET status = 'Finalizado'
     WHERE idPedido = p_idPedido;
-    
+
     -- Verificar se houve erros até aqui
     IF v_erro THEN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro ao atualizar o status do pedido';
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Erro ao atualizar o status do pedido';
     END IF;
-    
-    -- Obter o ID da fatura correspondente
-    SELECT idFatura INTO v_idFatura
-    FROM Fatura
-    WHERE idPedido = p_idPedido;
-    
-    -- Verificar se a fatura existe
-    IF v_idFatura IS NULL THEN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Fatura correspondente não encontrada';
-    END IF;
-    
-    -- Inserir registro de pagamento na tabela Pagamento
-    INSERT INTO Pagamento (idFatura, metodoPagamento, estadoPagamento)
-    VALUES (v_idFatura, 
-            CASE 
-                WHEN p_metodoPagamento = 'Multibanco' THEN 1
-                WHEN p_metodoPagamento = 'DinheiroVivo' THEN 2
-            END,
-            1); -- Estado do pagamento como "1 - Processado com sucesso"
-    
+
+    -- Inserir pagamento na tabela Pagamento
+    INSERT INTO Pagamento (idPedido, metodoPagamento, valorTotal)
+    VALUES (p_idPedido, p_metodoPagamento, v_valorTotal);
+
     -- Verificar se houve erros na inserção
     IF v_erro THEN
-        ROLLBACK;
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Erro ao registrar pagamento';
-    ELSE
-        COMMIT;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Erro ao registrar pagamento';
     END IF;
-    
-    -- Retornar detalhes do pagamento
-    SELECT 
-        p_idPedido AS idPedido,
-        v_idFatura AS idFatura,
-        v_valorTotal AS valorTotal,
-        p_metodoPagamento AS metodoPagamento,
-        'Pagamento processado com sucesso' AS mensagem;
 END$$
+
 DELIMITER ;
 
 
@@ -679,6 +620,7 @@ BEGIN
     DECLARE v_valorTotal DECIMAL(10,2);
     DECLARE v_idFatura INT;
     DECLARE v_statusPedido VARCHAR(50);
+    DECLARE v_metodoPagamento ENUM('Multibanco', 'DinheiroVivo');
 
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
         BEGIN
@@ -698,9 +640,9 @@ BEGIN
             SET MESSAGE_TEXT = 'Pedido não encontrado.';
     END IF;
 
-    IF v_statusPedido != 'PorPagar' THEN
+    IF v_statusPedido != 'Finalizado' THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'A fatura só pode ser emitida para pedidos com status "Por Pagar".';
+            SET MESSAGE_TEXT = 'A fatura só pode ser emitida para pedidos com status "Finalizado".';
     END IF;
 
     SELECT COALESCE(SUM(pp.quantidade * pr.preco), 0) INTO v_valorTotal
@@ -713,8 +655,12 @@ BEGIN
             SET MESSAGE_TEXT = 'Não é possível gerar fatura para pedido com valor zero.';
     END IF;
 
-    INSERT INTO Fatura (idPedido, idCliente, valorTotal, data, hora, idFuncionario)
-    VALUES (p_idPedido, v_idCliente, v_valorTotal, CURDATE(), CURTIME(), p_idFuncionario);
+    SELECT metodoPagamento INTO v_metodoPagamento
+    FROM Pagamento
+    WHERE idPedido = p_idPedido;
+
+    INSERT INTO Fatura (idPedido, idCliente, valorTotal, data, hora, idFuncionario, metodoPagamento)
+    VALUES (p_idPedido, v_idCliente, v_valorTotal, CURDATE(), CURTIME(), p_idFuncionario, v_metodoPagamento);
 
     SET v_idFatura = LAST_INSERT_ID();
 
@@ -746,14 +692,51 @@ BEGIN
         c.nome AS 'Nome do Cliente',
         pd.idPedido AS 'ID Pedido',
         GROUP_CONCAT(CONCAT(pr.nome, ' (', pp.quantidade, ' x ', pp.preco, ')') SEPARATOR ', ') AS 'Produtos',
-        f.valorTotal AS 'Total Fatura'
+        f.valorTotal AS 'Total Fatura',
+        f.metodoPagamento AS 'Método de Pagamento'
     FROM Fatura f
              LEFT JOIN Pedido pd ON f.idPedido = pd.idPedido
              LEFT JOIN Cliente c ON f.idCliente = c.idCliente
              LEFT JOIN PedidoProduto pp ON pp.idPedido = f.idPedido
              LEFT JOIN Produto pr ON pp.idProduto = pr.idProduto
     WHERE f.idFatura = p_idFatura
-    GROUP BY f.idFatura, f.data, f.hora, c.nome, pd.idPedido, f.valorTotal;
+    GROUP BY f.idFatura, f.data, f.hora, c.nome, pd.idPedido, f.valorTotal, f.metodoPagamento;
+END$$
+
+DELIMITER ;
+
+-- Procedure para Visualizar Relatório de Compra com Filtros
+DELIMITER $$
+
+CREATE PROCEDURE visualizarRelatorioCompra(
+    IN p_dataInicio DATE,
+    IN p_dataFim DATE
+)
+BEGIN
+    -- Validate dates
+    IF p_dataInicio IS NULL OR p_dataFim IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Start and end dates are required';
+    END IF;
+
+    IF p_dataInicio > p_dataFim THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Start date must be before end date';
+    END IF;
+
+    -- Detailed report of purchase invoices
+    SELECT
+        f.idFatura,
+        f.data,
+        f.hora,
+        c.nome AS nomeCliente,
+        f.valorTotal,
+        func.fNome AS nomeFuncionario -- Include the employee name
+    FROM FaturaCompra f
+             JOIN Cliente c ON f.idCliente = c.idCliente
+             JOIN Funcionario func ON f.idFuncionario = func.idFuncionario -- Join with Funcionario table
+    WHERE f.data BETWEEN p_dataInicio AND p_dataFim
+    ORDER BY f.data, f.hora;
 END$$
 
 DELIMITER ;
@@ -862,14 +845,15 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE emitirFaturaCompra(IN p_idCompra INT)
+
+CREATE PROCEDURE emitirFaturaCompra(
+    IN p_idCompra INT,
+    IN p_idFuncionario INT
+)
 BEGIN
     DECLARE v_idCliente INT DEFAULT 2; -- Fixed idCliente
     DECLARE v_valorTotal DECIMAL(10,2);
     DECLARE v_idFatura INT;
-
-    -- Debugging: Output the input parameter
-    SELECT 'Input p_idCompra:', p_idCompra;
 
     -- Check if the idCompra exists in the Compra table
     IF NOT EXISTS (SELECT 1 FROM Compra WHERE idCompra = p_idCompra) THEN
@@ -881,22 +865,18 @@ BEGIN
     FROM CompraProduto cp
     WHERE cp.idCompra = p_idCompra;
 
-    -- Debugging: Output the total value of the compra
-    SELECT 'Total Value of Compra:', v_valorTotal;
-
     IF v_valorTotal = 0 THEN
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Não é possível gerar fatura para compra com valor zero.';
     END IF;
 
-    INSERT INTO FaturaCompra (idCompra, idCliente, valorTotal, data, hora)
-    VALUES (p_idCompra, v_idCliente, v_valorTotal, CURDATE(), CURTIME());
+    INSERT INTO FaturaCompra (idCompra, idCliente, valorTotal, data, hora, idFuncionario)
+    VALUES (p_idCompra, v_idCliente, v_valorTotal, CURDATE(), CURTIME(), p_idFuncionario);
 
     SET v_idFatura = LAST_INSERT_ID();
 
-    -- Debugging: Output the ID of the newly created fatura
-    SELECT 'ID of Fatura:', v_idFatura;
 END$$
+
 DELIMITER ;
 
 -- Procedure para Criar Cliente com Validações

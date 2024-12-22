@@ -16,9 +16,8 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import java.sql.*;
 
-/**
- * A classe GerirComprasController gere a interface de gestão de compras no JavaFX.
- */
+import static com.grupo6.projetoptda.Utilidades.InterfaceUtils.recarregarInterface;
+
 public class GerirComprasController {
 
     @FXML
@@ -56,9 +55,6 @@ public class GerirComprasController {
     private ObservableList<Categoria> categorias;
     private ObservableList<Produto> produtos;
 
-    /**
-     * Inicializa o controlador, configurando a tabela e carregando as categorias.
-     */
     @FXML
     public void initialize() {
         DateUtils.updateDate(labelData);
@@ -69,9 +65,6 @@ public class GerirComprasController {
         labelUtilizador.setText(appState.getNomeFuncionario());
     }
 
-    /**
-     * Configura as colunas da TableView para permitir edição.
-     */
     private void setupTableView() {
         nomeColumn.setCellValueFactory(new PropertyValueFactory<>("nome"));
         nomeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -92,16 +85,10 @@ public class GerirComprasController {
         tableView.setEditable(true);
     }
 
-    /**
-     * Carrega as categorias a partir da base de dados.
-     */
     private void loadCategorias() {
         categorias = FXCollections.observableArrayList(DatabaseUtils.fetchCategories());
     }
 
-    /**
-     * Adiciona os produtos da tabela à base de dados e emite a compra e a fatura.
-     */
     @FXML
     private void adicionarProdutos() {
         ObservableList<Produto> produtos = tableView.getItems();
@@ -112,10 +99,10 @@ public class GerirComprasController {
 
         try (Connection connection = DriverManager.getConnection(DatabaseConnection.URL, DatabaseConnection.USER, DatabaseConnection.PASSWORD)) {
             for (Produto produto : produtos) {
-                if (!isRowEmpty(produto)) {
+                if (isRowEmpty(produto)) {
                     System.out.println("Processing product: " + produto);
 
-                    // Chama o procedimento armazenado para adicionar ou atualizar o produto
+                    // Call the stored procedure to add or update the product
                     String sql = "{CALL adicionarProduto(?, ?, ?, ?)}";
                     try (CallableStatement stmt = connection.prepareCall(sql)) {
                         stmt.setString(1, produto.getNome());
@@ -129,10 +116,10 @@ public class GerirComprasController {
                 }
             }
 
-            // Converte os produtos para o formato JSON
+            // Convert products to JSON format
             StringBuilder jsonBuilder = new StringBuilder("[");
             for (Produto produto : produtos) {
-                if (!isRowEmpty(produto)) {
+                if (isRowEmpty(produto)) {
                     jsonBuilder.append("{")
                             .append("\"nome\":\"").append(produto.getNome()).append("\",")
                             .append("\"idCategoria\":").append(produto.getCategoria().getIdCategoria()).append(",")
@@ -149,22 +136,23 @@ public class GerirComprasController {
             String produtosJson = jsonBuilder.toString();
             System.out.println("Generated JSON: " + produtosJson);
 
-            // Chama o procedimento armazenado para emitir a compra
+            // Call the stored procedure to emit the purchase
             String sqlEmitirCompra = "{CALL efetuarCompra(?)}";
             try (CallableStatement stmtCompra = connection.prepareCall(sqlEmitirCompra)) {
                 stmtCompra.setString(1, produtosJson);
-                stmtCompra.execute(); // Garante que o procedimento armazenado é executado
+                stmtCompra.execute(); // Ensure the stored procedure is executed
 
-                // Recupera o idCompra gerado
+                // Retrieve the generated idCompra
                 ResultSet rs = stmtCompra.getResultSet();
                 if (rs.next()) {
                     int idCompra = rs.getInt("idCompra");
 
-                    // Chama o procedimento armazenado para emitir a fatura da compra
-                    String sqlEmitirFaturaCompra = "{CALL emitirFaturaCompra(?)}";
+                    // Call the stored procedure to emit the invoice for the purchase
+                    String sqlEmitirFaturaCompra = "{CALL emitirFaturaCompra(?, ?)}";
                     try (CallableStatement stmtFatura = connection.prepareCall(sqlEmitirFaturaCompra)) {
                         stmtFatura.setInt(1, idCompra);
-                        stmtFatura.execute(); // Garante que o procedimento armazenado é executado
+                        stmtFatura.setInt(2, appState.getFuncionarioId()); // Pass the idFuncionario
+                        stmtFatura.execute(); // Ensure the stored procedure is executed
                     }
                 }
             }
@@ -173,46 +161,32 @@ public class GerirComprasController {
         }
     }
 
-    /**
-     * Mostra o painel para adicionar uma nova categoria.
-     */
     @FXML
     private void botaoAdicionarCategoria() {
         mostrarAddCategoryPane();
     }
 
-    /**
-     * Torna visível o painel para adicionar uma nova categoria.
-     */
     @FXML
     private void mostrarAddCategoryPane() {
         addCategoryPane.setVisible(true);
         addCategoryPane.setManaged(true);
     }
 
-    /**
-     * Esconde o painel para adicionar uma nova categoria.
-     */
     @FXML
     private void fecharAddCategoryPane() {
         addCategoryPane.setVisible(false);
         addCategoryPane.setManaged(false);
     }
 
-    /**
-     * Adiciona uma nova categoria à base de dados.
-     */
     @FXML
     private void adicionarCategoria() {
         String nome = nomeCategoriaField.getText();
         DatabaseUtils.adicionarCategoria(nome);
         fecharAddCategoryPane();
         loadCategorias();
+        recarregarInterface("/com/grupo6/projetoptda/GerirComprasPanel.fxml");
     }
 
-    /**
-     * Volta para o painel principal.
-     */
     @FXML
     private void botaoVoltar() {
         try {
@@ -222,25 +196,17 @@ public class GerirComprasController {
         }
     }
 
-    /**
-     * Adiciona uma nova linha à tabela de produtos.
-     */
     @FXML
     private void adicionarLinha() {
         Produto novoProduto = new Produto(0, 0, "", 0.0, 0);
         produtos.add(novoProduto);
+        tableView.refresh(); // Atualiza a tabela para exibir a nova linha
     }
 
-    /**
-     * Verifica se uma linha da tabela está vazia.
-     *
-     * @param produto o produto a ser verificado
-     * @return true se a linha estiver vazia, false caso contrário
-     */
     private boolean isRowEmpty(Produto produto) {
-        return produto.getNome() == null || produto.getNome().trim().isEmpty() ||
-                produto.getCategoria() == null ||
-                produto.getPreco() <= 0.0 ||
-                produto.getQuantidade() <= 0;
+        return produto.getNome() != null && !produto.getNome().trim().isEmpty() &&
+                produto.getCategoria() != null &&
+                !(produto.getPreco() <= 0.0) &&
+                produto.getQuantidade() > 0;
     }
 }
