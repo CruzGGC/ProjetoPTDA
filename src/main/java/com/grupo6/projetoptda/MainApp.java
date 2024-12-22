@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -26,7 +27,7 @@ public class MainApp extends Application {
         Scene scene = new Scene(root, 800, 600);
         CarregarCSS.applyCSS(scene);
 
-        primaryStage.setTitle("DIGIGEST Painel");
+        primaryStage.setTitle("DIGIGEST");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
