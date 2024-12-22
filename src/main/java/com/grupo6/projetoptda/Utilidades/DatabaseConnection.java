@@ -8,9 +8,9 @@ import java.sql.SQLException;
  * A classe DatabaseConnection gere a conexão com a base de dados.
  */
 public class DatabaseConnection {
-    public static String URL = "jdbc:mysql://localhost:3306/ptda24_bd_06";
-    public static String USER = "root";
-    public static String PASSWORD = "PASSWORD";
+    public static String URL = "jdbc:mysql://estga-dev.ua.pt:3306/ptda24_bd_06";
+    public static String USER = "PTDA24_06";
+    public static String PASSWORD = "Asnh#235";
 
     /**
      * Estabelece uma conexão com a base de dados.

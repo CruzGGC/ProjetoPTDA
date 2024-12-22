@@ -8,15 +8,15 @@ CALL adicionarCategoria('Vinhos');
 CALL adicionarCategoria('Espirituosas');
 
 -- 2. Teste de Adicionar Produto
-CALL adicionarProduto('Espresso', 1, 2.00, 250);
-CALL adicionarProduto('Espresso Chocolate', 1, 2.50, 150);
-CALL adicionarProduto('Croissant', 2, 2.00, 50);
-CALL adicionarProduto('Croissant com Chocolate', 2, 2.20, 65);
-CALL adicionarProduto('Avareza', 3, 6.00, 15);
-CALL adicionarProduto('Torre', 3, 12.00, 20);
-CALL adicionarProduto('Alentejo', 3, 8.00, 30);
-CALL adicionarProduto('Cartuxa', 3, 21.99, 40);
-CALL adicionarProduto('Vale Dona Maria Vinha do Rio Tinto', 3, 124.99, 5);
+CALL adicionarProduto('Espresso', 1, 0.50, 250);
+CALL adicionarProduto('Espresso Chocolate', 1, 0.75, 150);
+CALL adicionarProduto('Croissant', 2, 1.00, 50);
+CALL adicionarProduto('Croissant com Chocolate', 2, 1.20, 65);
+CALL adicionarProduto('Avareza', 3, 3.00, 15);
+CALL adicionarProduto('Torre', 3, 9.00, 20);
+CALL adicionarProduto('Alentejo', 3, 7.00, 30);
+CALL adicionarProduto('Cartuxa', 3, 19.99, 40);
+CALL adicionarProduto('Vale Dona Maria Vinha do Rio Tinto', 3, 120.99, 5);
 CALL adicionarProduto('Jägermeister', 4, 19.95, 950);
 CALL adicionarProduto('Eristoff Vodka Triple Destilled', 4, 13.45, 850);
 CALL adicionarProduto('Sierra', 4, 12.95, 20);
